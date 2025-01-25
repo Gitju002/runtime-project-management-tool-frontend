@@ -67,3 +67,33 @@ export const addTaskSchema = z
       path: ["finishTime"], // Highlight finishTime in error
     }
   );
+
+export const loginFormSchema = z.object({
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters.",
+  }),
+});
+
+export const formSchema = z.object({
+  projectName: z
+    .string()
+    .min(2, { message: "Project name must be at least 2 characters." }),
+  projectDesc: z.string().min(10, {
+    message: "Project description must be at least 10 characters.",
+  }),
+  date: z.string().refine((val) => !isNaN(Date.parse(val)), {
+    message: "Invalid date format.",
+  }),
+  projectPeriod: z.string().min(1, { message: "Project period is required." }),
+  clientName: z
+    .string()
+    .min(2, { message: "Client name must be at least 2 characters." }),
+  clientEmail: z.string().email({ message: "Invalid email address." }),
+  projectType: z
+    .string()
+    .min(2, { message: "Project type must be at least 2 characters." }),
+  cost: z.number().positive({ message: "Cost must be a positive number." }),
+});

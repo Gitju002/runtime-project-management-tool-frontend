@@ -10,3 +10,20 @@ export type Task = {
   finishTime: string;
   status: "Initiated" | "Ongoing" | "Completed";
 };
+
+export type Project = {
+  projectName: string;
+  projectDesc: string;
+  date: string;
+  projectPeriod: string;
+  clientName: string;
+  clientEmail: string;
+  projectType: string;
+  cost: number;
+  location?: string;
+};
+
+export type Service = {
+  serviceName: string;
+  cost: number;
+};
