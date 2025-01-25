@@ -42,9 +42,16 @@ const projects = [
   },
 ];
 
-export function Combobox() {
+export function Combobox({
+  value,
+  onChange,
+  disabled,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  disabled?: boolean;
+}) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -54,6 +61,7 @@ export function Combobox() {
           role="combobox"
           aria-expanded={open}
           className="w-full justify-between"
+          disabled={disabled}
         >
           {value
             ? projects.find((project) => project.value === value)?.label
@@ -71,8 +79,9 @@ export function Combobox() {
                 <CommandItem
                   key={project.value}
                   value={project.value}
+                  disabled={disabled}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
+                    onChange(currentValue === value ? "" : currentValue);
                     setOpen(false);
                   }}
                 >

@@ -1,11 +1,17 @@
 import React from "react";
 import { columns } from "@/pages/user/_components/columns";
 import { DataTable } from "@/components/table/data-table";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import TaskForm from "./_components/task-form";
 import { Task } from "@/types/types";
-
+import { PlusCircleIcon } from "lucide-react";
+import { format } from "date-fns";
 export const projects: Task[] = [
   {
     slno: 1,
@@ -51,9 +57,15 @@ const User = () => {
       <h1 className="text-2xl font-semibold mb-6">User Page</h1>
       <Dialog>
         <DialogTrigger asChild>
-          <Button>Add Task</Button>
+          <Button>
+            Add Task <PlusCircleIcon />
+          </Button>
         </DialogTrigger>
         <DialogContent>
+          <DialogTitle className="text-center text-sm border border-gray-200 rounded-md p-2 mt-4">
+            Add Task(s) for{" "}
+            <span className="text-blue-500">{format(new Date(), "PP")}</span>
+          </DialogTitle>
           <TaskForm />
         </DialogContent>
       </Dialog>

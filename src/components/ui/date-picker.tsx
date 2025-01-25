@@ -15,16 +15,19 @@ export function DatePicker({
   placeholder,
   value,
   onChange,
+  disabled,
 }: {
   placeholder: string;
   value: Date;
   onChange: (date: Date | undefined) => void;
+  disabled?: boolean;
 }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
+          disabled={disabled}
           className={cn(
             "w-full justify-start text-left font-normal",
             !value && "text-muted-foreground"
@@ -38,6 +41,7 @@ export function DatePicker({
         <Calendar
           mode="single"
           selected={value}
+          disabled={disabled}
           onSelect={onChange}
           initialFocus
         />
