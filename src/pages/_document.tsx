@@ -4,10 +4,8 @@ export default function Document() {
   return (
     <Html lang="en" suppressHydrationWarning>
       <Head />
-      <body className="antialiased">
-        <main className="container">
-          <Main />
-        </main>
+      <body className="antialiased ">
+        <Main />
         <NextScript />
       </body>
     </Html>

@@ -14,12 +14,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
 import { loginFormSchema } from "@/schema";
 import { ArrowRight } from "lucide-react";
+import { useLoginMutation } from "@/store/api/auth";
 
 export function LoginForm() {
-  const [loading, setloading] = useState<boolean>(false);
+  const [login, { isLoading: loading, isError, error }] = useLoginMutation();
+
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -29,8 +30,12 @@ export function LoginForm() {
     disabled: loading,
   });
 
-  function onSubmit(values: z.infer<typeof loginFormSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof loginFormSchema>) {
+    try {
+      await login(values);
+    } catch {
+      console.error(error);
+    }
   }
 
   return (
