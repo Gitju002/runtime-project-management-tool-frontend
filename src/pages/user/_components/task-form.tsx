@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -26,14 +26,31 @@ import { Combobox } from "@/components/ui/combo-box";
 import { DatePicker } from "@/components/ui/date-picker";
 import { TimePicker } from "@/components/ui/time-picker";
 import { cn } from "@/lib/utils";
+import { useGetProjectListMutation } from "@/store/api/project";
 
 const TaskForm = () => {
-  const [loading, setloading] = useState<boolean>(false);
+  const [getProjectList, { isLoading, data: projectLists, error }] =
+    useGetProjectListMutation();
+
+  const fetchProjectLists = async () => {
+    try {
+      const response = await getProjectList().unwrap();
+      console.log("Projects:", response);
+    } catch (err) {
+      console.error("Error fetching projects:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjectLists();
+  }, []);
+
   const form = useForm<z.infer<typeof addTaskSchema>>({
     resolver: zodResolver(addTaskSchema),
     defaultValues: {
-      projectName: "",
-      services: "",
+      date: new Date().toISOString(),
+      project: "",
+      service: "",
       purpose: "",
       startDate: "",
       startTime: "",
@@ -54,12 +71,12 @@ const TaskForm = () => {
           <div
             className={cn(
               "grid gap-2",
-              form.watch("projectName") ? "grid-cols-2" : "grid-cols-1"
+              form.watch("project") ? "grid-cols-2" : "grid-cols-1"
             )}
           >
             <FormField
               control={form.control}
-              name="projectName"
+              name="project"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Project Name</FormLabel>
@@ -68,7 +85,11 @@ const TaskForm = () => {
                       <Combobox
                         value={field.value}
                         onChange={field.onChange}
-                        disabled={loading}
+                        disabled={isLoading}
+                        data={projectLists?.data?.map((item) => ({
+                          label: item,
+                          value: item,
+                        }))}
                       />
                     </div>
                   </FormControl>
@@ -76,19 +97,19 @@ const TaskForm = () => {
                 </FormItem>
               )}
             />
-            {form.watch("projectName") && (
+            {form.watch("project") && (
               <FormField
                 control={form.control}
-                name="services"
+                name="service"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Services</FormLabel>
+                    <FormLabel>Service</FormLabel>
                     <FormControl>
                       <div className="w-full">
                         <Combobox
                           value={field.value}
                           onChange={field.onChange}
-                          disabled={loading}
+                          disabled={isLoading}
                         />
                       </div>
                     </FormControl>
@@ -108,7 +129,7 @@ const TaskForm = () => {
                   <Input
                     placeholder="Define Project Purpose Here"
                     {...field}
-                    disabled={loading}
+                    disabled={isLoading}
                   />
                 </FormControl>
                 <FormMessage />
@@ -129,7 +150,7 @@ const TaskForm = () => {
                       onChange={(e) => {
                         field.onChange(e?.toISOString());
                       }}
-                      disabled={loading}
+                      btnDisabled={isLoading}
                     />
                   </FormControl>
                   <FormMessage />
@@ -148,7 +169,7 @@ const TaskForm = () => {
                       onChange={(e) => {
                         field.onChange(e?.toISOString());
                       }}
-                      disabled={loading}
+                      disabled={isLoading}
                     />
                   </FormControl>
                   <FormMessage />
@@ -171,7 +192,11 @@ const TaskForm = () => {
                       onChange={(e) => {
                         field.onChange(e?.toISOString());
                       }}
-                      disabled={loading}
+                      btnDisabled={isLoading}
+                      disabled={(date: Date) => {
+                        const startDate = form.watch("startDate");
+                        return startDate ? date < new Date(startDate) : false;
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -190,7 +215,7 @@ const TaskForm = () => {
                       onChange={(e) => {
                         field.onChange(e?.toISOString());
                       }}
-                      disabled={loading}
+                      disabled={isLoading}
                     />
                   </FormControl>
                   <FormMessage />
@@ -207,7 +232,7 @@ const TaskForm = () => {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  disabled={loading}
+                  disabled={isLoading}
                 >
                   <FormControl>
                     <SelectTrigger

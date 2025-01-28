@@ -1,20 +1,46 @@
-"use client";
+import { motion } from "framer-motion";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import type { AddProject } from "@/types/types";
+import type { AddedProjectType } from "@/types/types";
 import { format } from "date-fns";
+import React from "react";
+import { Button } from "@/components/ui/button";
 
-export const columns: ColumnDef<AddProject>[] = [
+export const columns: ColumnDef<AddedProjectType>[] = [
   {
-    accessorKey: "projectName",
+    accessorKey: "project",
     header: "Project Name",
   },
   {
     accessorKey: "projectDescription",
     header: "Project Description",
-    cell: ({ row }) => (
-      <p className="truncate w-[80%]">{row.original.projectDescription}</p>
-    ),
+    cell: ({ row }) => {
+      const [isExpanded, setIsExpanded] = React.useState(false);
+      const description = row.original.projectDescription;
+
+      const truncatedDescription =
+        description.length > 30
+          ? `${description.slice(0, 30)}...`
+          : description;
+
+      return (
+        <div className="text-wrap items-center gap-1">
+          <p className="inline">
+            {isExpanded ? description : truncatedDescription}
+          </p>
+          {description.length > 30 && (
+            <Button
+              variant={"link"}
+              size={"sm"}
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="p-0 cursor-pointer text-xs text-nowrap text-slate-600"
+            >
+              {isExpanded ? "Read Less" : "Read More"}
+            </Button>
+          )}
+        </div>
+      );
+    },
   },
 
   {

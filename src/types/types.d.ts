@@ -42,9 +42,9 @@ export type UserResponse = {
   };
 };
 
-export type AddProject = {
+export type AddedProjectType = {
   id: string;
-  projectName: string;
+  project: string;
   projectDescription: string;
   date: string;
   projectPeriod: string;
@@ -52,4 +52,10 @@ export type AddProject = {
   clientEmail: string;
   projectType: string;
   cost: number;
+};
+
+export type ProjectListResponse = {
+  success: boolean;
+  message: string;
+  data: string[];
 };

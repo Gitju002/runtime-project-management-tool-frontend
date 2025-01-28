@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Home,
   BookType,
@@ -9,98 +7,137 @@ import {
   BarChart2,
   SidebarCloseIcon,
   SidebarOpenIcon,
+  User2,
+  ChevronUp,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarHeader,
   SidebarMenu,
-  SidebarMenuItem,
   SidebarMenuButton,
-  SidebarTrigger,
+  SidebarMenuItem,
+  SidebarMenuSkeleton,
+  useSidebar,
 } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useEffect, useState } from "react";
+import { CustomSidebarTrigger } from "./sidebar-trigger";
 
-const menuItems = [
-  { icon: Home, label: "Dashboard", href: "/admin" },
-  { icon: FolderKanban, label: "Projects", href: "/admin/projects" },
-  { icon: BookType, label: "Project Types", href: "/admin/project-types" },
-  { icon: Briefcase, label: "Services", href: "/admin/services" },
-  { icon: Users, label: "Users", href: "/admin/users" },
-  { icon: BarChart2, label: "Analytics", href: "/admin/analytics" },
+// Menu items.
+const items = [
+  {
+    icon: Home,
+    title: "Home",
+    label: "Dashboard",
+    href: "/admin",
+  },
+  {
+    icon: FolderKanban,
+    title: "Projects",
+    label: "Projects",
+    href: "/admin/projects",
+  },
+  {
+    icon: BookType,
+    title: "Project Types",
+    label: "Project Types",
+    href: "/admin/project-types",
+  },
+  {
+    icon: Briefcase,
+    title: "Services",
+    label: "Services",
+    href: "/admin/services",
+  },
+  {
+    icon: Users,
+    title: "Users",
+    label: "Users",
+    href: "/admin/users",
+  },
+  {
+    icon: BarChart2,
+    title: "Analytics",
+    label: "Analytics",
+    href: "/admin/analytics",
+  },
 ];
 
 export function AdminSidebar() {
-  const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(true); // Sidebar toggle state
+  const [loading, setLoading] = useState(true);
 
-  const toggleSidebar = () => setIsOpen((prev) => !prev);
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, []);
+
+  const pathname = usePathname();
 
   return (
-    <>
-      <Sidebar
-        className={`fixed top-0 left-0 h-screen border-r transition-all duration-300 bg-white ${
-          isOpen ? "w-64" : "w-16"
-        }`}
-      >
-        <div className="h-full flex flex-col gap-4 ">
-          <SidebarHeader className="h-16 gap-2  flex flex-row-reverse justify-between items-center px-4">
-            {isOpen ? (
-              <Button
-                variant={"outline"}
-                size={"icon"}
-                className=" top-2 right-2"
-                onClick={toggleSidebar}
-              >
-                <SidebarCloseIcon />
-              </Button>
-            ) : (
-              <Button variant={"outline"} size={"icon"} onClick={toggleSidebar}>
-                <SidebarOpenIcon onClick={toggleSidebar} />
-              </Button>
-            )}
-            {isOpen && (
-              <div className=" text-sm md:text-lg font-bold ml-4">
-                Admin Dashboard
-              </div>
-            )}
-          </SidebarHeader>
-          <SidebarContent className="max-h-96  flex flex-col justify-center ">
-            <SidebarGroup>
-              <SidebarGroupContent>
-                <SidebarMenu className="flex  flex-col gap-2 ">
-                  {menuItems.map((item) => (
-                    <SidebarMenuItem key={item.href}>
+    <Sidebar variant="floating" collapsible="icon">
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Dashbaord Navigation</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {loading
+                ? items.map((item) => <SidebarMenuSkeleton key={item.title} />)
+                : items.map((item) => (
+                    <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
                         asChild
-                        isActive={pathname.startsWith(item.href)}
+                        isActive={pathname === item.href}
                       >
-                        <Link
-                          href={item.href}
-                          className={`flex items-center px-4 py-3 rounded-lg ${
-                            pathname.startsWith(item.href)
-                              ? "bg-blue-100 text-blue-500"
-                              : "text-gray-700 hover:bg-gray-200"
-                          }`}
-                        >
-                          <item.icon className="w-6 h-6" />
-                          {isOpen && <span className="ml-4">{item.label}</span>}
+                        <Link href={item.href ?? "/admin"}>
+                          <item.icon className="!size-5" />
+                          <span className="text-sm md:text-base">
+                            {item.title}
+                          </span>
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </SidebarContent>
-        </div>
-      </Sidebar>
-    </>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton>
+                  <User2 /> Username
+                  <ChevronUp className="ml-auto" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                side="top"
+                className="w-[--radix-popper-anchor-width]"
+              >
+                <DropdownMenuItem>
+                  <span>Theme</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <span>Sign out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+    </Sidebar>
   );
 }

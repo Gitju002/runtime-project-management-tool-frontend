@@ -2,7 +2,8 @@ import * as z from "zod";
 
 export const addTaskSchema = z
   .object({
-    projectName: z
+    date: z.string(),
+    project: z
       .string()
       .min(2, {
         message: "Please enter a valid project name",
@@ -10,7 +11,7 @@ export const addTaskSchema = z
       .max(50, {
         message: "Project name must not exceed 50 characters",
       }),
-    services: z
+    service: z
       .string()
       .min(2, {
         message: "Please enter a valid service",
@@ -26,8 +27,8 @@ export const addTaskSchema = z
       .max(50, {
         message: "Purpose must not exceed 50 characters",
       }),
-    startDate: z.string(), // Keep as string here
-    finishDate: z.string(), // Keep as string here
+    startDate: z.string(),
+    finishDate: z.string(),
     startTime: z.string({
       message: "Please select a valid start time (HH:MM format)",
     }),
@@ -44,29 +45,28 @@ export const addTaskSchema = z
     },
     {
       message: "Finish date must be greater than or equal to start date",
-      path: ["finishDate"], // Highlight finishDate in error
-    }
-  )
-  .refine(
-    (data) => {
-      const startDate = new Date(data.startDate);
-      const finishDate = new Date(data.finishDate);
-
-      const [startHour, startMinute] = data.startTime.split(":").map(Number);
-      const [finishHour, finishMinute] = data.finishTime.split(":").map(Number);
-
-      return (
-        startDate < finishDate ||
-        (startDate.getTime() === finishDate.getTime() &&
-          (finishHour > startHour ||
-            (finishHour === startHour && finishMinute > startMinute)))
-      );
-    },
-    {
-      message: "Finish time must be greater than start time on the same date",
-      path: ["finishTime"], // Highlight finishTime in error
+      path: ["finishDate"],
     }
   );
+// .refine(
+//   (data) => {
+//     const startDate = new Date(data.startDate);
+//     const finishDate = new Date(data.finishDate);
+
+//     const [startHour, startMinute] = data.startTime.split(":").map(Number);
+//     const [finishHour, finishMinute] = data.finishTime.split(":").map(Number);
+//     console.log(data.startTime, data.finishTime);
+
+//     return (
+//       startDate.getTime() === finishDate.getTime() &&
+//       data.startTime < data.finishTime
+//     );
+//   },
+//   {
+//     message: "Finish time must be greater than start time on the same date",
+//     path: ["finishTime"],
+//   }
+// );
 
 export const loginFormSchema = z.object({
   email: z.string().email({

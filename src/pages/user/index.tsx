@@ -53,25 +53,30 @@ export const projects: Task[] = [
 
 const User = () => {
   return (
-    <>
-      <h1 className="text-2xl font-semibold mb-6">User Page</h1>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button>
-            Add Task <PlusCircleIcon />
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogTitle className="text-center text-sm border border-gray-200 rounded-md p-2 mt-4">
-            Add Task(s) for{" "}
-            <span className="text-blue-500">{format(new Date(), "PP")}</span>
-          </DialogTitle>
-          <TaskForm />
-        </DialogContent>
-      </Dialog>
-
-      <DataTable columns={columns} data={projects} />
-    </>
+    <div className="container  mx-auto min-h-screen w-full py-10">
+      <div className="grid grid-cols-1 gap-2">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-semibold">User Page</h1>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>
+                Add Task <PlusCircleIcon />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogTitle className="text-center text-sm border border-gray-200 rounded-md p-2 mt-4">
+                Add Task(s) for{" "}
+                <span className="text-blue-500">
+                  {format(new Date(), "PP")}
+                </span>
+              </DialogTitle>
+              <TaskForm />
+            </DialogContent>
+          </Dialog>
+        </div>
+        <DataTable columns={columns} data={projects} />
+      </div>
+    </div>
   );
 };
 

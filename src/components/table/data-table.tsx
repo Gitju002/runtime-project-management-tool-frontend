@@ -32,10 +32,10 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="rounded-md border">
-      <Table className="">
+      <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
+            <TableRow className="text-nowrap" key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id}>
@@ -56,7 +56,7 @@ export function DataTable<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                className="hover:bg-white"
+                className="hover:bg-white text-nowrap"
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
@@ -67,7 +67,7 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))
           ) : (
-            <TableRow>
+            <TableRow className="text-nowrap">
               <TableCell colSpan={columns.length} className="h-24 text-center">
                 No results.
               </TableCell>

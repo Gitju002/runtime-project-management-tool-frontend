@@ -4,7 +4,7 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { Toaster } from "sonner";
 import { AdminSidebar } from "./admin/_components/admin-sidebar";
-import { Sidebar } from "lucide-react";
+import { CustomSidebarTrigger } from "./admin/_components/sidebar-trigger";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -14,6 +14,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <AdminSidebar />
           <Toaster />
           <main className="flex-1">
+            <CustomSidebarTrigger />
             <Component {...pageProps} />
           </main>
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react"; // Added useState for loading state
+import { useEffect, useState } from "react"; // Added useState for loading state
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
@@ -17,9 +17,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { DatePicker } from "@/components/ui/date-picker";
 import { addProjectSchema } from "@/schema";
+import { useGetProjectListMutation } from "@/store/api/project";
 
 export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof addProjectSchema>>({
     resolver: zodResolver(addProjectSchema),
     defaultValues: {
@@ -103,7 +104,7 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
                       onChange={(e) => {
                         field.onChange(e?.toISOString());
                       }}
-                      disabled={loading} // Disabled when loading
+                      btnDisabled={loading} // Disabled when loading
                     />
                   </FormControl>
                   <FormMessage />

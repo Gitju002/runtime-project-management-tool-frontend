@@ -19,37 +19,42 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-const projects = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-];
+// const projects = [
+//   {
+//     value: "next.js",
+//     label: "Next.js",
+//   },
+//   {
+//     value: "sveltekit",
+//     label: "SvelteKit",
+//   },
+//   {
+//     value: "nuxt.js",
+//     label: "Nuxt.js",
+//   },
+//   {
+//     value: "remix",
+//     label: "Remix",
+//   },
+//   {
+//     value: "astro",
+//     label: "Astro",
+//   },
+// ];
 
 export function Combobox({
   value,
   onChange,
   disabled,
+  data,
 }: {
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  data?: {
+    value: string;
+    label: string;
+  }[];
 }) {
   const [open, setOpen] = React.useState(false);
 
@@ -64,7 +69,7 @@ export function Combobox({
           disabled={disabled}
         >
           {value
-            ? projects.find((project) => project.value === value)?.label
+            ? data?.find((item) => item.value === value)?.label
             : "Select project..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -75,10 +80,10 @@ export function Combobox({
           <CommandList>
             <CommandEmpty>No Projects found.</CommandEmpty>
             <CommandGroup>
-              {projects.map((project) => (
+              {data?.map((item) => (
                 <CommandItem
-                  key={project.value}
-                  value={project.value}
+                  key={item.value}
+                  value={item.value}
                   disabled={disabled}
                   onSelect={(currentValue) => {
                     onChange(currentValue === value ? "" : currentValue);
@@ -88,10 +93,10 @@ export function Combobox({
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === project.value ? "opacity-100" : "opacity-0"
+                      value === item.value ? "opacity-100" : "opacity-0"
                     )}
                   />
-                  {project.label}
+                  {item.label}
                 </CommandItem>
               ))}
             </CommandGroup>
