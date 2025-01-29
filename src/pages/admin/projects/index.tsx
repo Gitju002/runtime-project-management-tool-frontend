@@ -31,13 +31,13 @@ export default function Projects() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="container  mx-auto min-h-screen w-full   py-10 ">
-      <div className="grid grid-cols-1  gap-2">
+    <div className="container  mx-auto min-h-screen w-full py-6">
+      <div className="grid grid-cols-1 gap-2">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Existing Projects</h1>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button>
+              <Button className="transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35">
                 Add Project <PlusCircle className="ml-2 h-4 w-4" />
               </Button>
             </DialogTrigger>

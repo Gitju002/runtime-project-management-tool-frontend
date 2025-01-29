@@ -30,7 +30,7 @@ export type Service = {
 
 export type User = {
   email: string;
-  password: string;
+  password?: string;
   username: string;
 };
 

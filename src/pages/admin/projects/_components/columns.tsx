@@ -1,5 +1,3 @@
-import { motion } from "framer-motion";
-
 import type { ColumnDef } from "@tanstack/react-table";
 import type { AddedProjectType } from "@/types/types";
 import { format } from "date-fns";
@@ -33,7 +31,7 @@ export const columns: ColumnDef<AddedProjectType>[] = [
               variant={"link"}
               size={"sm"}
               onClick={() => setIsExpanded(!isExpanded)}
-              className="p-0 cursor-pointer text-xs text-nowrap text-slate-600"
+              className="px-1 cursor-pointer text-xs text-nowrap transition-colors duration-300 dark:text-slate-100 text-slate-600"
             >
               {isExpanded ? "Read Less" : "Read More"}
             </Button>

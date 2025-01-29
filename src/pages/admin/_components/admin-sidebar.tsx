@@ -5,10 +5,9 @@ import {
   Briefcase,
   Users,
   BarChart2,
-  SidebarCloseIcon,
-  SidebarOpenIcon,
-  User2,
   ChevronUp,
+  UserCircle2,
+  ChevronDown,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -23,7 +22,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSkeleton,
-  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
@@ -32,9 +30,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
-import { CustomSidebarTrigger } from "./sidebar-trigger";
 
-// Menu items.
 const items = [
   {
     icon: Home,
@@ -49,17 +45,18 @@ const items = [
     href: "/admin/projects",
   },
   {
-    icon: BookType,
-    title: "Project Types",
-    label: "Project Types",
-    href: "/admin/project-types",
-  },
-  {
     icon: Briefcase,
     title: "Services",
     label: "Services",
     href: "/admin/services",
   },
+  {
+    icon: BookType,
+    title: "Type Description",
+    label: "Type Description",
+    href: "/admin/type-description",
+  },
+
   {
     icon: Users,
     title: "Users",
@@ -88,10 +85,12 @@ export function AdminSidebar() {
   return (
     <Sidebar variant="floating" collapsible="icon">
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Dashbaord Navigation</SidebarGroupLabel>
+        <SidebarGroup className="space-y-28">
+          <SidebarGroupLabel className="text-sm md:text-base transition-all duration-300">
+            Dashbaord Navigation
+          </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="flex gap-y-4 ">
               {loading
                 ? items.map((item) => <SidebarMenuSkeleton key={item.title} />)
                 : items.map((item) => (
@@ -101,7 +100,7 @@ export function AdminSidebar() {
                         isActive={pathname === item.href}
                       >
                         <Link href={item.href ?? "/admin"}>
-                          <item.icon className="!size-5" />
+                          <item.icon className="!size-5 text-teal-shade dark:text-lime-shade" />
                           <span className="text-sm md:text-base">
                             {item.title}
                           </span>
@@ -119,8 +118,9 @@ export function AdminSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User2 /> Username
-                  <ChevronUp className="ml-auto" />
+                  <UserCircle2 className="text-teal-shade dark:text-lime-shade dark:hover:text-lime-shade" />{" "}
+                  Username
+                  <ChevronUp className="ml-auto text-teal-shade dark:text-lime-shade dark:hover:text-lime-shade" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -128,7 +128,7 @@ export function AdminSidebar() {
                 className="w-[--radix-popper-anchor-width]"
               >
                 <DropdownMenuItem>
-                  <span>Theme</span>
+                  <span>Profile</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <span>Sign out</span>
