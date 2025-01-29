@@ -1,4 +1,4 @@
-export type Task = {
+export type TableTask = {
   slno: number;
   date: string;
   projectName: string;
@@ -11,28 +11,28 @@ export type Task = {
   status: "Initiated" | "Ongoing" | "Completed";
 };
 
-export type Project = {
-  projectName: string;
-  projectDesc: string;
-  date: string;
-  projectPeriod: string;
-  clientName: string;
-  clientEmail: string;
-  projectType: string;
-  cost: number;
-  location?: string;
-};
+// export type Project = {
+//   projectName: string;
+//   projectDesc: string;
+//   date: string;
+//   projectPeriod: string;
+//   clientName: string;
+//   clientEmail: string;
+//   projectType: string;
+//   cost: number;
+//   location?: string;
+// };
 
-export type Service = {
-  serviceName: string;
-  cost: number;
-};
+// export type Service = {
+//   serviceName: string;
+//   cost: number;
+// };
 
-export type User = {
-  email: string;
-  password: string;
-  username: string;
-};
+// export type User = {
+//   email: string;
+//   password: string;
+//   username: string;
+// };
 
 export type UserResponse = {
   success: boolean;
@@ -54,8 +54,112 @@ export type AddedProjectType = {
   cost: number;
 };
 
+export type Service = {
+  _id: string;
+  project: string | Project;
+  serviceName: string;
+  serviceDescription: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
+
+export type Project = {
+  _id: string;
+  projectName: string;
+  projectDescription: string;
+  projectDate: string;
+  projectPeriod: number;
+  clientName: string;
+  clientEmail: string;
+  projectType: string;
+  cost: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
+
+export type Task = {
+  _id: string;
+  creator_role: string;
+  creator_id: User;
+  date: string;
+  user: User;
+  project: Project;
+  service: Service;
+  purpose: string;
+  startDate: string;
+  startTime: string;
+  finishDate: string;
+  finishTime: string;
+  status: "Initiated" | "Ongoing" | "Completed";
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
+
+export type User = {
+  _id: string;
+  externalId: number;
+  roleId: number;
+  roleName: string;
+  officeId: number;
+  officeName: string;
+  departmentId: number;
+  departmentName: string;
+  designation: string;
+  email: string;
+  name: string;
+  dob: string;
+  gender: number;
+  mobile: number;
+  profilePic: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
+
+export type CreateTaskPayload = {
+  date: string;
+  finishDate: string;
+  finishTime: string;
+  project: string;
+  purpose: string;
+  service: string;
+  startDate: string;
+  startTime: string;
+  status: "Initiated" | "Ongoing" | "Completed";
+};
+
+export type PaginationData = {
+  currentPage: number;
+  totalPages: number;
+  totalTasks: number;
+};
+
+export type TaskResponse = {
+  success: boolean;
+  message: string;
+  data: Task;
+};
+
 export type ProjectListResponse = {
   success: boolean;
   message: string;
   data: string[];
+};
+
+export type ServiceResponse = {
+  success: boolean;
+  message: string;
+  data: Service[];
+};
+
+export type GetAllResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    tasks: Task[];
+    paginationData: PaginationData;
+  };
 };

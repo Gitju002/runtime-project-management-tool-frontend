@@ -1,10 +1,11 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Task } from "@/types/types";
+import { TableTask, Task } from "@/types/types";
 import { Badge } from "@/components/ui/badge";
-export const columns: ColumnDef<Task>[] = [
+export const columns: ColumnDef<TableTask>[] = [
   {
     accessorKey: "slno",
     header: "SL No.",
+    cell: ({ row }) => row.index + 1,
   },
   {
     accessorKey: "date",

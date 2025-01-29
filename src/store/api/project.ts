@@ -10,10 +10,9 @@ export const projectApi = createApi({
   }),
   tagTypes: ["Project"],
   endpoints: (builder) => ({
-    getProjectList: builder.mutation<ProjectListResponse, void>({
+    getProjectList: builder.query<ProjectListResponse, void>({
       query: () => ({
         url: "project/names",
-        method: "GET",
       }),
       transformErrorResponse: (error) => {
         const apiError = error.data as ProjectListResponse;
@@ -24,4 +23,4 @@ export const projectApi = createApi({
   }),
 });
 
-export const { useGetProjectListMutation } = projectApi;
+export const { useGetProjectListQuery } = projectApi;
