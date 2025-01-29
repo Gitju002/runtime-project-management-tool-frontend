@@ -1,5 +1,3 @@
-"use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -14,9 +12,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Combobox } from "@/components/ui/combo-box";
+import { useState } from "react";
 
 const projectTypeSchema = z.object({
-  type: z.string().min(2, {
+  projectName: z.string().min(2, {
     message: "Project type must be at least 2 characters.",
   }),
   description: z.string().min(10, {
@@ -25,15 +25,26 @@ const projectTypeSchema = z.object({
   location: z.string().optional(),
 });
 
+const existingProjects = [
+  { value: "cosmos", label: "Cosmos DashBoard" },
+  { value: "jaro", label: "Jaro for Education" },
+  { value: "academy", label: "The Academy Group" },
+  { value: "invespy", label: "Invespy for Real Estate" },
+];
+
 export default function ProjectTypeForm({
   onSuccess,
 }: {
   onSuccess: () => void;
 }) {
+  const [selectedExistingProjects, setSelectedExistingProjects] = useState(
+    existingProjects[0]?.value || ""
+  );
+
   const form = useForm<z.infer<typeof projectTypeSchema>>({
     resolver: zodResolver(projectTypeSchema),
     defaultValues: {
-      type: "",
+      projectName: "",
       description: "",
       location: "",
     },
@@ -49,15 +60,15 @@ export default function ProjectTypeForm({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Project Type</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter project type" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+          name="projectName"
+          render={() => (
+            <div className="w-full">
+              <Combobox
+                value={selectedExistingProjects}
+                onChange={setSelectedExistingProjects}
+                data={existingProjects}
+              />
+            </div>
           )}
         />
         <FormField
@@ -89,7 +100,10 @@ export default function ProjectTypeForm({
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
+        <Button
+          type="submit"
+          className="w-full transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35"
+        >
           Submit
         </Button>
       </form>

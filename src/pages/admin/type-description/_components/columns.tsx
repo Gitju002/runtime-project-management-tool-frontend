@@ -1,17 +1,17 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import type { ProjectType } from "@/pages/admin/project-types/index";
+import type { ProjectType } from "@/pages/admin/type-description/index";
 import { Badge } from "@/components/ui/badge";
 
 export const columns: ColumnDef<ProjectType>[] = [
   {
-    accessorKey: "type",
-    header: "Type",
+    accessorKey: "projectName",
+    header: "Project Name",
   },
   {
     accessorKey: "description",
-    header: "Description",
+    header: "Type Description",
   },
   {
     accessorKey: "location",

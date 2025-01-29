@@ -12,6 +12,10 @@ export default {
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        "lime-shade": "hsl(var(--lime-shade))",
+        "teal-shade": "hsl(var(--teal-shade))",
+        "dark-shade": "hsl(var(--dark-shade))",
+        "darker-shade": "hsl(var(--darker-shade))",
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",

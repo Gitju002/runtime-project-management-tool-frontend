@@ -1,108 +1,87 @@
-"use client";
+import { Combobox } from "@/components/ui/combo-box";
+import React, { useState } from "react";
+import { PieChartComponent } from "./_components/pie-chart";
+import { BarChartComponent } from "./_components/bar-chart";
+import { TaskCompletedComponent } from "./_components/task-completed";
+import { DataTable } from "@/components/table/data-table";
+import { Task } from "@/types/types";
+import { columns } from "./_components/columns";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
-import {
-  PieChart,
-  Pie,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  Cell,
-} from "recharts";
-
-const totalTasks = 150;
-
-const projectData = [
-  { name: "Website Redesign", value: 45 },
-  { name: "Mobile App", value: 30 },
-  { name: "E-commerce Platform", value: 25 },
-  { name: "CRM System", value: 20 },
-  { name: "Marketing Campaign", value: 30 },
+const users = [
+  { value: "snehashis", label: "Snehashis Gharai" },
+  { value: "purbarun", label: "Purbarun Mondal" },
+  { value: "priyansu", label: "Priyansu Chowdhury" },
+  { value: "abhijit", label: "Abhijit Dinda" },
+  { value: "abdul", label: "Sayed Abdul" },
 ];
 
-const taskTimeData = [
-  { name: "Design", time: 120 },
-  { name: "Development", time: 300 },
-  { name: "Testing", time: 100 },
-  { name: "Deployment", time: 50 },
-  { name: "Maintenance", time: 80 },
+export const projects: Task[] = [
+  {
+    slno: 1,
+    date: "2021-09-01",
+    projectName: "Project 1",
+    services: "Service 1",
+    purpose: "Purpose 1",
+    startDate: "2021-09-01",
+    startTime: "10:00 AM",
+    finishDate: "2021-09-01",
+    finishTime: "12:00 PM",
+    status: "Initiated",
+  },
+  {
+    slno: 2,
+    date: "2021-09-01",
+    projectName: "Project 2",
+    services: "Service 2",
+    purpose: "Purpose 1",
+    startDate: "2021-09-01",
+    startTime: "10:00 AM",
+    finishDate: "2021-09-01",
+    finishTime: "12:00 PM",
+    status: "Completed",
+  },
+  {
+    slno: 3,
+    date: "2021-09-01",
+    projectName: "Project 2",
+    services: "Service 3",
+    purpose: "Purpose 3",
+    startDate: "2021-09-01",
+    startTime: "10:00 AM",
+    finishDate: "2021-09-01",
+    finishTime: "12:00 PM",
+    status: "Ongoing",
+  },
 ];
-
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
 
 export default function Analytics() {
+  const [selectedUser, setSelectedUser] = useState(users[0]?.value || "");
+
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Analytics</h1>
-      <div className="grid grid-cols-3 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Tasks</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-4xl font-bold">{totalTasks}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Project Distribution</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={{}} className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={projectData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {projectData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-          </CardContent>
-        </Card>
-        <Card className="md:col-span-2">
-          <CardHeader>
-            <CardTitle>Task Times</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={{}} className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={taskTimeData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <Legend />
-                  <Bar dataKey="time" fill="#8884d8" />
-                </BarChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-          </CardContent>
-        </Card>
+    <div className="container mx-auto min-h-screen w-full py-6">
+      <div className="grid grid-cols-1 gap-y-4">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="block w-full text-2xl font-bold">Analytics</h1>
+          <div className="w-full">
+            <Combobox
+              value={selectedUser}
+              onChange={setSelectedUser}
+              data={users}
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+          <TaskCompletedComponent />
+          <PieChartComponent />
+          <BarChartComponent />
+        </div>
+        <h1 className="text-sm md:text-base lg:text-xl font-bold">
+          Daily Update Task Table of{" "}
+          <span className="dark:text-lime-shade capitalize">
+            {users.find((user) => user.value === selectedUser)?.label}
+          </span>
+        </h1>
+        <DataTable columns={columns} data={projects} />
       </div>
     </div>
   );

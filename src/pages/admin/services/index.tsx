@@ -44,22 +44,24 @@ export default function Services() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="container mx-auto py-10">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Services</h1>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              Add Service <PlusCircle className="ml-2 h-4 w-4" />
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogTitle>Add New Service</DialogTitle>
-            <ServiceForm onSuccess={() => setOpen(false)} />
-          </DialogContent>
-        </Dialog>
+    <div className="container  mx-auto min-h-screen w-full py-6">
+      <div className="grid grid-cols-1 gap-2">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">Services</h1>
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button className=" transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35">
+                Add Service <PlusCircle className="ml-2 h-4 w-4" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogTitle>Add New Service</DialogTitle>
+              <ServiceForm onSuccess={() => setOpen(false)} />
+            </DialogContent>
+          </Dialog>
+        </div>
+        <DataTable columns={columns} data={services} />
       </div>
-      <DataTable columns={columns} data={services} />
     </div>
   );
 }

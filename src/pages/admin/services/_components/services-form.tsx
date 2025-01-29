@@ -84,7 +84,10 @@ export default function ServiceForm({ onSuccess }: { onSuccess: () => void }) {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
+        <Button
+          type="submit"
+          className="w-full transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35 "
+        >
           Submit
         </Button>
       </form>
