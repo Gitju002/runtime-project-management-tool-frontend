@@ -1,18 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import {
   Form,
-  FormDescription,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -20,31 +19,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { addTaskSchema } from "@/schema";
 import { Combobox } from "@/components/ui/combo-box";
 import { DatePicker } from "@/components/ui/date-picker";
 import { TimePicker } from "@/components/ui/time-picker";
 import { cn } from "@/lib/utils";
-import { useGetProjectListMutation } from "@/store/api/project";
+import { useGetProjectListQuery } from "@/store/api/project";
+import { useGetServiceByProjectQuery } from "@/store/api/service"; // Import the service query
+import { addTaskSchema } from "@/schema";
+import { useCreateTaskMutation } from "@/store/api/tasks";
+import { toast } from "sonner";
 
-const TaskForm = () => {
-  const [getProjectList, { isLoading, data: projectLists, error }] =
-    useGetProjectListMutation();
-
-  const fetchProjectLists = async () => {
-    try {
-      const response = await getProjectList().unwrap();
-      console.log("Projects:", response);
-    } catch (err) {
-      console.error("Error fetching projects:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchProjectLists();
-  }, []);
-
+const TaskForm = ({
+  setIsOpen,
+}: {
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const form = useForm<z.infer<typeof addTaskSchema>>({
     resolver: zodResolver(addTaskSchema),
     defaultValues: {
@@ -60,8 +49,38 @@ const TaskForm = () => {
     },
   });
 
+  const {
+    data: projectLists,
+    isLoading: isProjectLoading,
+    error: projectError,
+  } = useGetProjectListQuery();
+
+  const selectedProject = useWatch({ control: form.control, name: "project" });
+
+  // Fetch services when a project is selected
+  const {
+    data: serviceLists,
+    isLoading: isServiceLoading,
+    error: serviceError,
+  } = useGetServiceByProjectQuery(selectedProject, { skip: !selectedProject });
+
+  const [
+    createTask,
+    {
+      isLoading: isTaskCreating,
+      error: taskError,
+      data: taskData,
+      isSuccess: taskSuccess,
+    },
+  ] = useCreateTaskMutation();
+
   function onSubmit(values: z.infer<typeof addTaskSchema>) {
-    console.log(values);
+    createTask(values)
+      .unwrap()
+      .then(() => {
+        form.reset();
+        setIsOpen(false);
+      });
   }
 
   return (
@@ -71,7 +90,7 @@ const TaskForm = () => {
           <div
             className={cn(
               "grid gap-2",
-              form.watch("project") ? "grid-cols-2" : "grid-cols-1"
+              selectedProject ? "grid-cols-2" : "grid-cols-1"
             )}
           >
             <FormField
@@ -85,7 +104,7 @@ const TaskForm = () => {
                       <Combobox
                         value={field.value}
                         onChange={field.onChange}
-                        disabled={isLoading}
+                        disabled={isProjectLoading}
                         data={projectLists?.data?.map((item) => ({
                           label: item,
                           value: item,
@@ -97,7 +116,7 @@ const TaskForm = () => {
                 </FormItem>
               )}
             />
-            {form.watch("project") && (
+            {selectedProject && (
               <FormField
                 control={form.control}
                 name="service"
@@ -109,7 +128,13 @@ const TaskForm = () => {
                         <Combobox
                           value={field.value}
                           onChange={field.onChange}
-                          disabled={isLoading}
+                          disabled={isServiceLoading || !serviceLists}
+                          data={
+                            serviceLists?.data?.map((service) => ({
+                              label: service.serviceName,
+                              value: service.serviceName,
+                            })) || []
+                          }
                         />
                       </div>
                     </FormControl>
@@ -129,14 +154,14 @@ const TaskForm = () => {
                   <Input
                     placeholder="Define Project Purpose Here"
                     {...field}
-                    disabled={isLoading}
+                    disabled={isProjectLoading}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <div className="flex items-center  gap-2">
+          <div className="flex items-center gap-2">
             <FormField
               control={form.control}
               name="startDate"
@@ -147,10 +172,8 @@ const TaskForm = () => {
                     <DatePicker
                       placeholder="Pick start date"
                       value={field.value ? new Date(field.value) : new Date()}
-                      onChange={(e) => {
-                        field.onChange(e?.toISOString());
-                      }}
-                      btnDisabled={isLoading}
+                      onChange={(e) => field.onChange(e?.toISOString())}
+                      btnDisabled={isProjectLoading}
                     />
                   </FormControl>
                   <FormMessage />
@@ -166,10 +189,8 @@ const TaskForm = () => {
                   <FormControl>
                     <TimePicker
                       value={field.value ? new Date(field.value) : undefined}
-                      onChange={(e) => {
-                        field.onChange(e?.toISOString());
-                      }}
-                      disabled={isLoading}
+                      onChange={(e) => field.onChange(e?.toISOString())}
+                      disabled={isProjectLoading}
                     />
                   </FormControl>
                   <FormMessage />
@@ -178,7 +199,7 @@ const TaskForm = () => {
             />
           </div>
 
-          <div className="flex items-center  gap-2">
+          <div className="flex items-center gap-2">
             <FormField
               control={form.control}
               name="finishDate"
@@ -189,10 +210,8 @@ const TaskForm = () => {
                     <DatePicker
                       placeholder="Pick finish date"
                       value={field.value ? new Date(field.value) : new Date()}
-                      onChange={(e) => {
-                        field.onChange(e?.toISOString());
-                      }}
-                      btnDisabled={isLoading}
+                      onChange={(e) => field.onChange(e?.toISOString())}
+                      btnDisabled={isProjectLoading}
                       disabled={(date: Date) => {
                         const startDate = form.watch("startDate");
                         return startDate ? date < new Date(startDate) : false;
@@ -212,10 +231,8 @@ const TaskForm = () => {
                   <FormControl>
                     <TimePicker
                       value={field.value ? new Date(field.value) : undefined}
-                      onChange={(e) => {
-                        field.onChange(e?.toISOString());
-                      }}
-                      disabled={isLoading}
+                      onChange={(e) => field.onChange(e?.toISOString())}
+                      disabled={isProjectLoading}
                     />
                   </FormControl>
                   <FormMessage />
@@ -232,7 +249,7 @@ const TaskForm = () => {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  disabled={isLoading}
+                  disabled={isProjectLoading}
                 >
                   <FormControl>
                     <SelectTrigger
@@ -252,7 +269,6 @@ const TaskForm = () => {
                           ? "!text-green-600 font-semibold"
                           : ""
                       }
-                      
                       `}
                     >
                       <SelectValue placeholder="Select your Task Completion Status" />

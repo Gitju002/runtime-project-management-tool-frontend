@@ -136,17 +136,31 @@ export const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
 
     const handleTimeChange = useCallback(
       (nextDate: Date | undefined) => {
-        if (onChange) {
-          onChange(nextDate);
-        } else {
-          console.log(nextDate);
+        if (nextDate) {
+          let hours = nextDate.getHours();
+          const minutes = nextDate.getMinutes();
+
+          if (ampm === "PM" && hours < 12) {
+            hours += 12;
+          }
+
+          // Set updated time
+          const updatedDate = new Date(nextDate);
+          updatedDate.setHours(hours, minutes, 0, 0);
+
+          if (onChange) {
+            onChange(updatedDate);
+          } else {
+            console.log(updatedDate.toISOString());
+          }
         }
       },
-      [onChange]
+      [onChange, ampm] // Depend on `ampm` to ensure correct time conversion
     );
 
     const timescape = useTimescape({
       ...timeOptions,
+      hour12: false, // Enforce 24-hour format
       ...(value && { date: value }),
       onChangeDate: handleTimeChange,
     });

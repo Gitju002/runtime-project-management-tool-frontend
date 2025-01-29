@@ -57,7 +57,6 @@ export function Combobox({
   }[];
 }) {
   const [open, setOpen] = React.useState(false);
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -70,15 +69,15 @@ export function Combobox({
         >
           {value
             ? data?.find((item) => item.value === value)?.label
-            : "Select project..."}
+            : "Select from here..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search Project..." />
+          <CommandInput placeholder="Search here..." />
           <CommandList>
-            <CommandEmpty>No Projects found.</CommandEmpty>
+            <CommandEmpty>No Record found.</CommandEmpty>
             <CommandGroup>
               {data?.map((item) => (
                 <CommandItem
