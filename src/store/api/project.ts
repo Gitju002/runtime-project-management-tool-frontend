@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { AddedProjectType, ProjectListResponse } from "@/types/types";
+import { ProjectListResponse } from "@/types/types";
 import { toast } from "sonner";
 
 export const projectApi = createApi({

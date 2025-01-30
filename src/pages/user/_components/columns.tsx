@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { TableTask, Task } from "@/types/types";
+import { TableTask } from "@/types/types";
 import { Badge } from "@/components/ui/badge";
 export const columns: ColumnDef<TableTask>[] = [
   {

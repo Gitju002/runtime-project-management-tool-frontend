@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,11 +35,8 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
     },
   });
 
-  const {
-    data: projectLists,
-    isLoading: isProjectLoading,
-    error: projectError,
-  } = useGetProjectListQuery();
+  const { data: projectLists, isLoading: isProjectLoading } =
+    useGetProjectListQuery();
 
   async function onSubmit(values: z.infer<typeof addProjectSchema>) {
     setLoading(true); // Start loading

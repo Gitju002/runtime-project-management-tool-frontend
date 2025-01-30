@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Clock, ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "./button";
-import { log } from "console";
 
 interface TimePickerProps {
   value: string;
