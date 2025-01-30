@@ -8,11 +8,14 @@ import { AdminSidebar } from "./admin/_components/admin-sidebar";
 import { CustomSidebarTrigger } from "./admin/_components/sidebar-trigger";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import UserLogout from "@/components/ui/user-logout";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const hideSidebarRoutes = ["/user", "/login"];
+  const hideLogoutRoutes = ["/login", "/admin"];
   const showSidebar = !hideSidebarRoutes.includes(router.pathname);
+  const showLogout = !hideLogoutRoutes.includes(router.pathname);
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system">
@@ -28,6 +31,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 <ThemeToggle />
               </div>
             </main>
+            {showLogout && <UserLogout />}
           </div>
         </SidebarProvider>
       </StoreProvider>

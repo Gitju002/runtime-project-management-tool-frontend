@@ -30,6 +30,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
+import { useLogoutQuery } from "@/store/api/auth";
+import { useRouter } from "next/router";
 
 const items = [
   {
@@ -72,7 +74,17 @@ const items = [
 ];
 
 export function AdminSidebar() {
+  const pathname = usePathname();
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  const {
+    data: logoutData,
+    isLoading: logoutLoading,
+    isSuccess: logoutSuccess,
+    isError: logoutIsError,
+    refetch: logoutRefetch,
+  } = useLogoutQuery();
 
   useEffect(() => {
     setTimeout(() => {
@@ -80,7 +92,11 @@ export function AdminSidebar() {
     }, 2000);
   }, []);
 
-  const pathname = usePathname();
+  const handleLogout = () => {
+    console.log("Logout");
+    logoutRefetch();
+    router.push("/login");
+  };
 
   return (
     <Sidebar variant="floating" collapsible="icon">
@@ -130,7 +146,7 @@ export function AdminSidebar() {
                 <DropdownMenuItem>
                   <span>Profile</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
                   <span>Sign out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>

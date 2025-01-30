@@ -27,7 +27,22 @@ export const authApi = createApi({
         return error;
       },
     }),
+    logout: builder.query<UserResponse, void>({
+      query: () => ({
+        url: "auth/logout",
+      }),
+      transformResponse: (response) => {
+        const apiResponse = response as UserResponse;
+        toast.success(apiResponse.message);
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as UserResponse;
+        toast.error(apiError.message);
+        return error;
+      },
+    }),
   }),
 });
 
-export const { useLoginMutation } = authApi;
+export const { useLoginMutation, useLogoutQuery } = authApi;
