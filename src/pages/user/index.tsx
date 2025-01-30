@@ -13,7 +13,6 @@ import { PlusCircleIcon } from "lucide-react";
 import { format } from "date-fns";
 import { useGetTaskByUserIDQuery } from "@/store/api/tasks";
 import { transformTasks } from "@/utils/tasksFormatting";
-import { TableTask } from "@/types/types";
 // export const projects: Task[] = [
 //   {
 //     slno: 1,
@@ -62,7 +61,7 @@ const User = () => {
     isError: tasksIsError,
   } = useGetTaskByUserIDQuery();
 
-  console.log("Tasks Data");
+  console.log("Tasks Data", tasksData);
 
   const formattedTasks = transformTasks(tasksData?.data.tasks);
 
@@ -73,11 +72,11 @@ const User = () => {
           <h1 className="text-2xl font-semibold">User Page</h1>
           <Dialog open={isOpened} onOpenChange={setIsOpened}>
             <DialogTrigger asChild>
-              <Button>
+              <Button className="transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35">
                 Add Task <PlusCircleIcon />
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="bg-background dark:hover:shadow-2xl dark:hover:shadow-teal-shade/60 transition-all duration-200">
               <DialogTitle className="text-center text-sm border border-gray-200 rounded-md p-2 mt-4">
                 Add Task(s) for{" "}
                 <span className="text-blue-500">
