@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Task } from "@/types/types";
+import { TableTask } from "@/types/types";
 import { Badge } from "@/components/ui/badge";
-export const columns: ColumnDef<Task>[] = [
+export const columns: ColumnDef<TableTask>[] = [
   {
     accessorKey: "slno",
     header: "SL No.",

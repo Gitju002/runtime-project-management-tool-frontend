@@ -1,7 +1,4 @@
-"use client";
-
 import * as React from "react";
-import { TrendingUp } from "lucide-react";
 import { Label, Pie, PieChart } from "recharts";
 
 import {
@@ -12,12 +9,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+
 const chartData = [
   { taskCompletion: "completed", value: 300, fill: "var(--color-completed)" },
   { taskCompletion: "ongoing", value: 150, fill: "var(--color-ongoing)" },
@@ -47,8 +46,8 @@ export function TaskCompletedComponent() {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Task Completion Stats </CardTitle>
+        <CardDescription>Overview of task completion status</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -102,10 +101,34 @@ export function TaskCompletedComponent() {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          <span>
+            <span style={{ color: chartConfig.initiated.color }}>
+              {
+                chartData.find((data) => data.taskCompletion === "initiated")
+                  ?.value
+              }{" "}
+              Initiated
+            </span>
+            ,{" "}
+            <span style={{ color: chartConfig.ongoing.color }}>
+              {
+                chartData.find((data) => data.taskCompletion === "ongoing")
+                  ?.value
+              }{" "}
+              Ongoing
+            </span>{" "}
+            and{" "}
+            <span style={{ color: chartConfig.completed.color }}>
+              {
+                chartData.find((data) => data.taskCompletion === "completed")
+                  ?.value
+              }{" "}
+              Completed tasks
+            </span>
+          </span>
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total value for the last 6 months
+          Monitor the progress and ensure timely completion of tasks.
         </div>
       </CardFooter>
     </Card>

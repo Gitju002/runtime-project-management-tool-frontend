@@ -1,5 +1,3 @@
-"use client";
-
 import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
@@ -18,17 +16,17 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
+  { projectName: "cosmos", duration: 10 },
+  { projectName: "jaro", duration: 20 },
+  { projectName: "invespy", duration: 15 },
+  { projectName: "academy", duration: 7 },
+  { projectName: "ai", duration: 8 },
+  { projectName: "others", duration: 10 },
 ];
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  duration: {
+    label: "No. of Days",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
@@ -36,35 +34,53 @@ const chartConfig = {
 export function BarChartComponent() {
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Bar Chart</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+      <CardHeader className="flex items-center">
+        <CardTitle>Project Duration Analysis</CardTitle>
+        <CardDescription>
+          Overview of project duration across different projects
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="projectName"
+              className="capitalize"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={(value) => value.slice(0, 10)}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8} />
+            <Bar dataKey="duration" fill="var(--color-duration)" radius={8} />
           </BarChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          The most time-consuming project is{" "}
+          <span className="text-red-500 capitalize">
+            {
+              chartData.reduce((acc, curr) =>
+                curr.duration > acc.duration ? curr : acc
+              ).projectName
+            }
+          </span>
+          <TrendingUp className="h-4 w-4 text-red-500" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          Average project duration is{" "}
+          <span className=" font-semibold">
+            {Math.round(
+              chartData.reduce((acc, curr) => acc + curr.duration, 0) /
+                chartData.length
+            )}
+          </span>{" "}
+          days
         </div>
       </CardFooter>
     </Card>
