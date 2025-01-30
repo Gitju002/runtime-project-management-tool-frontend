@@ -15,10 +15,12 @@ import { Input } from "@/components/ui/input";
 import { loginFormSchema } from "@/schema";
 import { ArrowRight } from "lucide-react";
 import { useLoginMutation } from "@/store/api/auth";
+import { useRouter } from "next/router";
 
 export function LoginForm() {
-  const [login, { isLoading: loading, isError, error }] = useLoginMutation();
-
+  const [login, { isLoading: loading, isError, error, isSuccess }] =
+    useLoginMutation();
+  const router = useRouter();
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -30,7 +32,12 @@ export function LoginForm() {
 
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
     try {
-      await login(values);
+      await login(values)
+        .unwrap()
+        .then(() => {
+          router.push("/user");
+        });
+      console.log("isSuccess", isSuccess);
     } catch {
       console.error(error);
     }
