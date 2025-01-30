@@ -1,187 +1,149 @@
-"use client";
-import React, { forwardRef, useCallback, useState } from "react";
-import { useTimescape, type Options } from "timescape/react";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-
-const timePickerInputBase =
-  "p-1 inline w-full tabular-nums h-fit border-none outline-none select-none content-box caret-transparent rounded-sm min-w-8 text-center focus:bg-blue-500/10 focus-visible:ring-0 focus-visible:outline-none";
-const timePickerSeparatorBase = "text-xs text-gray-400";
-
-type TimeFormat = "hours" | "minutes" | "am/pm";
-
-type DateTimeArray<T extends TimeFormat> = T[];
-type TimePickerFormatDefaults = [DateTimeArray<TimeFormat>];
-
-const DEFAULTS: TimePickerFormatDefaults = [["hours", "minutes", "am/pm"]];
-
-type TimescapeReturn = ReturnType<typeof useTimescape>;
-type InputPlaceholders = Record<TimeFormat, string>;
-const INPUT_PLACEHOLDERS: InputPlaceholders = {
-  hours: "HH",
-  minutes: "MM",
-  "am/pm": "AM/PM",
-};
-
-const TimeGrid = forwardRef<
-  HTMLDivElement,
-  {
-    format: TimePickerFormatDefaults;
-    className?: string;
-    timescape: Pick<TimescapeReturn, "getRootProps" | "getInputProps">;
-    placeholders: InputPlaceholders;
-    onAMPMClick: () => void;
-    ampmValue: string;
-    disabled?: boolean;
-  }
->(
-  (
-    {
-      format,
-      className,
-      timescape,
-      placeholders,
-      onAMPMClick,
-      ampmValue,
-      disabled,
-    }: {
-      format: TimePickerFormatDefaults;
-      className?: string;
-      timescape: Pick<TimescapeReturn, "getRootProps" | "getInputProps">;
-      placeholders: InputPlaceholders;
-      onAMPMClick: () => void;
-      ampmValue: string;
-      disabled?: boolean;
-    },
-    ref
-  ) => {
-    return (
-      <div
-        className={cn(
-          "flex items-center w-40 p-1 border",
-          className,
-          "border-input rounded-md gap-1 selection:bg-transparent selection:text-foreground"
-        )}
-        {...timescape.getRootProps()}
-        ref={ref}
-      >
-        {format[0].map((unit, index) => (
-          <React.Fragment key={unit}>
-            {unit === "am/pm" ? (
-              <input
-                className={cn(
-                  "p-1 !bg-transparent outline-none cursor-pointer w-10 ms-auto text-sm font-semibold",
-                  {
-                    "bg-foreground/15": unit === "am/pm",
-                  }
-                )}
-                readOnly
-                disabled={disabled}
-                value={ampmValue}
-                onClick={onAMPMClick}
-                placeholder={placeholders[unit]}
-              />
-            ) : (
-              <Input
-                className={cn(timePickerInputBase)}
-                {...timescape.getInputProps(unit)}
-                placeholder={placeholders[unit]}
-                disabled={disabled}
-              />
-            )}
-            {index < format[0].length - 2 && (
-              <span className={timePickerSeparatorBase}>
-                {unit === "am/pm" ? "" : ":"}
-              </span>
-            )}
-          </React.Fragment>
-        ))}
-      </div>
-    );
-  }
-);
-
-TimeGrid.displayName = "TimeGrid";
+import { useState } from "react";
+import { Clock, ChevronUp, ChevronDown } from "lucide-react";
+import { Button } from "./button";
+import { log } from "console";
 
 interface TimePickerProps {
-  value?: Date;
-  format?: TimePickerFormatDefaults;
-  placeholders?: InputPlaceholders;
-  onChange?: Options["onChangeDate"];
-  timeOptions?: Options;
-  className?: string;
-  disabled?: boolean;
+  value: string;
+  onChange: (time: string) => void;
 }
 
-const DEFAULT_TS_OPTIONS = {
-  hour12: true,
-};
+export function TimePicker({ value, onChange }: TimePickerProps) {
+  const [isOpen, setIsOpen] = useState(false);
 
-export const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
-  (
-    {
-      value,
-      format = DEFAULTS,
-      placeholders,
-      timeOptions = DEFAULT_TS_OPTIONS,
-      onChange,
-      className,
-      disabled,
-    },
-    ref
-  ) => {
-    const [ampm, setAMPM] = useState(() =>
-      value ? (value.getHours() >= 12 ? "PM" : "AM") : "AM"
-    );
+  // Parse initial time
+  const initialTime = value ? new Date(`2000/01/01 ${value}`) : new Date();
+  const [hours, setHours] = useState(initialTime.getHours());
+  const [minutes, setMinutes] = useState(initialTime.getMinutes());
+  const [period, setPeriod] = useState(hours >= 12 ? "PM" : "AM");
 
-    const handleTimeChange = useCallback(
-      (nextDate: Date | undefined) => {
-        if (nextDate) {
-          let hours = nextDate.getHours();
-          const minutes = nextDate.getMinutes();
+  // Convert 24h to 12h format
+  const displayHours = hours % 12 || 12;
 
-          if (ampm === "PM" && hours < 12) {
-            hours += 12;
-          }
+  const handleHourChange = (delta: number) => {
+    let newHours = hours + delta;
+    if (newHours > 23) newHours = 0;
+    if (newHours < 0) newHours = 23;
+    setHours(newHours);
+    setPeriod(newHours >= 12 ? "PM" : "AM");
+    updateTime(newHours, minutes);
+    console.log("HandleHourChange:", newHours, minutes);
+  };
 
-          // Set updated time
-          const updatedDate = new Date(nextDate);
-          updatedDate.setHours(hours, minutes, 0, 0);
+  const handleMinuteChange = (delta: number) => {
+    let newMinutes = minutes + delta;
+    if (newMinutes > 59) newMinutes = 0;
+    if (newMinutes < 0) newMinutes = 59;
+    setMinutes(newMinutes);
+    updateTime(hours, newMinutes);
+    console.log("HandleMinChange:", hours, newMinutes);
+  };
 
-          if (onChange) {
-            onChange(updatedDate);
-          } else {
-            console.log(updatedDate.toISOString());
-          }
-        }
-      },
-      [onChange, ampm] // Depend on `ampm` to ensure correct time conversion
-    );
+  const togglePeriod = () => {
+    const newHours = hours >= 12 ? hours - 12 : hours + 12;
+    setHours(newHours);
+    setPeriod(period === "AM" ? "PM" : "AM");
+    updateTime(newHours, minutes);
+    console.log("TogglePeriod:", newHours, minutes);
+  };
 
-    const timescape = useTimescape({
-      ...timeOptions,
-      hour12: false, // Enforce 24-hour format
-      ...(value && { date: value }),
-      onChangeDate: handleTimeChange,
-    });
+  const updateTime = (h: number, m: number) => {
+    const date = new Date();
+    date.setHours(h);
+    date.setMinutes(m);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+    const timeString = date.toISOString();
+    console.log("UpdateTime:", typeof timeString, timeString);
 
-    const toggleAMPM = useCallback(() => {
-      setAMPM((prev) => (prev === "AM" ? "PM" : "AM"));
-    }, []);
+    onChange(timeString);
+  };
 
-    return (
-      <TimeGrid
-        format={format}
-        className={className}
-        timescape={timescape}
-        placeholders={placeholders ?? INPUT_PLACEHOLDERS}
-        ref={ref}
-        onAMPMClick={toggleAMPM}
-        ampmValue={ampm}
-        disabled={disabled}
-      />
-    );
-  }
-);
+  return (
+    <div className="relative">
+      <Button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between px-4 py-2 bg-white hover:bg-gray-200 dark:bg-background border border-input rounded-lg shadow-sm  focus:outline-none "
+      >
+        <div className="flex items-center gap-2">
+          <Clock className="w-5 h-5 text-gray-500 dark:text-lime-shade" />
+          <span className="text-gray-700 dark:text-lime-shade">
+            {`${displayHours.toString().padStart(2, "0")}:${minutes
+              .toString()
+              .padStart(2, "0")} ${period}`}
+          </span>
+        </div>
+      </Button>
 
-TimePicker.displayName = "TimePicker";
+      {isOpen && (
+        <div className="absolute mt-1 top-10 right-0 max-w-[250px] bg-white dark:bg-background  rounded-lg transition-all duration-200 shadow-lg shadow-slate-600/30 dark:shadow-none z-10 border border-input">
+          <div className="p-4 flex items-center justify-between gap-4">
+            {/* Hours */}
+            <div className="flex flex-col items-center">
+              <Button
+                type="button"
+                variant={"outline"}
+                size={"icon"}
+                onClick={() => handleHourChange(1)}
+                className="p-1 my-1 dark:shadow-md dark:shadow-teal-shade/40 dark:hover:bg-white  "
+              >
+                <ChevronUp className="w-5 h-5 dark:text-teal-shade text-gray-600" />
+              </Button>
+              <span className="text-2xl font-semibold w-12 text-center">
+                {displayHours.toString().padStart(2, "0")}
+              </span>
+              <Button
+                type="button"
+                variant={"outline"}
+                size={"icon"}
+                onClick={() => handleHourChange(-1)}
+                className="p-1 hover:bg-white  my-1 dark:shadow-md dark:shadow-teal-shade/40"
+              >
+                <ChevronDown className="w-5 h-5 dark:text-teal-shade text-gray-600" />
+              </Button>
+            </div>
+
+            <span className="text-2xl font-semibold text-gray-500">:</span>
+
+            {/* Minutes */}
+            <div className="flex flex-col items-center">
+              <Button
+                type="button"
+                variant={"outline"}
+                size={"icon"}
+                onClick={() => handleMinuteChange(1)}
+                className="p-1 hover:bg-white  my-1 dark:shadow-md dark:shadow-teal-shade/40"
+              >
+                <ChevronUp className="w-5 h-5 dark:text-teal-shade text-gray-600" />
+              </Button>
+              <span className="text-2xl font-semibold w-12 text-center">
+                {minutes.toString().padStart(2, "0")}
+              </span>
+              <Button
+                type="button"
+                variant={"outline"}
+                size={"icon"}
+                onClick={() => handleMinuteChange(-1)}
+                className="p-1 hover:bg-white  my-1 dark:shadow-md dark:shadow-teal-shade/40"
+              >
+                <ChevronDown className="w-5 h-5 dark:text-teal-shade text-gray-600" />
+              </Button>
+            </div>
+
+            {/* AM/PM */}
+            <Button
+              type="button"
+              variant={"outline"}
+              size={"icon"}
+              onClick={togglePeriod}
+              className="px-3 py-2 rounded-lg text-sm font-semibold bg-white dark:hover:bg-white dark:bg-background dark:text-teal-shade my-1 dark:shadow-md dark:shadow-teal-shade/40 "
+            >
+              {period}
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

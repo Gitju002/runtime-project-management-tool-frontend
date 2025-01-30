@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -21,13 +20,13 @@ import {
 } from "@/components/ui/select";
 import { Combobox } from "@/components/ui/combo-box";
 import { DatePicker } from "@/components/ui/date-picker";
-import { TimePicker } from "@/components/ui/time-picker";
 import { cn } from "@/lib/utils";
 import { useGetProjectListQuery } from "@/store/api/project";
 import { useGetServiceByProjectQuery } from "@/store/api/service"; // Import the service query
 import { addTaskSchema } from "@/schema";
 import { useCreateTaskMutation } from "@/store/api/tasks";
 import { toast } from "sonner";
+import { TimePicker } from "@/components/ui/time-picker";
 
 const TaskForm = ({
   setIsOpen,
@@ -152,6 +151,7 @@ const TaskForm = ({
                 <FormLabel>Purpose</FormLabel>
                 <FormControl>
                   <Input
+                    className="bg-background hover:bg-input"
                     placeholder="Define Project Purpose Here"
                     {...field}
                     disabled={isProjectLoading}
@@ -188,9 +188,8 @@ const TaskForm = ({
                   <FormLabel>Start Time</FormLabel>
                   <FormControl>
                     <TimePicker
-                      value={field.value ? new Date(field.value) : undefined}
-                      onChange={(e) => field.onChange(e?.toISOString())}
-                      disabled={isProjectLoading}
+                      value={field.value}
+                      onChange={(e) => field.onChange(e)}
                     />
                   </FormControl>
                   <FormMessage />
@@ -230,9 +229,9 @@ const TaskForm = ({
                   <FormLabel>Finish Time</FormLabel>
                   <FormControl>
                     <TimePicker
-                      value={field.value ? new Date(field.value) : undefined}
-                      onChange={(e) => field.onChange(e?.toISOString())}
-                      disabled={isProjectLoading}
+                      value={field.value}
+                      onChange={(e) => field.onChange(e)}
+                      // disabled={isProjectLoading}
                     />
                   </FormControl>
                   <FormMessage />
@@ -256,17 +255,17 @@ const TaskForm = ({
                       className={`
                       ${
                         field.value === "Initiated"
-                          ? "!text-blue-600 font-semibold"
+                          ? "!text-blue-600 font-semibold bg-background"
                           : ""
                       }
                       ${
                         field.value === "Ongoing"
-                          ? "!text-yellow-600 font-semibold"
+                          ? "!text-yellow-600 font-semibold bg-background"
                           : ""
                       }
                       ${
                         field.value === "Completed"
-                          ? "!text-green-600 font-semibold"
+                          ? "!text-green-600 font-semibold bg-background"
                           : ""
                       }
                       `}
@@ -301,7 +300,10 @@ const TaskForm = ({
           />
 
           <div className="flex items-center gap-2">
-            <Button className="ms-auto" type="submit">
+            <Button
+              className="ms-auto transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35"
+              type="submit"
+            >
               Submit
             </Button>
           </div>
