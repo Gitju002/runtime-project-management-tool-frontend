@@ -16,6 +16,11 @@ export const authApi = createApi({
         method: "POST",
         body,
       }),
+      transformResponse: (response) => {
+        const apiResponse = response as UserResponse;
+        toast.success(apiResponse.message);
+        return apiResponse;
+      },
       transformErrorResponse: (error) => {
         const apiError = error.data as UserResponse;
         toast.error(apiError.data.error);

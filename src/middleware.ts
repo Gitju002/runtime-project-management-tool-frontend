@@ -1,10 +1,23 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import * as jose from "jose";
 
-export function middleware(request: NextRequest) {
+const encodedSecret = new TextEncoder().encode(process.env.JWT_KEY as string);
+
+export async function middleware(request: NextRequest) {
   const { pathname, origin } = request.nextUrl;
-  const admin = false;
-  const authToken = request.cookies.get("auth-token");
+  const authToken = request.cookies.get("auth_token");
+  const tokenValue = authToken?.value;
+  let roleID;
+  if (tokenValue) {
+    try {
+      const decoded = await jose.jwtVerify(tokenValue, encodedSecret);
+      roleID = decoded.payload.roleId;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  const admin = roleID === 1 ? true : false;
 
   const loginUrl = new URL("/login", origin);
   const adminUrl = new URL("/admin", origin);
@@ -12,6 +25,12 @@ export function middleware(request: NextRequest) {
 
   const adminRouteRegex = /^\/admin(\/|$)/;
   const userRouteRegex = /^\/user(\/|$)/;
+
+  if (!authToken && !pathname.startsWith(loginUrl.pathname)) {
+    return NextResponse.redirect(loginUrl);
+  } else if (authToken && pathname.startsWith(loginUrl.pathname)) {
+    return NextResponse.redirect(admin ? adminUrl : userUrl);
+  }
 
   if (pathname === "/") {
     return NextResponse.redirect(admin ? adminUrl : userUrl);

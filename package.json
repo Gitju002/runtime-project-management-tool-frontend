@@ -1,5 +1,5 @@
 {
-  "name": "runtime-project-management-tool",
+  "name": "runtime-project-management-tool-frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -29,6 +29,7 @@
     "cmdk": "1.0.0",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.0.5",
+    "jose": "^5.9.6",
     "lucide-react": "^0.474.0",
     "next": "15.1.6",
     "next-themes": "^0.4.4",
