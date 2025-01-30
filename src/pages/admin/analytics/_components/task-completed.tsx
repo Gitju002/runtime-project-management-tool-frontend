@@ -38,7 +38,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function TaskCompletedComponent() {
+export default function TaskCompletedComponent() {
   const totalvalue = React.useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.value, 0);
   }, []);

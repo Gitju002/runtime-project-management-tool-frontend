@@ -7,7 +7,6 @@ import {
   BarChart2,
   ChevronUp,
   UserCircle2,
-  ChevronDown,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -73,13 +72,12 @@ const items = [
   },
 ];
 
-export function AdminSidebar() {
+export default function AdminSidebar() {
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  const [logout, { isLoading: loadingLogout, isError, error, isSuccess }] =
-    useLogoutMutation();
+  const [logout] = useLogoutMutation();
 
   useEffect(() => {
     setTimeout(() => {

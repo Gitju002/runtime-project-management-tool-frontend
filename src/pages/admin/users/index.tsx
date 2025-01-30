@@ -4,8 +4,24 @@ import { User } from "@/types/types";
 
 const users: User[] = [
   {
-    username: "John Doe",
+    name: "John Doe",
     email: "john.doe@example.com",
+    __v: 0,
+    _id: "1",
+    createdAt: "2021-09-29T07:00:00.000Z",
+    updatedAt: "2021-09-29T07:00:00.000Z",
+    departmentId: 1,
+    departmentName: "IT",
+    designation: "Software Engineer",
+    dob: "1990-01-01",
+    externalId: 1,
+    gender: 1,
+    mobile: 1234567890,
+    officeId: 1,
+    officeName: "Head Office",
+    profilePic: "https://randomuser.me/api/portraits",
+    roleId: 2,
+    roleName: "Admin",
   },
 ];
 

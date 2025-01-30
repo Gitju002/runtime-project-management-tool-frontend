@@ -48,7 +48,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function PieChartComponent() {
+export default function PieChartComponent() {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">

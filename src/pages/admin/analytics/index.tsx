@@ -1,8 +1,8 @@
 import { Combobox } from "@/components/ui/combo-box";
 import React, { useState } from "react";
-import { PieChartComponent } from "./_components/pie-chart";
-import { BarChartComponent } from "./_components/bar-chart";
-import { TaskCompletedComponent } from "./_components/task-completed";
+import PieChartComponent from "./_components/pie-chart";
+import BarChartComponent from "./_components/bar-chart";
+import TaskCompletedComponent from "./_components/task-completed";
 import { DataTable } from "@/components/table/data-table";
 import { TableTask } from "@/types/types";
 import { columns } from "./_components/columns";

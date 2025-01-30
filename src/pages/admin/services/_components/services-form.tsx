@@ -37,11 +37,8 @@ export default function ServiceForm({ onSuccess }: { onSuccess: () => void }) {
     },
   });
 
-  const {
-    data: projectLists,
-    isLoading: isProjectLoading,
-    error: projectError,
-  } = useGetProjectListQuery();
+  const { data: projectLists, isLoading: isProjectLoading } =
+    useGetProjectListQuery();
 
   // const selectedProject = useWatch({ control: form.control, name: "project" });
 
