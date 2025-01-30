@@ -1,5 +1,3 @@
-"use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react"; // Added useState for loading state
 import { useForm } from "react-hook-form";
