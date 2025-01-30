@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Combobox } from "@/components/ui/combo-box";
+import { useGetProjectListQuery } from "@/store/api/project";
 
 const serviceSchema = z.object({
   projectName: z.string().min(2, {
@@ -35,6 +37,14 @@ export default function ServiceForm({ onSuccess }: { onSuccess: () => void }) {
     },
   });
 
+  const {
+    data: projectLists,
+    isLoading: isProjectLoading,
+    error: projectError,
+  } = useGetProjectListQuery();
+
+  // const selectedProject = useWatch({ control: form.control, name: "project" });
+
   function onSubmit(values: z.infer<typeof serviceSchema>) {
     console.log(values);
     onSuccess();
@@ -50,7 +60,17 @@ export default function ServiceForm({ onSuccess }: { onSuccess: () => void }) {
             <FormItem>
               <FormLabel>Project Name</FormLabel>
               <FormControl>
-                <Input placeholder="Enter project name" {...field} />
+                <div className="w-full">
+                  <Combobox
+                    value={field.value}
+                    onChange={field.onChange}
+                    disabled={isProjectLoading}
+                    data={projectLists?.data?.map((item) => ({
+                      label: item,
+                      value: item,
+                    }))}
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -47,15 +47,15 @@ export default function TypeDescription() {
     <div className="container  mx-auto min-h-screen w-full py-6">
       <div className="grid grid-cols-1 gap-2">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Project Types</h1>
+          <h1 className="text-2xl font-bold">Project Types Description</h1>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button className="transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35">
-                Add Project Type <PlusCircle className="ml-2 h-4 w-4" />
+                Add Type Description <PlusCircle className="ml-2 h-4 w-4" />
               </Button>
             </DialogTrigger>
             <DialogContent>
-              <DialogTitle>Add New Project Type</DialogTitle>
+              <DialogTitle>Add Type Description</DialogTitle>
               <ProjectTypeForm onSuccess={() => setOpen(false)} />
             </DialogContent>
           </Dialog>
