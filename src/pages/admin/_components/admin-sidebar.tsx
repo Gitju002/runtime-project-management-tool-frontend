@@ -30,7 +30,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
-import { useLogoutQuery } from "@/store/api/auth";
+import { useLogoutMutation } from "@/store/api/auth";
 import { useRouter } from "next/router";
 
 const items = [
@@ -78,13 +78,8 @@ export function AdminSidebar() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  const {
-    data: logoutData,
-    isLoading: logoutLoading,
-    isSuccess: logoutSuccess,
-    isError: logoutIsError,
-    refetch: logoutRefetch,
-  } = useLogoutQuery();
+  const [logout, { isLoading: loadingLogout, isError, error, isSuccess }] =
+    useLogoutMutation();
 
   useEffect(() => {
     setTimeout(() => {
@@ -94,7 +89,7 @@ export function AdminSidebar() {
 
   const handleLogout = () => {
     console.log("Logout");
-    logoutRefetch();
+    logout();
     router.push("/login");
   };
 

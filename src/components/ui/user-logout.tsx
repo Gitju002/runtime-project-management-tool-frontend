@@ -1,21 +1,16 @@
 import { useRouter } from "next/router";
 import { Button } from "./button";
 import { usePathname } from "next/navigation";
-import { useLogoutQuery } from "@/store/api/auth";
+import { useLoginMutation, useLogoutMutation } from "@/store/api/auth";
 
 export default function UserLogout() {
   const pathname = usePathname();
   const router = useRouter();
-  const {
-    data: logoutData,
-    isLoading: logoutLoading,
-    isSuccess: logoutSuccess,
-    isError: logoutIsError,
-    refetch: logoutRefetch,
-  } = useLogoutQuery();
+  const [logout, { isLoading: loading, isError, error, isSuccess }] =
+    useLogoutMutation();
 
   const handleLogout = () => {
-    logoutRefetch();
+    logout();
     router.push("/login");
   };
   return (

@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react"; // Added useState for loading state
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +15,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { DatePicker } from "@/components/ui/date-picker";
 import { addProjectSchema } from "@/schema";
-import { useGetProjectListMutation } from "@/store/api/project";
+import { Combobox } from "@/components/ui/combo-box";
+import { useGetProjectListQuery } from "@/store/api/project";
 
 export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
   const [loading, setLoading] = useState(false);
@@ -33,6 +34,12 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
       cost: 0,
     },
   });
+
+  const {
+    data: projectLists,
+    isLoading: isProjectLoading,
+    error: projectError,
+  } = useGetProjectListQuery();
 
   async function onSubmit(values: z.infer<typeof addProjectSchema>) {
     setLoading(true); // Start loading
@@ -59,11 +66,17 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
               <FormItem>
                 <FormLabel>Project Name</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Enter project name"
-                    {...field}
-                    disabled={loading} // Disabled when loading
-                  />
+                  <div className="w-full">
+                    <Combobox
+                      value={field.value}
+                      onChange={field.onChange}
+                      disabled={isProjectLoading}
+                      data={projectLists?.data?.map((item) => ({
+                        label: item,
+                        value: item,
+                      }))}
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
