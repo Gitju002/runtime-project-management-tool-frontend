@@ -4,7 +4,7 @@ import { PieChartComponent } from "./_components/pie-chart";
 import { BarChartComponent } from "./_components/bar-chart";
 import { TaskCompletedComponent } from "./_components/task-completed";
 import { DataTable } from "@/components/table/data-table";
-import { Task } from "@/types/types";
+import { TableTask } from "@/types/types";
 import { columns } from "./_components/columns";
 
 const users = [
@@ -15,7 +15,7 @@ const users = [
   { value: "abdul", label: "Sayed Abdul" },
 ];
 
-export const projects: Task[] = [
+const projects: TableTask[] = [
   {
     slno: 1,
     date: "2021-09-01",

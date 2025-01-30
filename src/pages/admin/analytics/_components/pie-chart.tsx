@@ -4,6 +4,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -12,38 +13,37 @@ import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
 } from "@/components/ui/chart";
 
 const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 90, fill: "var(--color-other)" },
+  { projectName: "cosmos", totalTasks: 16, fill: "var(--color-cosmos)" },
+  { projectName: "jaro", totalTasks: 20, fill: "var(--color-jaro)" },
+  { projectName: "invespy", totalTasks: 12, fill: "var(--color-invespy)" },
+  { projectName: "academy", totalTasks: 4, fill: "var(--color-academy)" },
+  { projectName: "ai", totalTasks: 2, fill: "var(--color-ai)" },
 ];
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  chrome: {
-    label: "Chrome",
+  cosmos: {
+    label: "Cosmos DashBoard",
     color: "hsl(var(--chart-1))",
   },
-  safari: {
-    label: "Safari",
+  jaro: {
+    label: "Jaro for Education",
     color: "hsl(var(--chart-2))",
   },
-  firefox: {
-    label: "Firefox",
+  invespy: {
+    label: "Invespy for Real Estate",
     color: "hsl(var(--chart-3))",
   },
-  edge: {
-    label: "Edge",
+  academy: {
+    label: "The Academy Group",
     color: "hsl(var(--chart-4))",
   },
-  other: {
-    label: "Other",
+  ai: {
+    label: "AI Models",
     color: "hsl(var(--chart-5))",
   },
 } satisfies ChartConfig;
@@ -52,23 +52,44 @@ export function PieChartComponent() {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Legend</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Project Task Distribution</CardTitle>
+        <CardDescription>
+          Overview of tasks across different projects
+        </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[300px]"
+          className="mx-auto text-nowrap aspect-square max-h-[300px]"
         >
           <PieChart>
-            <Pie data={chartData} dataKey="visitors" />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
+            <Pie data={chartData} dataKey="totalTasks" nameKey="projectName" />
             <ChartLegend
-              content={<ChartLegendContent nameKey="browser" />}
+              content={<ChartLegendContent nameKey="projectName" />}
               className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
             />
           </PieChart>
         </ChartContainer>
       </CardContent>
+      <CardFooter className="leading-none text-muted-foreground text-sm justify-center">
+        Maximum Tasks accomplished for{" "}
+        {
+          chartConfig[
+            chartData.reduce(
+              (max, data) => (data.totalTasks > max.totalTasks ? data : max),
+              chartData[0]
+            ).projectName as keyof typeof chartConfig
+          ].label
+        }{" "}
+        <span className="font-semibold mx-1">
+          {" "}
+          ({Math.max(...chartData.map((data) => data.totalTasks))})
+        </span>{" "}
+      </CardFooter>
     </Card>
   );
 }

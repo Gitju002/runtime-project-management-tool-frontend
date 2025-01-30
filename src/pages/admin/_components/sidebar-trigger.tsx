@@ -16,7 +16,7 @@ export function CustomSidebarTrigger() {
     >
       <div
         className={cn(
-          " bg-slate-200/40 dark:bg-slate-600/30  rounded-md p-2 w-full backdrop-blur-sm flex justify-between items-center shadow-slate-600/20 shadow-md dark:shadow-lime-shade/40",
+          " bg-slate-200/40 dark:bg-slate-600/30 border border-white/20 rounded-md p-2 w-full backdrop-blur-sm flex justify-between items-center shadow-slate-600/20 shadow-md dark:shadow-slate-shade/40",
           isMobile && "rounded-none"
         )}
       >
