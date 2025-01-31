@@ -16,10 +16,14 @@ import { loginFormSchema } from "@/schema";
 import { ArrowRight } from "lucide-react";
 import { useLoginMutation } from "@/store/api/auth";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "@/store/features/userInfo";
 
 export default function LoginForm() {
   const [login, { isLoading: loading, error, isSuccess }] = useLoginMutation();
   const router = useRouter();
+  const dispatch = useDispatch();
+
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -31,12 +35,14 @@ export default function LoginForm() {
 
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
     try {
-      await login(values)
-        .unwrap()
-        .then(() => {
-          router.push("/user");
-        });
-      console.log("isSuccess", isSuccess);
+      const response = await login(values).unwrap();
+      dispatch(
+        setCredentials({
+          token: response.data.token,
+          role: response.data.user.role,
+        })
+      );
+      router.push("/user");
     } catch {
       console.error(error);
     }

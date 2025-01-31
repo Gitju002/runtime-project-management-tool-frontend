@@ -168,3 +168,12 @@ export type GetAllResponse = {
     paginationData: PaginationData;
   };
 };
+
+export type GetUserResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    name: string;
+    role: string;
+  };
+};

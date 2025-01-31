@@ -1,13 +1,16 @@
 import { useRouter } from "next/router";
 import { Button } from "./button";
 import { useLogoutMutation } from "@/store/api/auth";
+import { useDispatch } from "react-redux";
+import { clearUserInfo } from "@/store/features/userInfo";
 
 export default function UserLogout() {
   const router = useRouter();
   const [logout] = useLogoutMutation();
-
+  const dispatch = useDispatch();
   const handleLogout = () => {
     logout();
+    dispatch(clearUserInfo());
     router.push("/login");
   };
   return (
