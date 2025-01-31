@@ -39,6 +39,11 @@ export type UserResponse = {
   message: string;
   data: {
     error: string;
+    token: string;
+    user: {
+      name: string;
+      role: string;
+    };
   };
 };
 

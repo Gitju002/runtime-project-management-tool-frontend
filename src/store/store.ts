@@ -4,6 +4,8 @@ import { authApi } from "./api/auth";
 import { projectApi } from "./api/project";
 import { serviceApi } from "./api/service";
 import { taskApi } from "./api/tasks";
+import userReducer from "./features/userInfo";
+import { EnhancedStore } from "@reduxjs/toolkit";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +13,7 @@ export const store = configureStore({
     [projectApi.reducerPath]: projectApi.reducer,
     [serviceApi.reducerPath]: serviceApi.reducer,
     [taskApi.reducerPath]: taskApi.reducer,
+    userInfo: userReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -21,3 +24,7 @@ export const store = configureStore({
 });
 
 setupListeners(store.dispatch);
+
+export type AppStore = EnhancedStore;
+export type RootState = ReturnType<AppStore["getState"]>;
+export type AppDispatch = AppStore["dispatch"];
