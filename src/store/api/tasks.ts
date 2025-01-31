@@ -1,11 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { toast } from "sonner";
-import {
-  CreateTaskPayload,
-  GetAllResponse,
-  Task,
-  TaskResponse,
-} from "@/types/types";
+import { CreateTaskPayload, GetAllResponse, TaskResponse } from "@/types/types";
 
 export const taskApi = createApi({
   reducerPath: "taskApi",

@@ -1,13 +1,10 @@
 import { useRouter } from "next/router";
 import { Button } from "./button";
-import { usePathname } from "next/navigation";
-import { useLoginMutation, useLogoutMutation } from "@/store/api/auth";
+import { useLogoutMutation } from "@/store/api/auth";
 
 export default function UserLogout() {
-  const pathname = usePathname();
   const router = useRouter();
-  const [logout, { isLoading: loading, isError, error, isSuccess }] =
-    useLogoutMutation();
+  const [logout] = useLogoutMutation();
 
   const handleLogout = () => {
     logout();
