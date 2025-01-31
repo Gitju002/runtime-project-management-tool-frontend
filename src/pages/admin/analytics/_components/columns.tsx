@@ -1,6 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { TableTask } from "@/types/types";
 import { Badge } from "@/components/ui/badge";
+
 export const columns: ColumnDef<TableTask>[] = [
   {
     accessorKey: "slno",

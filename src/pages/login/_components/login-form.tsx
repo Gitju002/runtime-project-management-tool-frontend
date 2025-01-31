@@ -17,9 +17,8 @@ import { ArrowRight } from "lucide-react";
 import { useLoginMutation } from "@/store/api/auth";
 import { useRouter } from "next/router";
 
-export function LoginForm() {
-  const [login, { isLoading: loading, isError, error, isSuccess }] =
-    useLoginMutation();
+export default function LoginForm() {
+  const [login, { isLoading: loading, error, isSuccess }] = useLoginMutation();
   const router = useRouter();
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),

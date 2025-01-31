@@ -25,7 +25,6 @@ import { useGetProjectListQuery } from "@/store/api/project";
 import { useGetServiceByProjectQuery } from "@/store/api/service"; // Import the service query
 import { addTaskSchema } from "@/schema";
 import { useCreateTaskMutation } from "@/store/api/tasks";
-import { toast } from "sonner";
 import { TimePicker } from "@/components/ui/time-picker";
 
 const TaskForm = ({
@@ -48,30 +47,16 @@ const TaskForm = ({
     },
   });
 
-  const {
-    data: projectLists,
-    isLoading: isProjectLoading,
-    error: projectError,
-  } = useGetProjectListQuery();
+  const { data: projectLists, isLoading: isProjectLoading } =
+    useGetProjectListQuery();
 
   const selectedProject = useWatch({ control: form.control, name: "project" });
 
   // Fetch services when a project is selected
-  const {
-    data: serviceLists,
-    isLoading: isServiceLoading,
-    error: serviceError,
-  } = useGetServiceByProjectQuery(selectedProject, { skip: !selectedProject });
+  const { data: serviceLists, isLoading: isServiceLoading } =
+    useGetServiceByProjectQuery(selectedProject, { skip: !selectedProject });
 
-  const [
-    createTask,
-    {
-      isLoading: isTaskCreating,
-      error: taskError,
-      data: taskData,
-      isSuccess: taskSuccess,
-    },
-  ] = useCreateTaskMutation();
+  const [createTask] = useCreateTaskMutation();
 
   function onSubmit(values: z.infer<typeof addTaskSchema>) {
     createTask(values)

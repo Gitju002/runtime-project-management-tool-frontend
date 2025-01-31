@@ -2,8 +2,9 @@ import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import Image from "next/image";
 
-export function CustomSidebarTrigger() {
+function CustomSidebarTrigger() {
   const { toggleSidebar } = useSidebar();
   const { open, isMobile } = useSidebar();
 
@@ -43,10 +44,13 @@ export function CustomSidebarTrigger() {
         >
           <ArrowRight />
         </Button>
-        <div className="aspect-auto w-16 ">
-          <img src="/images/logo.png" alt="logo" />
+        <div className="aspect-auto w-16 relative">
+          {/* kothao img tag use korbi na */}
+          <Image fill src="/images/logo.png" alt="logo" />
         </div>
       </div>
     </div>
   );
 }
+
+export default CustomSidebarTrigger;

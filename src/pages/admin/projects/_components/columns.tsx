@@ -4,6 +4,29 @@ import { format } from "date-fns";
 import React from "react";
 import { Button } from "@/components/ui/button";
 
+const ExpandedComponent = ({ data }: { data: string }) => {
+  const [isExpanded, setIsExpanded] = React.useState(false);
+
+  const truncatedDescription =
+    data.length > 30 ? `${data.slice(0, 30)}...` : data;
+
+  return (
+    <div className="text-wrap items-center gap-1">
+      <p className="inline">{isExpanded ? data : truncatedDescription}</p>
+      {data.length > 30 && (
+        <Button
+          variant={"link"}
+          size={"sm"}
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="px-1 cursor-pointer text-xs text-nowrap transition-colors duration-300 dark:text-slate-100 text-slate-600"
+        >
+          {isExpanded ? "Read Less" : "Read More"}
+        </Button>
+      )}
+    </div>
+  );
+};
+
 export const columns: ColumnDef<AddedProjectType>[] = [
   {
     accessorKey: "project",
@@ -13,31 +36,7 @@ export const columns: ColumnDef<AddedProjectType>[] = [
     accessorKey: "projectDescription",
     header: "Project Description",
     cell: ({ row }) => {
-      const [isExpanded, setIsExpanded] = React.useState(false);
-      const description = row.original.projectDescription;
-
-      const truncatedDescription =
-        description.length > 30
-          ? `${description.slice(0, 30)}...`
-          : description;
-
-      return (
-        <div className="text-wrap items-center gap-1">
-          <p className="inline">
-            {isExpanded ? description : truncatedDescription}
-          </p>
-          {description.length > 30 && (
-            <Button
-              variant={"link"}
-              size={"sm"}
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="px-1 cursor-pointer text-xs text-nowrap transition-colors duration-300 dark:text-slate-100 text-slate-600"
-            >
-              {isExpanded ? "Read Less" : "Read More"}
-            </Button>
-          )}
-        </div>
-      );
+      return <ExpandedComponent data={row.original.projectDescription} />;
     },
   },
 
