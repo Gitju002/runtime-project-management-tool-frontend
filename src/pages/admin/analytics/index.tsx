@@ -5,7 +5,7 @@ import BarChartComponent from "./_components/bar-chart";
 import TaskCompletedComponent from "./_components/task-completed";
 import { DataTable } from "@/components/table/data-table";
 import { TableTask } from "@/types/types";
-import { columns } from "./_components/columns";
+import { columns } from "../../../components/table/table-columns/analytics-columns";
 
 const users = [
   { value: "snehashis", label: "Snehashis Gharai" },

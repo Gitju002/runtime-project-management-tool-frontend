@@ -1,5 +1,5 @@
 import { DataTable } from "@/components/table/data-table";
-import { columns } from "./_components/columns";
+import { columns } from "../../../components/table/table-columns/admin-users-columns";
 import { User } from "@/types/types";
 
 const users: User[] = [

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { columns } from "@/pages/user/_components/columns";
+import { columns } from "@/components/table/table-columns/user-columns";
 import { DataTable } from "@/components/table/data-table";
 import {
   Dialog,

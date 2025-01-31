@@ -7,7 +7,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DataTable } from "@/components/table/data-table";
-import { columns } from "@/pages/admin/type-description/_components/columns";
+import { columns } from "@/components/table/table-columns/type-desc-columns";
 import { PlusCircle } from "lucide-react";
 import ProjectTypeForm from "@/pages/admin/type-description/_components/type-desc-form";
 

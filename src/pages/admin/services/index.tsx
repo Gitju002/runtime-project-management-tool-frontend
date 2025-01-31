@@ -7,7 +7,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DataTable } from "@/components/table/data-table";
-import { columns } from "@/pages/admin/services/_components/columns";
+import { columns } from "@/components/table/table-columns/services-columns";
 import { PlusCircle } from "lucide-react";
 import ServiceForm from "@/pages/admin/services/_components/services-form";
 
