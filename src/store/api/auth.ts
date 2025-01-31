@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { User, UserResponse } from "@/types/types";
+import { GetUserResponse, User, UserResponse } from "@/types/types";
 import { toast } from "sonner";
+import { setCookie, deleteCookie } from "cookies-next";
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -42,7 +43,14 @@ export const authApi = createApi({
         return error;
       },
     }),
+
+    getUser: builder.query<GetUserResponse, void>({
+      query: () => ({
+        url: "auth/me",
+      }),
+      providesTags: ["User"],
+    }),
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation } = authApi;
+export const { useLoginMutation, useLogoutMutation, useGetUserQuery } = authApi;

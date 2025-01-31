@@ -31,6 +31,8 @@ import {
 import { useEffect, useState } from "react";
 import { useLogoutMutation } from "@/store/api/auth";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { clearUserInfo } from "@/store/features/userInfo";
 
 const items = [
   {
@@ -78,7 +80,7 @@ export default function AdminSidebar() {
   const router = useRouter();
 
   const [logout] = useLogoutMutation();
-
+  const dispatch = useDispatch();
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
@@ -88,6 +90,7 @@ export default function AdminSidebar() {
   const handleLogout = () => {
     console.log("Logout");
     logout();
+    dispatch(clearUserInfo());
     router.push("/login");
   };
 
