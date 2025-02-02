@@ -18,7 +18,6 @@ import { useLoginMutation } from "@/store/api/auth";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { setCredentials } from "@/store/features/userInfo";
-import { RootState } from "@/store/store";
 export default function LoginForm() {
   const [login, { isLoading: loading, error, isSuccess }] = useLoginMutation();
   const router = useRouter();
@@ -60,10 +59,9 @@ export default function LoginForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
-              <FormControl>
+              <FormControl className="transition-all duration-200 dark:border-teal-shade">
                 <Input type="email" placeholder="your@email.com" {...field} />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
@@ -74,7 +72,7 @@ export default function LoginForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
-              <FormControl>
+              <FormControl className="transition-all duration-200 dark:border-teal-shade">
                 <Input type="password" placeholder="********" {...field} />
               </FormControl>
 
@@ -83,7 +81,11 @@ export default function LoginForm() {
           )}
         />
         <div className="flex ">
-          <Button className="ms-auto  w-full" type="submit" disabled={loading}>
+          <Button
+            className="ms-auto  w-full  transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35 "
+            type="submit"
+            disabled={loading}
+          >
             Sign In
             <ArrowRight className="" />
           </Button>

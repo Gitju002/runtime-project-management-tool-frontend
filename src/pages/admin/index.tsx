@@ -17,9 +17,7 @@ export default function Admin() {
         ].map((title, index) => (
           <Card key={index} className="card-dark">
             <CardHeader>
-              <CardTitle className="dark:text-teal-950 md:text-lg">
-                {title}
-              </CardTitle>
+              <CardTitle className=" md:text-lg">{title}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-end text-6xl font-semibold">
