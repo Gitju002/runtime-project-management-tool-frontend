@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { AddedProjectType, Project } from "@/types/types";
+import type { Project } from "@/types/types";
 import { format } from "date-fns";
 import React from "react";
 import { Button } from "@/components/ui/button";

@@ -10,7 +10,6 @@ import { DataTable } from "@/components/table/data-table";
 import { columns } from "@/components/table/table-columns/projects-columns";
 import { PlusCircle } from "lucide-react";
 import ProjectForm from "@/pages/admin/projects/_components/project-form";
-import { AddedProjectType } from "@/types/types";
 import { useGetAllProjectsQuery } from "@/store/api/project";
 
 export default function Projects() {

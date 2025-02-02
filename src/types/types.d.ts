@@ -25,11 +25,10 @@ export type UserResponse = {
 };
 
 export type AddedProjectType = {
-  id: string;
-  project: string;
+  projectName: string;
   projectDescription: string;
-  date: string;
-  projectPeriod: string;
+  projectDate: string;
+  projectPeriod: number;
   clientName: string;
   clientEmail: string;
   projectType: string;
@@ -160,6 +159,12 @@ export type GetAllProjectResponse = {
     paginationData: PaginationData;
   };
 };
+
+interface CreateProjectResponse {
+  success: boolean;
+  message: string;
+  data: Project;
+}
 
 export type GetUserResponse = {
   success: boolean;

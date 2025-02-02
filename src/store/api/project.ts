@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
+  AddedProjectType,
+  CreateProjectResponse,
   GetAllProjectResponse,
   GetAllProjectsQueryParams,
   ProjectListResponse,
@@ -42,8 +44,32 @@ export const projectApi = createApi({
         toast.error(apiError.message);
         return error;
       },
+      providesTags: ["Project"],
+    }),
+    createProject: builder.mutation<CreateProjectResponse, AddedProjectType>({
+      query: (payload) => ({
+        url: "project/create",
+        method: "POST",
+        body: payload,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      transformResponse: (response: CreateProjectResponse) => {
+        toast.success(response.message); // Show success message
+        return response;
+      },
+      transformErrorResponse: (error: any) => {
+        toast.error(error.data?.message || "Failed to create project");
+        return error;
+      },
+      invalidatesTags: ["Project"],
     }),
   }),
 });
 
-export const { useGetProjectListQuery, useGetAllProjectsQuery } = projectApi;
+export const {
+  useGetProjectListQuery,
+  useGetAllProjectsQuery,
+  useCreateProjectMutation,
+} = projectApi;

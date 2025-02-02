@@ -16,18 +16,22 @@ import { Textarea } from "@/components/ui/textarea";
 import { DatePicker } from "@/components/ui/date-picker";
 import { addProjectSchema } from "@/schema";
 import { Combobox } from "@/components/ui/combo-box";
-import { useGetProjectListQuery } from "@/store/api/project";
+import {
+  useCreateProjectMutation,
+  useGetProjectListQuery,
+} from "@/store/api/project";
 
 export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
   const [loading, setLoading] = useState(false);
+  const [createProject, { isLoading }] = useCreateProjectMutation();
+
   const form = useForm<z.infer<typeof addProjectSchema>>({
     resolver: zodResolver(addProjectSchema),
     defaultValues: {
-      id: "",
       projectName: "",
       projectDescription: "",
-      date: "",
-      projectPeriod: "",
+      projectDate: "",
+      projectPeriod: 0,
       clientName: "",
       clientEmail: "",
       projectType: "",
@@ -40,9 +44,12 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
 
   async function onSubmit(values: z.infer<typeof addProjectSchema>) {
     setLoading(true); // Start loading
+    console.log("values", values);
     try {
-      console.log(values);
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate API call
+      const response = await createProject(values).unwrap();
+      if (response.success) {
+        form.reset();
+      }
       onSuccess();
     } catch (error) {
       console.error("Failed to submit:", error);
@@ -64,7 +71,7 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
                 <FormLabel>Project Name</FormLabel>
                 <FormControl>
                   <div className="w-full">
-                    <Combobox
+                    {/* <Combobox
                       value={field.value}
                       onChange={field.onChange}
                       disabled={isProjectLoading}
@@ -72,6 +79,11 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
                         label: item,
                         value: item,
                       }))}
+                    /> */}
+                    <Input
+                      placeholder="Enter project name"
+                      {...field}
+                      disabled={loading} // Disabled when loading
                     />
                   </div>
                 </FormControl>
@@ -101,7 +113,7 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
           <div className="flex gap-2">
             <FormField
               control={form.control}
-              name="date"
+              name="projectDate"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>Date</FormLabel>
@@ -129,7 +141,11 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
                   <FormControl>
                     <Input
                       placeholder="Enter project period"
-                      {...field}
+                      type="number"
+                      value={field.value}
+                      onChange={(e) => {
+                        field.onChange(parseInt(e.target.value) || 0);
+                      }}
                       disabled={loading} // Disabled when loading
                     />
                   </FormControl>
