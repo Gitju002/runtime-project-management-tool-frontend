@@ -111,6 +111,11 @@ export type CreateTaskPayload = {
   startTime: string;
   status: "Initiated" | "Ongoing" | "Completed";
 };
+export type CreateServicePayload = {
+  project: string;
+  serviceName: string;
+  serviceDescription: string;
+};
 
 export type PaginationData = {
   currentPage: number;
@@ -173,6 +178,12 @@ interface CreateProjectResponse {
   message: string;
   data: Project;
 }
+
+export type CreateServiceResponse = {
+  success: boolean;
+  message: string;
+  data?: Service;
+};
 
 export type GetUserResponse = {
   success: boolean;

@@ -1,9 +1,12 @@
 import {
+  CreateServicePayload,
+  CreateServiceResponse,
   GetAllProjectsQueryParams,
   GetAllServiceResponse,
   ServiceResponse,
 } from "@/types/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { create } from "domain";
 import { toast } from "sonner";
 
 export const serviceApi = createApi({
@@ -25,7 +28,6 @@ export const serviceApi = createApi({
       },
       providesTags: ["Service"],
     }),
-
     getAllServices: builder.query<
       GetAllServiceResponse,
       GetAllProjectsQueryParams
@@ -46,8 +48,34 @@ export const serviceApi = createApi({
       },
       providesTags: ["Service"],
     }),
+    createService: builder.mutation<
+      CreateServiceResponse,
+      CreateServicePayload
+    >({
+      query: (payload) => ({
+        url: "service/create",
+        method: "POST",
+        body: payload,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["Service"],
+      transformResponse: (response: CreateServiceResponse) => {
+        toast.success(response.message);
+        return response;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as ServiceResponse;
+        toast.error(apiError.message);
+        return error;
+      },
+    }),
   }),
 });
 
-export const { useGetServiceByProjectQuery, useGetAllServicesQuery } =
-  serviceApi;
+export const {
+  useGetServiceByProjectQuery,
+  useGetAllServicesQuery,
+  useCreateServiceMutation,
+} = serviceApi;
