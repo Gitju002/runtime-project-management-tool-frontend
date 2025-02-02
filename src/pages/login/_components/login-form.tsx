@@ -16,14 +16,13 @@ import { loginFormSchema } from "@/schema";
 import { ArrowRight } from "lucide-react";
 import { useLoginMutation } from "@/store/api/auth";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCredentials } from "@/store/features/userInfo";
-
+import { RootState } from "@/store/store";
 export default function LoginForm() {
   const [login, { isLoading: loading, error, isSuccess }] = useLoginMutation();
   const router = useRouter();
   const dispatch = useDispatch();
-
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -42,7 +41,11 @@ export default function LoginForm() {
           role: response.data.user.role,
         })
       );
-      router.push("/user");
+      if (response.data.user.role === "admin") {
+        router.push("/admin");
+      } else {
+        router.push("/user");
+      }
     } catch {
       console.error(error);
     }

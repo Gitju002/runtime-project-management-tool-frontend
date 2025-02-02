@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { AddedProjectType } from "@/types/types";
+import type { AddedProjectType, Project } from "@/types/types";
 import { format } from "date-fns";
 import React from "react";
 import { Button } from "@/components/ui/button";
@@ -27,9 +27,9 @@ const ExpandedComponent = ({ data }: { data: string }) => {
   );
 };
 
-export const columns: ColumnDef<AddedProjectType>[] = [
+export const columns: ColumnDef<Project>[] = [
   {
-    accessorKey: "project",
+    accessorKey: "projectName",
     header: "Project Name",
   },
   {
@@ -41,9 +41,9 @@ export const columns: ColumnDef<AddedProjectType>[] = [
   },
 
   {
-    accessorKey: "date",
+    accessorKey: "projectDate",
     header: "Date",
-    cell: ({ row }) => format(new Date(row.original.date), "PPP"),
+    cell: ({ row }) => format(new Date(row.original.projectDate), "PPP"),
   },
   {
     accessorKey: "projectPeriod",

@@ -11,29 +11,6 @@ export type TableTask = {
   status: "Initiated" | "Ongoing" | "Completed";
 };
 
-// export type Project = {
-//   projectName: string;
-//   projectDesc: string;
-//   date: string;
-//   projectPeriod: string;
-//   clientName: string;
-//   clientEmail: string;
-//   projectType: string;
-//   cost: number;
-//   location?: string;
-// };
-
-// export type Service = {
-//   serviceName: string;
-//   cost: number;
-// };
-
-// export type User = {
-//   email: string;
-//   password: string;
-//   username: string;
-// };
-
 export type UserResponse = {
   success: boolean;
   message: string;
@@ -160,11 +137,26 @@ export type ServiceResponse = {
   data: Service[];
 };
 
-export type GetAllResponse = {
+export type GetAllTaskResponse = {
   success: boolean;
   message: string;
   data: {
     tasks: Task[];
+    paginationData: PaginationData;
+  };
+};
+
+export type GetAllProjectsQueryParams = {
+  projectName?: string;
+  limit?: number;
+  page?: number;
+};
+
+export type GetAllProjectResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    projects: Project[];
     paginationData: PaginationData;
   };
 };
