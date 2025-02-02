@@ -3,6 +3,10 @@ import type { Service } from "@/pages/admin/services/index";
 
 export const columns: ColumnDef<Service>[] = [
   {
+    accessorKey: "id",
+    header: "SL No.",
+  },
+  {
     accessorKey: "projectName",
     header: "Project Name",
   },

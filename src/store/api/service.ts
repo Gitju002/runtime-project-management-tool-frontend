@@ -1,4 +1,8 @@
-import { ServiceResponse } from "@/types/types";
+import {
+  GetAllProjectsQueryParams,
+  GetAllServiceResponse,
+  ServiceResponse,
+} from "@/types/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { toast } from "sonner";
 
@@ -19,8 +23,31 @@ export const serviceApi = createApi({
         toast.error(apiError.message);
         return error;
       },
+      providesTags: ["Service"],
+    }),
+
+    getAllServices: builder.query<
+      GetAllServiceResponse,
+      GetAllProjectsQueryParams
+    >({
+      query: ({ projectName, limit, page } = {}) => ({
+        url: `service/all`,
+        params: { projectName, limit, page },
+      }),
+      transformResponse: (response) => {
+        const apiResponse = response as GetAllServiceResponse;
+        toast.success(apiResponse.message);
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as GetAllServiceResponse;
+        toast.error(apiError.message);
+        return error;
+      },
+      providesTags: ["Service"],
     }),
   }),
 });
 
-export const { useGetServiceByProjectQuery } = serviceApi;
+export const { useGetServiceByProjectQuery, useGetAllServicesQuery } =
+  serviceApi;

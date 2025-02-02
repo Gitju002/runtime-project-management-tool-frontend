@@ -25,6 +25,7 @@ export const projectApi = createApi({
         toast.error(apiError.message);
         return error;
       },
+      providesTags: ["Project"],
     }),
     getAllProjects: builder.query<
       GetAllProjectResponse,

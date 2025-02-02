@@ -136,6 +136,12 @@ export type ServiceResponse = {
   data: Service[];
 };
 
+export type GetAllProjectsQueryParams = {
+  projectName?: string;
+  limit?: number;
+  page?: number;
+};
+
 export type GetAllTaskResponse = {
   success: boolean;
   message: string;
@@ -144,18 +150,20 @@ export type GetAllTaskResponse = {
     paginationData: PaginationData;
   };
 };
-
-export type GetAllProjectsQueryParams = {
-  projectName?: string;
-  limit?: number;
-  page?: number;
-};
-
 export type GetAllProjectResponse = {
   success: boolean;
   message: string;
   data: {
     projects: Project[];
+    paginationData: PaginationData;
+  };
+};
+
+export type GetAllServiceResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    services: Service[];
     paginationData: PaginationData;
   };
 };
