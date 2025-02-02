@@ -178,3 +178,10 @@ body {
   font-weight: 900;
   font-style: italic;
 }
+
+/* Admin Dashboard Card */
+.card-dark {
+  @apply transition-all duration-200;
+  @apply dark:bg-gradient-to-bl dark:from-teal-300 dark:to-teal-900 dark:border-teal-400;
+  @apply hover:shadow-2xl hover:shadow-teal-shade/40;
+}
