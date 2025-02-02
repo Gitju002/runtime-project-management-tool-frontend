@@ -11,29 +11,6 @@ export type TableTask = {
   status: "Initiated" | "Ongoing" | "Completed";
 };
 
-// export type Project = {
-//   projectName: string;
-//   projectDesc: string;
-//   date: string;
-//   projectPeriod: string;
-//   clientName: string;
-//   clientEmail: string;
-//   projectType: string;
-//   cost: number;
-//   location?: string;
-// };
-
-// export type Service = {
-//   serviceName: string;
-//   cost: number;
-// };
-
-// export type User = {
-//   email: string;
-//   password: string;
-//   username: string;
-// };
-
 export type UserResponse = {
   success: boolean;
   message: string;
@@ -48,11 +25,10 @@ export type UserResponse = {
 };
 
 export type AddedProjectType = {
-  id: string;
-  project: string;
+  projectName: string;
   projectDescription: string;
-  date: string;
-  projectPeriod: string;
+  projectDate: string;
+  projectPeriod: number;
   clientName: string;
   clientEmail: string;
   projectType: string;
@@ -135,6 +111,11 @@ export type CreateTaskPayload = {
   startTime: string;
   status: "Initiated" | "Ongoing" | "Completed";
 };
+export type CreateServicePayload = {
+  project: string;
+  serviceName: string;
+  serviceDescription: string;
+};
 
 export type PaginationData = {
   currentPage: number;
@@ -160,13 +141,48 @@ export type ServiceResponse = {
   data: Service[];
 };
 
-export type GetAllResponse = {
+export type GetAllProjectsQueryParams = {
+  projectName?: string;
+  limit?: number;
+  page?: number;
+};
+
+export type GetAllTaskResponse = {
   success: boolean;
   message: string;
   data: {
     tasks: Task[];
     paginationData: PaginationData;
   };
+};
+export type GetAllProjectResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    projects: Project[];
+    paginationData: PaginationData;
+  };
+};
+
+export type GetAllServiceResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    services: Service[];
+    paginationData: PaginationData;
+  };
+};
+
+interface CreateProjectResponse {
+  success: boolean;
+  message: string;
+  data: Project;
+}
+
+export type CreateServiceResponse = {
+  success: boolean;
+  message: string;
+  data?: Service;
 };
 
 export type GetUserResponse = {

@@ -1,6 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { toast } from "sonner";
-import { CreateTaskPayload, GetAllResponse, TaskResponse } from "@/types/types";
+import {
+  CreateTaskPayload,
+  GetAllTaskResponse,
+  TaskResponse,
+} from "@/types/types";
 
 export const taskApi = createApi({
   reducerPath: "taskApi",
@@ -29,17 +33,18 @@ export const taskApi = createApi({
       },
     }),
 
-    getTaskByUserID: builder.query<GetAllResponse, void>({
+    getTaskByUserID: builder.query<GetAllTaskResponse, void>({
       query: () => ({
         url: "/task/get-by-user",
       }),
       providesTags: ["Task"],
       transformResponse: (response) => {
-        const apiResponse = response as GetAllResponse;
+        const apiResponse = response as GetAllTaskResponse;
+        toast.success(apiResponse.message);
         return apiResponse;
       },
       transformErrorResponse: (error) => {
-        const apiError = error.data as GetAllResponse;
+        const apiError = error.data as GetAllTaskResponse;
         toast.error(apiError.message);
         return error;
       },

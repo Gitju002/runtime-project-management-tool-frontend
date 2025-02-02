@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,6 +10,7 @@ import { DataTable } from "@/components/table/data-table";
 import { columns } from "@/components/table/table-columns/services-columns";
 import { PlusCircle } from "lucide-react";
 import ServiceForm from "@/pages/admin/services/_components/services-form";
+import { useGetAllServicesQuery } from "@/store/api/service";
 
 export type Service = {
   id: string;
@@ -18,30 +19,61 @@ export type Service = {
   description: string;
 };
 
-const services: Service[] = [
-  {
-    id: "1",
-    projectName: "E-commerce Platform",
-    serviceName: "Frontend Development",
-    description: "Develop responsive user interface using React",
-  },
-  {
-    id: "2",
-    projectName: "CRM System",
-    serviceName: "Backend Development",
-    description: "Build RESTful API using Node.js and Express",
-  },
-  {
-    id: "3",
-    projectName: "Mobile App",
-    serviceName: "UI/UX Design",
-    description: "Create intuitive and appealing user interface designs",
-  },
-  // Add more mock services as needed
-];
+// const services: Service[] = [
+//   {
+//     id: "1",
+//     projectName: "E-commerce Platform",
+//     serviceName: "Frontend Development",
+//     description: "Develop responsive user interface using React",
+//   },
+//   {
+//     id: "2",
+//     projectName: "CRM System",
+//     serviceName: "Backend Development",
+//     description: "Build RESTful API using Node.js and Express",
+//   },
+//   {
+//     id: "3",
+//     projectName: "Mobile App",
+//     serviceName: "UI/UX Design",
+//     description: "Create intuitive and appealing user interface designs",
+//   },
+//   // Add more mock services as needed
+// ];
 
 export default function Services() {
   const [open, setOpen] = useState(false);
+  const [projectName, setProjectName] = useState(""); // For search
+  const [page, setPage] = useState(1); // For pagination
+  const [limit, setLimit] = useState(10); // Items per page
+
+  const {
+    data: servicesData,
+    isLoading,
+    error,
+    refetch,
+  } = useGetAllServicesQuery({
+    projectName,
+    limit,
+    page,
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [projectName, page, limit]);
+
+  const formattedServices: Service[] =
+    servicesData?.data?.services?.map((service, index) => ({
+      id: (index + 1).toString(), // Ensure id is a string
+      projectName:
+        typeof service.project === "string"
+          ? service.project
+          : service.project.projectName, // Ensure projectName is a string
+      serviceName: service.serviceName,
+      description: service.serviceDescription,
+    })) || []; // Default to empty array if undefined
+
+  console.log(servicesData);
 
   return (
     <div className="container  mx-auto min-h-screen w-full py-6">
@@ -60,7 +92,20 @@ export default function Services() {
             </DialogContent>
           </Dialog>
         </div>
-        <DataTable columns={columns} data={services} />
+        {
+          // Loading
+          isLoading ? (
+            <div>Loading...</div>
+          ) : // Error
+          error ? (
+            <div>Error fetching data</div>
+          ) : // Success
+          servicesData?.data?.services?.length ? (
+            <DataTable columns={columns} data={formattedServices || []} />
+          ) : (
+            <div>No data found</div>
+          )
+        }
       </div>
     </div>
   );

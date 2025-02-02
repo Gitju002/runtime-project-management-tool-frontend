@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,25 +10,28 @@ import { DataTable } from "@/components/table/data-table";
 import { columns } from "@/components/table/table-columns/projects-columns";
 import { PlusCircle } from "lucide-react";
 import ProjectForm from "@/pages/admin/projects/_components/project-form";
-import { AddedProjectType } from "@/types/types";
-
-const projects: AddedProjectType[] = [
-  {
-    id: "1",
-    date: "2023-05-01",
-    project: "Website Redesign",
-    projectType: "Web Development",
-    projectDescription:
-      "Redesigning the website for better user experience.Redesigning the website for better user experience.Redesigning the website for better user experience.Redesigning the website for better user experience.Redesigning the website for better user experience.Redesigning the website for better user experience.Redesigning the website for better user experience.",
-    projectPeriod: "2 months",
-    clientName: "John Doe",
-    clientEmail: "abc@gmail.com",
-    cost: 2000,
-  },
-];
+import { useGetAllProjectsQuery } from "@/store/api/project";
 
 export default function Projects() {
   const [open, setOpen] = useState(false);
+  const [projectName, setProjectName] = useState(""); // For search
+  const [page, setPage] = useState(1); // For pagination
+  const [limit, setLimit] = useState(10); // Items per page
+
+  const {
+    data: projectData,
+    isLoading,
+    error,
+    refetch,
+  } = useGetAllProjectsQuery({
+    projectName,
+    limit,
+    page,
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [projectName, page, limit]);
 
   return (
     <div className="container  mx-auto min-h-screen w-full py-6">
@@ -47,7 +50,23 @@ export default function Projects() {
             </DialogContent>
           </Dialog>
         </div>
-        <DataTable columns={columns} data={projects} />
+        {
+          // Loading
+          isLoading ? (
+            <div>Loading...</div>
+          ) : // Error
+          error ? (
+            <div>Error fetching data</div>
+          ) : // Success
+          projectData?.data?.projects?.length ? (
+            <DataTable
+              columns={columns}
+              data={projectData?.data?.projects || []}
+            />
+          ) : (
+            <div>No data found</div>
+          )
+        }
       </div>
     </div>
   );

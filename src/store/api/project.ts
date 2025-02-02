@@ -1,5 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { ProjectListResponse } from "@/types/types";
+import {
+  AddedProjectType,
+  CreateProjectResponse,
+  GetAllProjectResponse,
+  GetAllProjectsQueryParams,
+  ProjectListResponse,
+} from "@/types/types";
 import { toast } from "sonner";
 
 export const projectApi = createApi({
@@ -19,8 +25,52 @@ export const projectApi = createApi({
         toast.error(apiError.message);
         return error;
       },
+      providesTags: ["Project"],
+    }),
+    getAllProjects: builder.query<
+      GetAllProjectResponse,
+      GetAllProjectsQueryParams
+    >({
+      query: ({ projectName, limit, page } = {}) => ({
+        url: `project/all`,
+        params: { projectName, limit, page }, // Add query params here
+      }),
+      transformResponse: (response) => {
+        const apiResponse = response as GetAllProjectResponse;
+        toast.success(apiResponse.message);
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as GetAllProjectResponse;
+        toast.error(apiError.message);
+        return error;
+      },
+      providesTags: ["Project"],
+    }),
+    createProject: builder.mutation<CreateProjectResponse, AddedProjectType>({
+      query: (payload) => ({
+        url: "project/create",
+        method: "POST",
+        body: payload,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      transformResponse: (response: CreateProjectResponse) => {
+        toast.success(response.message); // Show success message
+        return response;
+      },
+      transformErrorResponse: (error: any) => {
+        toast.error(error.data?.message || "Failed to create project");
+        return error;
+      },
+      invalidatesTags: ["Project"],
     }),
   }),
 });
 
-export const { useGetProjectListQuery } = projectApi;
+export const {
+  useGetProjectListQuery,
+  useGetAllProjectsQuery,
+  useCreateProjectMutation,
+} = projectApi;

@@ -87,7 +87,7 @@ export const formSchema = z.object({
   date: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: "Invalid date format.",
   }),
-  projectPeriod: z.string().min(1, { message: "Project period is required." }),
+  projectPeriod: z.number().min(1, { message: "Project period is required." }),
   clientName: z
     .string()
     .min(2, { message: "Client name must be at least 2 characters." }),
@@ -99,17 +99,16 @@ export const formSchema = z.object({
 });
 
 export const addProjectSchema = z.object({
-  id: z.string(),
   projectName: z.string().min(2, {
     message: "Project name must be at least 2 characters.",
   }),
   projectDescription: z.string().min(10, {
     message: "Project description must be at least 10 characters.",
   }),
-  date: z
-    .string()
-    .refine((val) => !isNaN(Date.parse(val)), "Invalid date format."),
-  projectPeriod: z.string().min(5, {
+  projectDate: z.string({
+    message: "Project date must be a string",
+  }),
+  projectPeriod: z.number().min(2, {
     message: "Project period must be specified.",
   }),
   clientName: z.string().min(2, {

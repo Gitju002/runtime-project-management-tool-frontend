@@ -13,16 +13,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Combobox } from "@/components/ui/combo-box";
-import { useGetProjectListQuery } from "@/store/api/project";
+import {
+  useCreateProjectMutation,
+  useGetProjectListQuery,
+} from "@/store/api/project";
+import { useCreateServiceMutation } from "@/store/api/service";
 
 const serviceSchema = z.object({
-  projectName: z.string().min(2, {
+  project: z.string().min(2, {
     message: "Project name must be at least 2 characters.",
   }),
   serviceName: z.string().min(2, {
     message: "Service name must be at least 2 characters.",
   }),
-  description: z.string().min(10, {
+  serviceDescription: z.string().min(10, {
     message: "Description must be at least 10 characters.",
   }),
 });
@@ -31,20 +35,33 @@ export default function ServiceForm({ onSuccess }: { onSuccess: () => void }) {
   const form = useForm<z.infer<typeof serviceSchema>>({
     resolver: zodResolver(serviceSchema),
     defaultValues: {
-      projectName: "",
+      project: "",
       serviceName: "",
-      description: "",
+      serviceDescription: "",
     },
   });
 
   const { data: projectLists, isLoading: isProjectLoading } =
     useGetProjectListQuery();
 
+  const [
+    createService,
+    {
+      isLoading: isCreatingService,
+      isSuccess: isServiceCreated,
+      isError: isServiceError,
+      error: serviceError,
+    },
+  ] = useCreateServiceMutation();
+
   // const selectedProject = useWatch({ control: form.control, name: "project" });
 
-  function onSubmit(values: z.infer<typeof serviceSchema>) {
-    console.log(values);
-    onSuccess();
+  async function onSubmit(values: z.infer<typeof serviceSchema>) {
+    const response = await createService(values);
+    if (response.data?.success) {
+      form.reset();
+      onSuccess();
+    }
   }
 
   return (
@@ -52,7 +69,7 @@ export default function ServiceForm({ onSuccess }: { onSuccess: () => void }) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="projectName"
+          name="project"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Project Name</FormLabel>
@@ -88,7 +105,7 @@ export default function ServiceForm({ onSuccess }: { onSuccess: () => void }) {
         />
         <FormField
           control={form.control}
-          name="description"
+          name="serviceDescription"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Description</FormLabel>
