@@ -110,6 +110,18 @@ export type User = {
   __v: number;
 };
 
+export type ExternalUser = {
+  id: number;
+  name: string;
+  role_id: number;
+  role_name: string;
+  mobile: string | null;
+  office_name: string;
+  department_name: string;
+  profilepic: string;
+  user_status: string;
+};
+
 export type CreateTaskPayload = {
   date: string;
   finishDate: string;
@@ -153,6 +165,7 @@ export type ServiceResponse = {
 
 export type GetAllProjectsQueryParams = {
   projectName?: string;
+  userName?: string;
   limit?: number;
   page?: number;
 };
@@ -189,6 +202,14 @@ export type GetAllTypeDescResponse = {
   data: ProjectTypeDesc[];
 };
 
+export type GetAllUserResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    users: ExternalUser[];
+    paginationData: PaginationData;
+  };
+};
 interface CreateProjectResponse {
   success: boolean;
   message: string;
