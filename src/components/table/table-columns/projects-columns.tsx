@@ -8,17 +8,17 @@ const ExpandedComponent = ({ data }: { data: string }) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
 
   const truncatedDescription =
-    data.length > 30 ? `${data.slice(0, 30)}...` : data;
+    data.length > 10 ? `${data.slice(0, 10)}...` : data;
 
   return (
     <div className="text-wrap items-center gap-1">
       <p className="inline">{isExpanded ? data : truncatedDescription}</p>
-      {data.length > 30 && (
+      {data.length > 10 && (
         <Button
           variant={"link"}
           size={"sm"}
           onClick={() => setIsExpanded(!isExpanded)}
-          className="px-1 cursor-pointer text-xs text-nowrap transition-colors duration-300 dark:text-slate-100 text-slate-600"
+          className=" cursor-pointer text-xs text-nowrap transition-colors duration-300 dark:text-slate-100 text-slate-600 px-0"
         >
           {isExpanded ? "Read Less" : "Read More"}
         </Button>

@@ -67,7 +67,7 @@ export function CustomPagination({
           <PaginationPrevious
             href="#"
             onClick={() => handlePageChange(currentPage - 1)}
-            // disabled={currentPage === 1}
+            // isActive={currentPage != 1}
           />
         </PaginationItem>
 
@@ -91,8 +91,13 @@ export function CustomPagination({
         <PaginationItem>
           <PaginationNext
             href="#"
-            onClick={() => handlePageChange(currentPage + 1)}
-            // disabled={currentPage === totalPages}
+            onClick={() => {
+              if (currentPage < totalPages) {
+                handlePageChange(currentPage + 1);
+              } else {
+                handlePageChange(1);
+              }
+            }}
           />
         </PaginationItem>
       </PaginationContent>

@@ -20,7 +20,7 @@ export default function Admin() {
               <CardTitle className=" md:text-lg">{title}</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col items-end gap-2">
-              <p className="text-end text-6xl font-semibold dark:text-lime-shade">
+              <p className="text-end text-6xl font-semibold dark:text-lime-shade ">
                 {index === 0
                   ? "24"
                   : index === 1

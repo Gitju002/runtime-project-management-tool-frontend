@@ -256,3 +256,21 @@ body {
   @apply dark:bg-gradient-to-bl dark:from-input dark:to-background dark:border-lime-shade dark:hover:border-teal-400;
   @apply hover:shadow-2xl hover:shadow-teal-shade/40;
 }
+
+/* Scrollbar Styling */
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--teal-shade));
+  border-radius: 24px;
+  height: 20px !important;
+}

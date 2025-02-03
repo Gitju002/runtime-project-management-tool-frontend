@@ -45,8 +45,7 @@ function CustomSidebarTrigger() {
           <ArrowRight />
         </Button>
         <div className="aspect-auto w-16 relative">
-          {/* kothao img tag use korbi na */}
-          <Image fill src="/images/logo.png" alt="logo" />
+          <Image height={24} width={56} src="/images/logo.png" alt="logo" />
         </div>
       </div>
     </div>

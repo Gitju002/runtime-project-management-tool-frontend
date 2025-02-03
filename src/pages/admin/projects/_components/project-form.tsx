@@ -137,7 +137,7 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
               name="projectPeriod"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Project Period</FormLabel>
+                  <FormLabel>Project Period (in Days)</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Enter project period"
@@ -233,7 +233,7 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
           </div>
           <Button
             type="submit"
-            className="w-full"
+            className="w-full transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35"
             disabled={loading} // Disabled when loading
           >
             {loading ? "Submitting..." : "Submit"}

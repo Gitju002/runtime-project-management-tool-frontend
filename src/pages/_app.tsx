@@ -14,9 +14,12 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const hideSidebarRoutes = ["/user", "/login"];
   const hideLogoutRoutes = ["/login", "/admin"];
+  const hideThemeToggleRoutes = ["/login"];
+  const isAdminRoute = /^\/admin(\/|$)/.test(router.pathname);
   const showSidebar = !hideSidebarRoutes.includes(router.pathname);
-  const showLogout = !hideLogoutRoutes.includes(router.pathname);
-
+  const showLogout =
+    !hideLogoutRoutes.includes(router.pathname) && !isAdminRoute;
+  const showThemeToggle = !hideThemeToggleRoutes.includes(router.pathname);
   return (
     <ThemeProvider attribute="class" defaultTheme="system">
       <StoreProvider>
@@ -28,7 +31,7 @@ export default function App({ Component, pageProps }: AppProps) {
               {showSidebar && <CustomSidebarTrigger />}
               <Component {...pageProps} />
               <div className="fixed z-10 bottom-4 right-4">
-                <ThemeToggle />
+                {showThemeToggle && <ThemeToggle />}
               </div>
             </main>
             {showLogout && <UserLogout />}
