@@ -1,0 +1,39 @@
+import {
+  GetAllProjectsQueryParams,
+  GetAllTypeDescResponse,
+} from "@/types/types";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { toast } from "sonner";
+
+export const project_TD_Api = createApi({
+  reducerPath: "project_TD_Api",
+  baseQuery: fetchBaseQuery({
+    baseUrl: process.env.NEXT_PUBLIC_API_URL,
+    credentials: "include",
+  }),
+  tagTypes: ["ProjectType"],
+  endpoints: (builder) => ({
+    getAllProjectTypedesc: builder.query<
+      GetAllTypeDescResponse,
+      GetAllProjectsQueryParams
+    >({
+      query: ({ projectName, limit, page } = {}) => ({
+        url: "projectTypeDesc/all",
+        params: { projectName, limit, page },
+      }),
+      transformResponse: (response) => {
+        const apiResponse = response as GetAllTypeDescResponse;
+        toast.success(apiResponse.message);
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as GetAllTypeDescResponse;
+        toast.error(apiError.message);
+        return error;
+      },
+      providesTags: ["ProjectType"],
+    }),
+  }),
+});
+
+export const { useGetAllProjectTypedescQuery } = project_TD_Api;

@@ -14,12 +14,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Combobox } from "@/components/ui/combo-box";
 import { useState } from "react";
+import { useGetProjectListQuery } from "@/store/api/project";
 
 const projectTypeSchema = z.object({
   projectName: z.string().min(2, {
     message: "Project type must be at least 2 characters.",
   }),
-  description: z.string().min(10, {
+  typeDescription: z.string().min(10, {
     message: "Description must be at least 10 characters.",
   }),
   location: z.string().optional(),
@@ -41,11 +42,14 @@ export default function ProjectTypeForm({
     existingProjects[0]?.value || ""
   );
 
+  const { data: projectLists, isLoading: isProjectLoading } =
+    useGetProjectListQuery();
+
   const form = useForm<z.infer<typeof projectTypeSchema>>({
     resolver: zodResolver(projectTypeSchema),
     defaultValues: {
       projectName: "",
-      description: "",
+      typeDescription: "",
       location: "",
     },
   });
@@ -61,22 +65,32 @@ export default function ProjectTypeForm({
         <FormField
           control={form.control}
           name="projectName"
-          render={() => (
-            <div className="w-full">
-              <Combobox
-                value={selectedExistingProjects}
-                onChange={setSelectedExistingProjects}
-                data={existingProjects}
-              />
-            </div>
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Project Name</FormLabel>
+              <FormControl>
+                <div className="w-full">
+                  <Combobox
+                    value={field.value}
+                    onChange={field.onChange}
+                    disabled={isProjectLoading}
+                    data={projectLists?.data?.map((item) => ({
+                      label: item,
+                      value: item,
+                    }))}
+                  />
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
         />
         <FormField
           control={form.control}
-          name="description"
+          name="typeDescription"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>Type Description</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="Enter project type description"

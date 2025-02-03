@@ -60,6 +60,16 @@ export type Project = {
   __v: number;
 };
 
+export type ProjectTypeDesc = {
+  _id: string;
+  project: string | Project;
+  projectTypeDescription: string;
+  location: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
+
 export type Task = {
   _id: string;
   creator_role: string;
@@ -171,6 +181,12 @@ export type GetAllServiceResponse = {
     services: Service[];
     paginationData: PaginationData;
   };
+};
+
+export type GetAllTypeDescResponse = {
+  success: boolean;
+  message: string;
+  data: ProjectTypeDesc[];
 };
 
 interface CreateProjectResponse {

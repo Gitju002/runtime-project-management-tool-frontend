@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,6 +10,8 @@ import { DataTable } from "@/components/table/data-table";
 import { columns } from "@/components/table/table-columns/type-desc-columns";
 import { PlusCircle } from "lucide-react";
 import ProjectTypeForm from "@/pages/admin/type-description/_components/type-desc-form";
+import { useGetAllProjectTypedescQuery } from "@/store/api/projectTypeDesc";
+import { ProjectTypeDesc } from "@/types/types";
 
 export type ProjectType = {
   id: string;
@@ -42,6 +44,36 @@ const projectTypes: ProjectType[] = [
 
 export default function TypeDescription() {
   const [open, setOpen] = useState(false);
+  const [projectName, setProjectName] = useState(""); // For search
+  const [page, setPage] = useState(1); // For pagination
+  const [limit, setLimit] = useState(10); // Items per page
+
+  const {
+    data: allProjectTypeDesc,
+    isLoading,
+    isSuccess,
+    refetch: refetchProjectTypeDesc,
+  } = useGetAllProjectTypedescQuery({
+    projectName,
+    limit,
+    page,
+  });
+
+  // console.log(allProjectTypeDesc);
+
+  // const formattedTypeDesc =
+  //   allProjectTypeDesc?.data.map((projectType) => ({
+  //     project:
+  //       typeof projectType.project === "string"
+  //         ? projectType.project
+  //         : projectType.project.projectName,
+  //     projectTypeDescription: projectType.projectTypeDescription,
+  //     location: projectType.location,
+  //   })) || [];
+
+  // useEffect(() => {
+  //   refetchProjectTypeDesc();
+  // }, [projectName, page, limit]);
 
   return (
     <div className="container  mx-auto min-h-screen w-full py-6">
@@ -60,7 +92,7 @@ export default function TypeDescription() {
             </DialogContent>
           </Dialog>
         </div>
-        <DataTable columns={columns} data={projectTypes} />
+        {/* <DataTable columns={columns} data={formattedTypeDesc} /> */}
       </div>
     </div>
   );

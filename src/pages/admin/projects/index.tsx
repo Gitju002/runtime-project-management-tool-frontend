@@ -29,10 +29,6 @@ export default function Projects() {
     page,
   });
 
-  useEffect(() => {
-    refetch();
-  }, [projectName, page, limit]);
-
   return (
     <div className="container  mx-auto min-h-screen w-full py-6">
       <div className="grid grid-cols-1 gap-2">

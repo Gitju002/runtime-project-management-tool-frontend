@@ -51,16 +51,11 @@ export default function Services() {
     data: servicesData,
     isLoading,
     error,
-    refetch,
   } = useGetAllServicesQuery({
     projectName,
     limit,
     page,
   });
-
-  useEffect(() => {
-    refetch();
-  }, [projectName, page, limit]);
 
   const formattedServices: Service[] =
     servicesData?.data?.services?.map((service, index) => ({

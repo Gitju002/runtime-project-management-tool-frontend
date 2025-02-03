@@ -87,7 +87,7 @@ export default function LoginForm() {
             disabled={loading}
           >
             Sign In
-            <ArrowRight className="" />
+            <ArrowRight />
           </Button>
         </div>
       </form>

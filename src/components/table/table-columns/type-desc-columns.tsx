@@ -1,14 +1,15 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { ProjectType } from "@/pages/admin/type-description/index";
 import { Badge } from "@/components/ui/badge";
+import { ProjectTypeDesc } from "@/types/types";
 
-export const columns: ColumnDef<ProjectType>[] = [
+export const columns: ColumnDef<Partial<ProjectTypeDesc>>[] = [
   {
-    accessorKey: "projectName",
+    accessorKey: "project",
     header: "Project Name",
   },
   {
-    accessorKey: "description",
+    accessorKey: "projectTypeDescription",
     header: "Type Description",
   },
   {
