@@ -5,7 +5,7 @@ export const columns: ColumnDef<TableTask>[] = [
   {
     accessorKey: "slno",
     header: "SL No.",
-    cell: ({ row }) => row.index + 1,
+    // cell: ({ row }) => row.index + 1,
   },
   {
     accessorKey: "date",

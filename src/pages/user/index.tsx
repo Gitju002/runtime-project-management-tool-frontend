@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { columns } from "@/components/table/table-columns/user-columns";
 import { DataTable } from "@/components/table/data-table";
 import {
@@ -13,57 +13,32 @@ import { PlusCircleIcon } from "lucide-react";
 import { format } from "date-fns";
 import { useGetTaskByUserIDQuery } from "@/store/api/tasks";
 import { transformTasks } from "@/utils/tasksFormatting";
-// export const projects: Task[] = [
-//   {
-//     slno: 1,
-//     date: "2021-09-01",
-//     projectName: "Project 1",
-//     services: "Service 1",
-//     purpose: "Purpose 1",
-//     startDate: "2021-09-01",
-//     startTime: "10:00 AM",
-//     finishDate: "2021-09-01",
-//     finishTime: "12:00 PM",
-//     status: "Initiated",
-//   },
-//   {
-//     slno: 2,
-//     date: "2021-09-01",
-//     projectName: "Project 2",
-//     services: "Service 2",
-//     purpose: "Purpose 1",
-//     startDate: "2021-09-01",
-//     startTime: "10:00 AM",
-//     finishDate: "2021-09-01",
-//     finishTime: "12:00 PM",
-//     status: "Completed",
-//   },
-//   {
-//     slno: 3,
-//     date: "2021-09-01",
-//     projectName: "Project 2",
-//     services: "Service 3",
-//     purpose: "Purpose 3",
-//     startDate: "2021-09-01",
-//     startTime: "10:00 AM",
-//     finishDate: "2021-09-01",
-//     finishTime: "12:00 PM",
-//     status: "Ongoing",
-//   },
-// ];
+import { CustomPagination } from "@/components/ui/custom-pagination";
 
 const User = () => {
   const [isOpened, setIsOpened] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(10); // Items per page
+  const [totalPages, setTotalPages] = useState(1);
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   const {
     data: tasksData,
     isLoading: tasksLoading,
     isSuccess: tasksSuccess,
     isError: tasksIsError,
-  } = useGetTaskByUserIDQuery();
+  } = useGetTaskByUserIDQuery({ page: currentPage, limit });
 
   console.log("Tasks Data", tasksData);
+  useEffect(() => {
+    if (tasksData) {
+      setTotalPages(tasksData?.data.paginationData.totalPages);
+    }
+  }, [tasksData]);
 
-  const formattedTasks = transformTasks(tasksData?.data.tasks);
+  const formattedTasks = transformTasks(tasksData, limit);
 
   return (
     <div className="container  mx-auto min-h-screen w-full py-10">
@@ -92,9 +67,15 @@ const User = () => {
         ) : tasksIsError ? (
           <div>Error fetching data</div>
         ) : tasksSuccess ? (
-          <DataTable columns={columns} data={formattedTasks} />
+          <>
+            <DataTable columns={columns} data={formattedTasks} />
+            <CustomPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </>
         ) : null}
-        {/* <DataTable columns={columns} data={projects} /> */}
       </div>
     </div>
   );
