@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { toast } from "sonner";
 import {
   CreateTaskPayload,
+  GetAllProjectsQueryParams,
   GetAllTaskResponse,
   TaskResponse,
 } from "@/types/types";
@@ -33,9 +34,13 @@ export const taskApi = createApi({
       },
     }),
 
-    getTaskByUserID: builder.query<GetAllTaskResponse, void>({
-      query: () => ({
+    getTaskByUserID: builder.query<
+      GetAllTaskResponse,
+      Partial<GetAllProjectsQueryParams>
+    >({
+      query: ({ limit, page }) => ({
         url: "/task/get-by-user",
+        params: { limit, page },
       }),
       providesTags: ["Task"],
       transformResponse: (response) => {

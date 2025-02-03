@@ -1,4 +1,4 @@
-import { TableTask, Task } from "@/types/types";
+import { GetAllTaskResponse, TableTask, Task } from "@/types/types";
 
 const formatDate = (isoString: string): string => {
   const date = new Date(isoString);
@@ -14,10 +14,16 @@ const formatTime = (isoString: string): string => {
   return `${hours}:${minutes} ${ampm}`;
 };
 
-export const transformTasks = (tasks?: Task[]): TableTask[] => {
+export const transformTasks = (
+  taskData: GetAllTaskResponse | undefined,
+  limit: number
+): TableTask[] => {
+  const pageNo = taskData?.data?.paginationData.currentPage || 1;
+  console.log("Page No", pageNo);
+  console.log("Limit", limit);
   return (
-    tasks?.map((task, index) => ({
-      slno: index + 1,
+    taskData?.data?.tasks.map((task, index) => ({
+      slno: limit * (pageNo - 1) + index + 1,
       date: formatDate(task.date),
       projectName: task.project.projectName,
       services: task.service.serviceName,

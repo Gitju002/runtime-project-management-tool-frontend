@@ -19,8 +19,8 @@ export default function Admin() {
             <CardHeader>
               <CardTitle className=" md:text-lg">{title}</CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-end text-6xl font-semibold">
+            <CardContent className="flex flex-col items-end gap-2">
+              <p className="text-end text-6xl font-semibold dark:text-lime-shade">
                 {index === 0
                   ? "24"
                   : index === 1
@@ -29,18 +29,13 @@ export default function Admin() {
                   ? "8"
                   : "156"}
               </p>
-              {/* <p>
-                {index === 0
-                  ? "Users"
-                  : index === 1
-                  ? "Projects"
-                  : index === 2
-                  ? "Projects"
-                  : "Projects"}
-              </p> */}
             </CardContent>
           </Card>
         ))}
+      </div>
+      {/* Placeholder for more features */}
+      <div className="border-2 border-dashed border-teal-shade/50 min-h-96 w-full bg-slate-100 dark:bg-slate-800/50 rounded-md flex flex-col items-center justify-center mt-6 cursor-not-allowed">
+        <span className="text-teal-shade">Placeholder for more content</span>
       </div>
     </div>
   );
