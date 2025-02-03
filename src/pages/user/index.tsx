@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { columns } from "@/components/table/table-columns/user-columns";
 import { DataTable } from "@/components/table/data-table";
 import {
@@ -47,9 +48,11 @@ const User = () => {
           <h1 className="text-2xl font-semibold">User Page</h1>
           <Dialog open={isOpened} onOpenChange={setIsOpened}>
             <DialogTrigger asChild>
-              <Button className="transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35">
-                Add Task <PlusCircleIcon />
-              </Button>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Button className="transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35">
+                  Add Task <PlusCircleIcon />
+                </Button>
+              </motion.div>
             </DialogTrigger>
             <DialogContent className="bg-background dark:hover:shadow-2xl dark:hover:shadow-teal-shade/60 transition-all duration-200">
               <DialogTitle className="text-center text-sm border border-gray-200 rounded-md p-2 mt-4">
@@ -63,7 +66,18 @@ const User = () => {
           </Dialog>
         </div>
         {tasksLoading ? (
-          <div>Loading...</div>
+          <div className="flex justify-center items-center h-96">
+            <motion.div
+              animate={{ opacity: [1, 0.5, 1], rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity }}
+            >
+              <img
+                src="/images/hourglass.png"
+                alt="loading..."
+                className="w-14 h-14 md:w-20 md:h-20"
+              />
+            </motion.div>
+          </div>
         ) : tasksIsError ? (
           <div>Error fetching data</div>
         ) : tasksSuccess ? (

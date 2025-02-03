@@ -286,7 +286,7 @@ const TaskForm = ({
 
           <div className="flex items-center gap-2">
             <Button
-              className="ms-auto transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35"
+              className="w-full ms-auto transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35"
               type="submit"
             >
               Submit

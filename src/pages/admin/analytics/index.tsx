@@ -58,7 +58,7 @@ export default function Analytics() {
   const [selectedUser, setSelectedUser] = useState(users[0]?.value || "");
 
   return (
-    <div className="container mx-auto min-h-screen w-full py-6">
+    <div className="container mx-auto w-full py-6">
       <div className="grid grid-cols-1 gap-y-4">
         <div className="flex justify-between items-center mb-6">
           <h1 className="block w-full text-2xl font-bold">Analytics</h1>

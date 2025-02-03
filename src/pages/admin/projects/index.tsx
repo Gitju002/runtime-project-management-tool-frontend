@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import {
   Dialog,
   DialogContent,
@@ -41,15 +42,17 @@ export default function Projects() {
     }
   }, [projectData]);
   return (
-    <div className="container  mx-auto min-h-screen w-full py-6">
+    <div className="container  mx-auto w-full py-6">
       <div className="grid grid-cols-1 gap-2">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Existing Projects</h1>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button className="transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35">
-                Add Project <PlusCircle className="ml-2 h-4 w-4" />
-              </Button>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Button className="transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35">
+                  Add Project <PlusCircle className="ml-2 h-4 w-4" />
+                </Button>
+              </motion.div>
             </DialogTrigger>
             <DialogContent className="bg-background dark:hover:shadow-2xl dark:hover:shadow-teal-shade/60 transition-all duration-200">
               <DialogTitle>Add New Project</DialogTitle>
@@ -60,7 +63,18 @@ export default function Projects() {
         {
           // Loading
           isLoading ? (
-            <div>Loading...</div>
+            <div className="flex justify-center items-center h-96">
+              <motion.div
+                animate={{ opacity: [1, 0.5, 1], rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity }}
+              >
+                <img
+                  src="/images/hourglass.png"
+                  alt="loading..."
+                  className="w-14 h-14 md:w-20 md:h-20"
+                />
+              </motion.div>
+            </div>
           ) : // Error
           error ? (
             <div>Error fetching data</div>
