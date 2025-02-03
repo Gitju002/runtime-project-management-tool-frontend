@@ -59,21 +59,17 @@ export default function TypeDescription() {
     page,
   });
 
-  // console.log(allProjectTypeDesc);
+  console.log(allProjectTypeDesc);
 
-  // const formattedTypeDesc =
-  //   allProjectTypeDesc?.data.map((projectType) => ({
-  //     project:
-  //       typeof projectType.project === "string"
-  //         ? projectType.project
-  //         : projectType.project.projectName,
-  //     projectTypeDescription: projectType.projectTypeDescription,
-  //     location: projectType.location,
-  //   })) || [];
-
-  // useEffect(() => {
-  //   refetchProjectTypeDesc();
-  // }, [projectName, page, limit]);
+  const formattedTypeDesc =
+    allProjectTypeDesc?.data.map((projectType) => ({
+      project:
+        typeof projectType.project === "string"
+          ? projectType.project
+          : projectType.project.projectName,
+      projectTypeDescription: projectType.projectTypeDescription,
+      location: projectType.location,
+    })) || [];
 
   return (
     <div className="container  mx-auto min-h-screen w-full py-6">
@@ -92,7 +88,7 @@ export default function TypeDescription() {
             </DialogContent>
           </Dialog>
         </div>
-        {/* <DataTable columns={columns} data={formattedTypeDesc} /> */}
+        <DataTable columns={columns} data={formattedTypeDesc} />
       </div>
     </div>
   );

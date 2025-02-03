@@ -15,6 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Combobox } from "@/components/ui/combo-box";
 import { useState } from "react";
 import { useGetProjectListQuery } from "@/store/api/project";
+import { useCreateProjectTypeDescMutation } from "@/store/api/projectTypeDesc";
 
 const projectTypeSchema = z.object({
   projectName: z.string().min(2, {
@@ -42,6 +43,15 @@ export default function ProjectTypeForm({
     existingProjects[0]?.value || ""
   );
 
+  const [
+    createProjectTypeDesc,
+    {
+      data: createdProjectType,
+      isLoading: isCreatingProjectType,
+      isSuccess: isProjectTypeCreated,
+    },
+  ] = useCreateProjectTypeDescMutation();
+
   const { data: projectLists, isLoading: isProjectLoading } =
     useGetProjectListQuery();
 
@@ -54,9 +64,18 @@ export default function ProjectTypeForm({
     },
   });
 
-  function onSubmit(values: z.infer<typeof projectTypeSchema>) {
+  async function onSubmit(values: z.infer<typeof projectTypeSchema>) {
     console.log(values);
-    onSuccess();
+    const response = await createProjectTypeDesc({
+      project: values.projectName,
+      projectTypeDescription: values.typeDescription,
+      location: values.location,
+    });
+
+    if (response?.data?.success) {
+      form.reset();
+      onSuccess();
+    }
   }
 
   return (

@@ -1,8 +1,10 @@
 import {
   GetAllProjectsQueryParams,
   GetAllTypeDescResponse,
+  ProjectTypeDesc,
 } from "@/types/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { create } from "domain";
 import { toast } from "sonner";
 
 export const project_TD_Api = createApi({
@@ -33,7 +35,31 @@ export const project_TD_Api = createApi({
       },
       providesTags: ["ProjectType"],
     }),
+    createProjectTypeDesc: builder.mutation<
+      GetAllTypeDescResponse,
+      Partial<ProjectTypeDesc>
+    >({
+      query: (body) => ({
+        url: "projectTypeDesc/create",
+        method: "POST",
+        body,
+      }),
+      transformResponse: (response) => {
+        const apiResponse = response as GetAllTypeDescResponse;
+        toast.success(apiResponse.message);
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as GetAllTypeDescResponse;
+        toast.error(apiError.message);
+        return error;
+      },
+      invalidatesTags: ["ProjectType"],
+    }),
   }),
 });
 
-export const { useGetAllProjectTypedescQuery } = project_TD_Api;
+export const {
+  useGetAllProjectTypedescQuery,
+  useCreateProjectTypeDescMutation,
+} = project_TD_Api;
