@@ -38,8 +38,8 @@ export default function LoginForm() {
       const response = await login(values).unwrap();
       dispatch(
         setCredentials({
-          token: response.data.token,
-          role: response.data.user.role,
+          token: response?.data?.token,
+          role: response?.data?.user?.role,
         })
       );
       if (response?.data?.user?.role === "Admin") {
