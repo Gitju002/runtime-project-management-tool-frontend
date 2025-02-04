@@ -210,6 +210,15 @@ export type GetAllUserResponse = {
     paginationData: PaginationData;
   };
 };
+
+export type GetAllUsersListResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    label: string;
+    value: string;
+  }[];
+};
 interface CreateProjectResponse {
   success: boolean;
   message: string;

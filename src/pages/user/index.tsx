@@ -32,7 +32,7 @@ const User = () => {
     isError: tasksIsError,
   } = useGetTaskByUserIDQuery({ page: currentPage, limit });
 
-  console.log("Tasks Data", tasksData);
+  //console.log("Tasks Data", tasksData);
   useEffect(() => {
     if (tasksData) {
       setTotalPages(tasksData?.data.paginationData.totalPages);

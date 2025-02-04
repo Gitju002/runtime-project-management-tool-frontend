@@ -3,6 +3,7 @@ import {
   ExternalUser,
   GetAllProjectsQueryParams,
   GetAllUserResponse,
+  GetAllUsersListResponse,
 } from "@/types/types";
 import { toast } from "sonner";
 
@@ -19,6 +20,7 @@ export const userApi = createApi({
         url: "/user/get-all-users",
         params: { userName, limit, page },
       }),
+      providesTags: ["User"],
       transformResponse: (response) => {
         const apiResponse = response as GetAllUserResponse;
         toast.success(apiResponse.message);
@@ -30,7 +32,23 @@ export const userApi = createApi({
         return error;
       },
     }),
+    getUsersList: builder.query<GetAllUsersListResponse, void>({
+      query: () => ({
+        url: "/user/get-user-list",
+      }),
+      providesTags: ["User"],
+      transformResponse: (response) => {
+        const apiResponse = response as GetAllUsersListResponse;
+        toast.success(apiResponse.message);
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as GetAllUsersListResponse;
+        toast.error(apiError.message);
+        return error;
+      },
+    }),
   }),
 });
 
-export const { useGetAllUsersQuery } = userApi;
+export const { useGetAllUsersQuery, useGetUsersListQuery } = userApi;

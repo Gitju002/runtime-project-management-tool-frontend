@@ -19,8 +19,6 @@ export const transformTasks = (
   limit: number
 ): TableTask[] => {
   const pageNo = taskData?.data?.paginationData.currentPage || 1;
-  console.log("Page No", pageNo);
-  console.log("Limit", limit);
   return (
     taskData?.data?.tasks.map((task, index) => ({
       slno: limit * (pageNo - 1) + index + 1,
