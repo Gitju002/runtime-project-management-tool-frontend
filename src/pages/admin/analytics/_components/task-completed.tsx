@@ -16,32 +16,68 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { useGetTasksPerStatusQuery } from "@/store/api/analytics";
+import { TaskStatus } from "@/types/types";
+import { set } from "date-fns";
 
-const chartData = [
-  { taskCompletion: "completed", value: 300, fill: "var(--color-completed)" },
-  { taskCompletion: "ongoing", value: 150, fill: "var(--color-ongoing)" },
-  { taskCompletion: "initiated", value: 50, fill: "var(--color-initiated)" },
+const chart_Data: TaskStatus[] = [
+  { status: "Completed", count: 2, fill: "var(--color-Completed)" },
+  { status: "Ongoing", count: 3, fill: "var(--color-Ongoing)" },
+  { status: "Initiated", count: 5, fill: "var(--color-Initiated)" },
 ];
 
 const chartConfig = {
-  completed: {
-    label: "completed",
+  Completed: {
+    label: "Completed",
     color: "hsl(var(--chart-2))",
   },
-  ongoing: {
-    label: "ongoing",
+  Ongoing: {
+    label: "Ongoing",
     color: "hsl(var(--chart-3))",
   },
-  initiated: {
-    label: "inititated",
+  Initiated: {
+    label: "Inititated",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
 
-export default function TaskCompletedComponent() {
-  const totalvalue = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.value, 0);
-  }, []);
+export default function TaskCompletedComponent({
+  userName,
+}: {
+  userName: string;
+}) {
+  const [chartData, setChartData] = React.useState<TaskStatus[]>(chart_Data);
+  const [totalvalue, setTotalValue] = React.useState(50);
+  const {
+    data: taskAnalyticsData,
+    isError,
+    isLoading,
+    isSuccess,
+  } = useGetTasksPerStatusQuery({
+    userName,
+  });
+
+  // console.log(
+  //   "Task Analytics Data",
+  //   taskAnalyticsData,
+  //   isLoading,
+  //   isSuccess,
+  //   isError
+  // );
+
+  React.useEffect(() => {
+    if (taskAnalyticsData) {
+      const data = taskAnalyticsData.data.tasks.map((task) => ({
+        status: task.status,
+        count: task.count,
+        fill: chartConfig[task.status].color,
+      }));
+      setChartData(data);
+      setTotalValue(taskAnalyticsData.data.totalTasks);
+    }
+  }, [taskAnalyticsData]);
+
+  console.log("Chart Data", chartConfig.Initiated.color);
 
   return (
     <Card className="flex flex-col">
@@ -61,8 +97,8 @@ export default function TaskCompletedComponent() {
             />
             <Pie
               data={chartData}
-              dataKey="value"
-              nameKey="taskCompletion"
+              dataKey="count"
+              nameKey="status"
               innerRadius={60}
               strokeWidth={5}
             >
@@ -102,27 +138,18 @@ export default function TaskCompletedComponent() {
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
           <span>
-            <span style={{ color: chartConfig.initiated.color }}>
-              {
-                chartData.find((data) => data.taskCompletion === "initiated")
-                  ?.value
-              }{" "}
+            <span style={{ color: chartConfig.Initiated.color }}>
+              {chartData.find((data) => data.status === "Initiated")?.count}{" "}
               Initiated
             </span>
             ,{" "}
-            <span style={{ color: chartConfig.ongoing.color }}>
-              {
-                chartData.find((data) => data.taskCompletion === "ongoing")
-                  ?.value
-              }{" "}
+            <span style={{ color: chartConfig.Ongoing.color }}>
+              {chartData.find((data) => data.status === "Ongoing")?.count}{" "}
               Ongoing
             </span>{" "}
             and{" "}
-            <span style={{ color: chartConfig.completed.color }}>
-              {
-                chartData.find((data) => data.taskCompletion === "completed")
-                  ?.value
-              }{" "}
+            <span style={{ color: chartConfig.Completed.color }}>
+              {chartData.find((data) => data.status === "Completed")?.count}{" "}
               Completed tasks
             </span>
           </span>

@@ -45,7 +45,7 @@ export const taskApi = createApi({
       providesTags: ["Task"],
       transformResponse: (response) => {
         const apiResponse = response as GetAllTaskResponse;
-        toast.success(apiResponse.message);
+        toast.success("Task list fetched successfully");
         return apiResponse;
       },
       transformErrorResponse: (error) => {

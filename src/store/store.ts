@@ -6,6 +6,7 @@ import { serviceApi } from "./api/service";
 import { project_TD_Api } from "./api/projectTypeDesc";
 import { userApi } from "./api/user";
 import { taskApi } from "./api/tasks";
+import { analyticsApi } from "./api/analytics";
 import userReducer from "./features/userInfo";
 import { EnhancedStore } from "@reduxjs/toolkit";
 
@@ -17,6 +18,7 @@ export const store = configureStore({
     [taskApi.reducerPath]: taskApi.reducer,
     [project_TD_Api.reducerPath]: project_TD_Api.reducer,
     [userApi.reducerPath]: userApi.reducer,
+    [analyticsApi.reducerPath]: analyticsApi.reducer,
     userInfo: userReducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -26,7 +28,8 @@ export const store = configureStore({
       .concat(serviceApi.middleware)
       .concat(taskApi.middleware)
       .concat(project_TD_Api.middleware)
-      .concat(userApi.middleware),
+      .concat(userApi.middleware)
+      .concat(analyticsApi.middleware),
 });
 
 setupListeners(store.dispatch);

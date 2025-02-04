@@ -246,3 +246,20 @@ export type GetUserResponse = {
     role: string;
   };
 };
+
+export interface TaskStatus {
+  status: "Ongoing" | "Initiated" | "Completed"; // Task statuses
+  count: number; // Number of tasks in this status
+  fill: string; // CSS variable for color
+}
+
+export interface TaskStatusData {
+  tasks: TaskStatus[]; // Array of task statuses
+  totalTasks: number; // Total number of tasks
+}
+
+export interface TaskStatusResponse {
+  success: boolean; // Request status
+  message: string; // Success message
+  data: TaskStatusData; // Response data
+}
