@@ -15,7 +15,7 @@ export type UserResponse = {
   success: boolean;
   message: string;
   data: {
-    error: string;
+    error?: string;
     token: string;
     user: {
       name: string;

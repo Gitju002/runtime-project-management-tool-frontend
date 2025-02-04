@@ -19,6 +19,7 @@ import {
   useCreateProjectMutation,
   useGetProjectListQuery,
 } from "@/store/api/project";
+import { Loader2 } from "lucide-react";
 
 export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
   const [loading, setLoading] = useState(false);
@@ -209,9 +210,11 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
                     <Input
                       type="number"
                       placeholder="Enter project cost"
-                      value={field.value}
+                      value={field.value === 0 ? "" : field.value} // Show empty string if the value is 0
                       onChange={(e) => {
-                        field.onChange(parseInt(e.target.value) || 0);
+                        const value = e.target.value;
+                        // Allow empty string or convert to integer
+                        field.onChange(value === "" ? "" : parseInt(value));
                       }}
                       disabled={loading} // Disabled when loading
                     />
@@ -226,7 +229,13 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
             className="w-full transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35"
             disabled={loading} // Disabled when loading
           >
-            {loading ? "Submitting..." : "Submit"}
+            {loading ? (
+              <>
+                <Loader2 className="animate-spin mr-2 h-5 w-5" /> Submitting...
+              </>
+            ) : (
+              "Submit"
+            )}
           </Button>
         </form>
       </Form>

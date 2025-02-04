@@ -18,8 +18,10 @@ import { useLoginMutation } from "@/store/api/auth";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { setCredentials } from "@/store/features/userInfo";
+import { Loader2 } from "lucide-react";
 export default function LoginForm() {
-  const [login, { isLoading: loading, error, isSuccess }] = useLoginMutation();
+  const [login, { isLoading: isSubmitting, error, isSuccess }] =
+    useLoginMutation();
   const router = useRouter();
   const dispatch = useDispatch();
   const form = useForm<z.infer<typeof loginFormSchema>>({
@@ -28,7 +30,7 @@ export default function LoginForm() {
       email: "",
       password: "",
     },
-    disabled: loading,
+    disabled: isSubmitting,
   });
 
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
@@ -84,9 +86,15 @@ export default function LoginForm() {
           <Button
             className="ms-auto  w-full  transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35 "
             type="submit"
-            disabled={loading}
+            disabled={isSubmitting}
           >
-            Sign In
+            {isSubmitting ? (
+              <>
+                <Loader2 className="animate-spin mr-2 h-5 w-5" /> Signin in...
+              </>
+            ) : (
+              "Sign in"
+            )}
             <ArrowRight />
           </Button>
         </div>

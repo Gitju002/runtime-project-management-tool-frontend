@@ -20,6 +20,7 @@ export default function Projects() {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10); // Items per page
   const [totalPages, setTotalPages] = useState(1);
+  const [paginationLoading, setPaginationLoading] = useState(false);
 
   const {
     data: projectData,
@@ -32,6 +33,7 @@ export default function Projects() {
     limit,
   });
   const handlePageChange = (page: number) => {
+    setPaginationLoading(true);
     setCurrentPage(page);
   };
 
@@ -39,6 +41,7 @@ export default function Projects() {
   useEffect(() => {
     if (projectData) {
       setTotalPages(projectData?.data.paginationData.totalPages);
+      setPaginationLoading(false);
     }
   }, [projectData]);
   return (
@@ -62,7 +65,7 @@ export default function Projects() {
         </div>
         {
           // Loading
-          isLoading ? (
+          isLoading || paginationLoading ? (
             <div className="flex justify-center items-center h-96">
               <motion.div
                 animate={{ opacity: [1, 0.5, 1], rotate: 360 }}
@@ -85,6 +88,7 @@ export default function Projects() {
                 columns={columns}
                 data={projectData?.data?.projects || []}
               />
+
               <CustomPagination
                 currentPage={currentPage}
                 totalPages={totalPages}

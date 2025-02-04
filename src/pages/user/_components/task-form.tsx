@@ -26,6 +26,7 @@ import { useGetServiceByProjectQuery } from "@/store/api/service"; // Import the
 import { addTaskSchema } from "@/schema";
 import { useCreateTaskMutation } from "@/store/api/tasks";
 import { TimePicker } from "@/components/ui/time-picker";
+import { Loader2 } from "lucide-react";
 
 const TaskForm = ({
   setIsOpen,
@@ -56,7 +57,7 @@ const TaskForm = ({
   const { data: serviceLists, isLoading: isServiceLoading } =
     useGetServiceByProjectQuery(selectedProject, { skip: !selectedProject });
 
-  const [createTask] = useCreateTaskMutation();
+  const [createTask, { isLoading: isSubmitting }] = useCreateTaskMutation();
 
   function onSubmit(values: z.infer<typeof addTaskSchema>) {
     createTask(values)
@@ -66,6 +67,7 @@ const TaskForm = ({
         setIsOpen(false);
       });
   }
+  const isFormDisabled = isProjectLoading || isServiceLoading || isSubmitting;
 
   return (
     <div className="max-h-[600px] overflow-y-scroll no-scrollbar p-1">
@@ -88,7 +90,7 @@ const TaskForm = ({
                       <Combobox
                         value={field.value}
                         onChange={field.onChange}
-                        disabled={isProjectLoading}
+                        disabled={isFormDisabled}
                         data={projectLists?.data?.map((item) => ({
                           label: item,
                           value: item,
@@ -112,7 +114,7 @@ const TaskForm = ({
                         <Combobox
                           value={field.value}
                           onChange={field.onChange}
-                          disabled={isServiceLoading || !serviceLists}
+                          disabled={isFormDisabled || !serviceLists}
                           data={
                             serviceLists?.data?.map((service) => ({
                               label: service.serviceName,
@@ -139,7 +141,7 @@ const TaskForm = ({
                     className="bg-background hover:bg-input"
                     placeholder="Define Project Purpose Here"
                     {...field}
-                    disabled={isProjectLoading}
+                    disabled={isFormDisabled}
                   />
                 </FormControl>
                 <FormMessage />
@@ -158,7 +160,7 @@ const TaskForm = ({
                       placeholder="Pick start date"
                       value={field.value ? new Date(field.value) : new Date()}
                       onChange={(e) => field.onChange(e?.toISOString())}
-                      btnDisabled={isProjectLoading}
+                      btnDisabled={isFormDisabled}
                     />
                   </FormControl>
                   <FormMessage />
@@ -175,6 +177,7 @@ const TaskForm = ({
                     <TimePicker
                       value={field.value}
                       onChange={(e) => field.onChange(e)}
+                      disabled={isFormDisabled}
                     />
                   </FormControl>
                   <FormMessage />
@@ -195,7 +198,7 @@ const TaskForm = ({
                       placeholder="Pick finish date"
                       value={field.value ? new Date(field.value) : new Date()}
                       onChange={(e) => field.onChange(e?.toISOString())}
-                      btnDisabled={isProjectLoading}
+                      btnDisabled={isFormDisabled}
                       disabled={(date: Date) => {
                         const startDate = form.watch("startDate");
                         return startDate ? date < new Date(startDate) : false;
@@ -216,6 +219,7 @@ const TaskForm = ({
                     <TimePicker
                       value={field.value}
                       onChange={(e) => field.onChange(e)}
+                      disabled={isFormDisabled}
                       // disabled={isProjectLoading}
                     />
                   </FormControl>
@@ -233,7 +237,7 @@ const TaskForm = ({
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  disabled={isProjectLoading}
+                  disabled={isFormDisabled}
                 >
                   <FormControl>
                     <SelectTrigger
@@ -288,8 +292,16 @@ const TaskForm = ({
             <Button
               className="w-full ms-auto transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35"
               type="submit"
+              disabled={isSubmitting}
             >
-              Submit
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="animate-spin mr-2 h-5 w-5" />{" "}
+                  Submitting...
+                </>
+              ) : (
+                "Submit"
+              )}
             </Button>
           </div>
         </form>

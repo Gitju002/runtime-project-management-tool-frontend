@@ -21,7 +21,9 @@ const User = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10); // Items per page
   const [totalPages, setTotalPages] = useState(1);
+  const [paginationLoading, setPaginationLoading] = useState(false);
   const handlePageChange = (page: number) => {
+    setPaginationLoading(true);
     setCurrentPage(page);
   };
 
@@ -36,6 +38,7 @@ const User = () => {
   useEffect(() => {
     if (tasksData) {
       setTotalPages(tasksData?.data.paginationData.totalPages);
+      setPaginationLoading(false);
     }
   }, [tasksData]);
 
@@ -65,7 +68,7 @@ const User = () => {
             </DialogContent>
           </Dialog>
         </div>
-        {tasksLoading ? (
+        {tasksLoading || paginationLoading ? (
           <div className="flex justify-center items-center h-96">
             <motion.div
               animate={{ opacity: [1, 0.5, 1], rotate: 360 }}
