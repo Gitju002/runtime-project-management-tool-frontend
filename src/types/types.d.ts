@@ -199,7 +199,10 @@ export type GetAllServiceResponse = {
 export type GetAllTypeDescResponse = {
   success: boolean;
   message: string;
-  data: ProjectTypeDesc[];
+  data: {
+    response: ProjectTypeDesc[];
+    paginationData: PaginationData;
+  };
 };
 
 export type GetAllUserResponse = {

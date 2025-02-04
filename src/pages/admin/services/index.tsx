@@ -12,6 +12,7 @@ import { columns } from "@/components/table/table-columns/services-columns";
 import { PlusCircle } from "lucide-react";
 import ServiceForm from "@/pages/admin/services/_components/services-form";
 import { useGetAllServicesQuery } from "@/store/api/service";
+import { CustomPagination } from "@/components/ui/custom-pagination";
 
 export type Service = {
   id: string;
@@ -23,8 +24,14 @@ export type Service = {
 export default function Services() {
   const [open, setOpen] = useState(false);
   const [projectName, setProjectName] = useState(""); // For search
-  const [page, setPage] = useState(1); // For pagination
+  const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10); // Items per page
+  const [totalPages, setTotalPages] = useState(1);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    console.log("Page", page);
+  };
 
   const {
     data: servicesData,
@@ -32,13 +39,21 @@ export default function Services() {
     error,
   } = useGetAllServicesQuery({
     projectName,
+    page: currentPage,
     limit,
-    page,
   });
+
+  useEffect(() => {
+    if (servicesData) {
+      setTotalPages(servicesData?.data?.paginationData?.totalPages);
+    }
+  }, [servicesData]);
+
+  console.log(servicesData?.data?.paginationData?.totalPages);
 
   const formattedServices: Service[] =
     servicesData?.data?.services?.map((service, index) => ({
-      id: (index + 1).toString(), // Ensure id is a string
+      id: (limit * (currentPage - 1) + index + 1).toString(),
       projectName:
         typeof service.project === "string"
           ? service.project
@@ -46,8 +61,6 @@ export default function Services() {
       serviceName: service.serviceName,
       description: service.serviceDescription,
     })) || []; // Default to empty array if undefined
-
-  console.log(servicesData);
 
   return (
     <div className="container  mx-auto w-full py-6">
@@ -88,7 +101,14 @@ export default function Services() {
             <div>Error fetching data</div>
           ) : // Success
           servicesData?.data?.services?.length ? (
-            <DataTable columns={columns} data={formattedServices || []} />
+            <>
+              <DataTable columns={columns} data={formattedServices || []} />
+              <CustomPagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            </>
           ) : (
             <div>No data found</div>
           )

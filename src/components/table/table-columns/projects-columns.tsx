@@ -18,7 +18,7 @@ const ExpandedComponent = ({ data }: { data: string }) => {
           variant={"link"}
           size={"sm"}
           onClick={() => setIsExpanded(!isExpanded)}
-          className=" cursor-pointer text-xs text-nowrap transition-colors duration-300 dark:text-slate-100 text-slate-600 px-0"
+          className=" cursor-pointer text-xs text-nowrap transition-colors duration-300 dark:text-slate-400 text-slate-600 px-0 ml-1"
         >
           {isExpanded ? "Read Less" : "Read More"}
         </Button>

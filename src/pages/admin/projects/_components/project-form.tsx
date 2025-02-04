@@ -15,7 +15,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { DatePicker } from "@/components/ui/date-picker";
 import { addProjectSchema } from "@/schema";
-import { Combobox } from "@/components/ui/combo-box";
 import {
   useCreateProjectMutation,
   useGetProjectListQuery,
@@ -30,7 +29,7 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
     defaultValues: {
       projectName: "",
       projectDescription: "",
-      projectDate: "",
+      projectDate: new Date().toISOString(),
       projectPeriod: 0,
       clientName: "",
       clientEmail: "",
@@ -71,15 +70,6 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
                 <FormLabel>Project Name</FormLabel>
                 <FormControl>
                   <div className="w-full">
-                    {/* <Combobox
-                      value={field.value}
-                      onChange={field.onChange}
-                      disabled={isProjectLoading}
-                      data={projectLists?.data?.map((item) => ({
-                        label: item,
-                        value: item,
-                      }))}
-                    /> */}
                     <Input
                       placeholder="Enter project name"
                       {...field}
