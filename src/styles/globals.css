@@ -261,6 +261,7 @@ body {
 /* width */
 ::-webkit-scrollbar {
   width: 7px;
+  height: 7px;
 }
 
 /* Track */
@@ -272,5 +273,4 @@ body {
 ::-webkit-scrollbar-thumb {
   background: hsl(var(--teal-shade));
   border-radius: 24px;
-  height: 20px !important;
 }

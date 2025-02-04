@@ -13,6 +13,7 @@ import { PlusCircle } from "lucide-react";
 import ProjectTypeForm from "@/pages/admin/type-description/_components/type-desc-form";
 import { useGetAllProjectTypedescQuery } from "@/store/api/projectTypeDesc";
 import { ProjectTypeDesc } from "@/types/types";
+import { CustomPagination } from "@/components/ui/custom-pagination";
 
 export type ProjectType = {
   id: string;
@@ -46,8 +47,13 @@ const projectTypes: ProjectType[] = [
 export default function TypeDescription() {
   const [open, setOpen] = useState(false);
   const [projectName, setProjectName] = useState(""); // For search
-  const [page, setPage] = useState(1); // For pagination
+  const [currentPage, setCurrentPage] = useState(1); // For pagination
   const [limit, setLimit] = useState(10); // Items per page
+  const [totalPages, setTotalPages] = useState(1); // Total pages
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   const {
     data: allProjectTypeDesc,
@@ -57,14 +63,20 @@ export default function TypeDescription() {
     refetch: refetchProjectTypeDesc,
   } = useGetAllProjectTypedescQuery({
     projectName,
+    page: currentPage,
     limit,
-    page,
   });
+
+  useEffect(() => {
+    if (allProjectTypeDesc) {
+      setTotalPages(allProjectTypeDesc?.data?.paginationData?.totalPages);
+    }
+  }, [allProjectTypeDesc]);
 
   console.log(allProjectTypeDesc);
 
   const formattedTypeDesc =
-    allProjectTypeDesc?.data.map((projectType) => ({
+    allProjectTypeDesc?.data?.response?.map((projectType) => ({
       project:
         typeof projectType.project === "string"
           ? projectType.project
@@ -110,6 +122,11 @@ export default function TypeDescription() {
         ) : (
           <>
             <DataTable columns={columns} data={formattedTypeDesc} />
+            <CustomPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           </>
         )}
       </div>

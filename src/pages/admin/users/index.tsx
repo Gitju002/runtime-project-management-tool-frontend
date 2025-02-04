@@ -1,13 +1,20 @@
 import { DataTable } from "@/components/table/data-table";
 import { columns } from "../../../components/table/table-columns/admin-users-columns";
 import { useGetAllUsersQuery } from "@/store/api/user";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { CustomPagination } from "@/components/ui/custom-pagination";
 
 export default function Users() {
-  const [page, setPage] = useState(1); // For pagination
-  const [limit, setLimit] = useState(10); // Items per page
   const [userName, setUserName] = useState(""); // For search
+  const [currentPage, setCurrentPage] = useState(1); // For pagination
+  const [limit, setLimit] = useState(10); // Items per page
+  const [totalPages, setTotalPages] = useState(1);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    console.log("Page: ", page);
+  };
 
   const {
     data: userData,
@@ -15,7 +22,15 @@ export default function Users() {
     isSuccess,
     error,
     refetch: refetchUsers,
-  } = useGetAllUsersQuery({ userName, limit, page });
+  } = useGetAllUsersQuery({ userName, page: currentPage, limit });
+
+  useEffect(() => {
+    if (userData) {
+      setTotalPages(userData?.data?.paginationData?.totalPages);
+      console.log(userData?.data);
+    }
+  }, [userData]);
+
   return (
     <div className="container  mx-auto w-full py-6">
       <div className="grid grid-cols-1 gap-2">
@@ -43,7 +58,14 @@ export default function Users() {
           <div>Error fetching data</div>
         ) : // Success
         userData?.data?.users?.length ? (
-          <DataTable columns={columns} data={userData?.data?.users || []} />
+          <>
+            <DataTable columns={columns} data={userData?.data?.users || []} />
+            <CustomPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </>
         ) : (
           <div>No data found</div>
         )
