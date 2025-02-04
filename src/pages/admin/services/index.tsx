@@ -27,10 +27,11 @@ export default function Services() {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10); // Items per page
   const [totalPages, setTotalPages] = useState(1);
+  const [paginationLoading, setPaginationLoading] = useState(false);
 
   const handlePageChange = (page: number) => {
+    setPaginationLoading(true);
     setCurrentPage(page);
-    console.log("Page", page);
   };
 
   const {
@@ -46,6 +47,7 @@ export default function Services() {
   useEffect(() => {
     if (servicesData) {
       setTotalPages(servicesData?.data?.paginationData?.totalPages);
+      setPaginationLoading(false);
     }
   }, [servicesData]);
 
@@ -83,7 +85,7 @@ export default function Services() {
         </div>
         {
           // Loading
-          isLoading ? (
+          isLoading || paginationLoading ? (
             <div className="flex justify-center items-center h-96">
               <motion.div
                 animate={{ opacity: [1, 0.5, 1], rotate: 360 }}

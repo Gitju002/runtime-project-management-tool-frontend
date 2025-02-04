@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import {
@@ -12,37 +12,7 @@ import { columns } from "@/components/table/table-columns/type-desc-columns";
 import { PlusCircle } from "lucide-react";
 import ProjectTypeForm from "@/pages/admin/type-description/_components/type-desc-form";
 import { useGetAllProjectTypedescQuery } from "@/store/api/projectTypeDesc";
-import { ProjectTypeDesc } from "@/types/types";
 import { CustomPagination } from "@/components/ui/custom-pagination";
-
-export type ProjectType = {
-  id: string;
-  projectName: string;
-  description: string;
-  location: string | null;
-};
-
-const projectTypes: ProjectType[] = [
-  {
-    id: "1",
-    projectName: "Web Development",
-    description: "Creation of websites and web applications",
-    location: "Remote",
-  },
-  {
-    id: "2",
-    projectName: "Mobile App Development",
-    description: "Development of mobile applications for iOS and Android",
-    location: "On-site",
-  },
-  {
-    id: "3",
-    projectName: "UI/UX Design",
-    description: "Design of user interfaces and user experiences",
-    location: null,
-  },
-  // Add more mock project types as needed
-];
 
 export default function TypeDescription() {
   const [open, setOpen] = useState(false);
@@ -50,8 +20,10 @@ export default function TypeDescription() {
   const [currentPage, setCurrentPage] = useState(1); // For pagination
   const [limit, setLimit] = useState(10); // Items per page
   const [totalPages, setTotalPages] = useState(1); // Total pages
+  const [paginationLoading, setPaginationLoading] = useState(false);
 
   const handlePageChange = (page: number) => {
+    setPaginationLoading(true);
     setCurrentPage(page);
   };
 
@@ -60,7 +32,6 @@ export default function TypeDescription() {
     isLoading,
     isSuccess,
     error,
-    refetch: refetchProjectTypeDesc,
   } = useGetAllProjectTypedescQuery({
     projectName,
     page: currentPage,
@@ -69,6 +40,7 @@ export default function TypeDescription() {
 
   useEffect(() => {
     if (allProjectTypeDesc) {
+      setPaginationLoading(false);
       setTotalPages(allProjectTypeDesc?.data?.paginationData?.totalPages);
     }
   }, [allProjectTypeDesc]);
@@ -104,7 +76,7 @@ export default function TypeDescription() {
             </DialogContent>
           </Dialog>
         </div>
-        {isLoading ? (
+        {isLoading || paginationLoading ? (
           <div className="flex justify-center items-center h-96">
             <motion.div
               animate={{ opacity: [1, 0.5, 1], rotate: 360 }}

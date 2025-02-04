@@ -10,8 +10,10 @@ export default function Users() {
   const [currentPage, setCurrentPage] = useState(1); // For pagination
   const [limit, setLimit] = useState(10); // Items per page
   const [totalPages, setTotalPages] = useState(1);
+  const [paginationLoading, setPaginationLoading] = useState(false);
 
   const handlePageChange = (page: number) => {
+    setPaginationLoading(true);
     setCurrentPage(page);
     console.log("Page: ", page);
   };
@@ -21,13 +23,12 @@ export default function Users() {
     isLoading,
     isSuccess,
     error,
-    refetch: refetchUsers,
   } = useGetAllUsersQuery({ userName, page: currentPage, limit });
 
   useEffect(() => {
     if (userData) {
+      setPaginationLoading(false);
       setTotalPages(userData?.data?.paginationData?.totalPages);
-      console.log(userData?.data);
     }
   }, [userData]);
 
@@ -40,7 +41,7 @@ export default function Users() {
       </div>
       {
         // Loading
-        isLoading ? (
+        isLoading || paginationLoading ? (
           <div className="flex justify-center items-center h-96">
             <motion.div
               animate={{ opacity: [1, 0.5, 1], rotate: 360 }}

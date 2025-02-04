@@ -5,9 +5,10 @@ import { Button } from "./button";
 interface TimePickerProps {
   value: string;
   onChange: (time: string) => void;
+  disabled?: boolean;
 }
 
-export function TimePicker({ value, onChange }: TimePickerProps) {
+export function TimePicker({ value, onChange, disabled }: TimePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   // Parse initial time
@@ -62,6 +63,7 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
     <div className="relative">
       <Button
         type="button"
+        disabled={disabled}
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between px-4 py-2 bg-white hover:bg-gray-200 dark:bg-background border border-input rounded-lg shadow-sm  focus:outline-none "
       >
