@@ -17,12 +17,14 @@ export const authApi = createApi({
         body,
       }),
       transformResponse: (response) => {
+        console.log("Response:", response);
         const apiResponse = response as UserResponse;
         toast.success(apiResponse.message);
         return apiResponse;
       },
       transformErrorResponse: (error) => {
-        const apiError = error.data as UserResponse;
+        console.log("Error:", error);
+        const apiError = error?.data as UserResponse;
         toast.error(apiError?.data?.error || "Error logging in");
         return error;
       },
@@ -37,7 +39,7 @@ export const authApi = createApi({
         return apiResponse;
       },
       transformErrorResponse: (error) => {
-        const apiError = error.data as UserResponse;
+        const apiError = error?.data as UserResponse;
         toast.error(apiError?.message || "Error logging out");
         return error;
       },
