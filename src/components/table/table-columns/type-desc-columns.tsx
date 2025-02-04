@@ -1,5 +1,4 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { ProjectType } from "@/pages/admin/type-description/index";
 import { Badge } from "@/components/ui/badge";
 import { ProjectTypeDesc } from "@/types/types";
 
