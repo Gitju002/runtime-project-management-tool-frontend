@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { User, UserResponse } from "@/types/types";
+import { User, UserPayload, UserResponse } from "@/types/types";
 import { toast } from "sonner";
 
 export const authApi = createApi({
@@ -10,7 +10,7 @@ export const authApi = createApi({
   }),
   tagTypes: ["User"],
   endpoints: (builder) => ({
-    login: builder.mutation<UserResponse, Partial<User>>({
+    login: builder.mutation<UserResponse, UserPayload>({
       query: (body) => ({
         url: "auth/login",
         method: "POST",

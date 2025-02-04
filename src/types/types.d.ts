@@ -139,6 +139,10 @@ export type CreateServicePayload = {
   serviceDescription: string;
 };
 
+export type UserPayload = {
+  email: string;
+  password: string;
+};
 export type PaginationData = {
   currentPage: number;
   totalPages: number;
