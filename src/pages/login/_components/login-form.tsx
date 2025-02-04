@@ -40,7 +40,7 @@ export default function LoginForm() {
           role: response.data.user.role,
         })
       );
-      if (response.data.user.role === "admin") {
+      if (response.data.user.role === "Admin") {
         router.push("/admin");
       } else {
         router.push("/user");
