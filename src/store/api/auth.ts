@@ -17,13 +17,11 @@ export const authApi = createApi({
         body,
       }),
       transformResponse: (response) => {
-        console.log("Response:", response);
         const apiResponse = response as UserResponse;
         toast.success(apiResponse.message);
         return apiResponse;
       },
       transformErrorResponse: (error) => {
-        console.log("Error:", error);
         const apiError = error?.data as UserResponse;
         toast.error(apiError?.data?.error || "Error logging in");
         return error;

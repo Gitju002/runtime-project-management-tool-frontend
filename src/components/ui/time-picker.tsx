@@ -27,7 +27,6 @@ export function TimePicker({ value, onChange, disabled }: TimePickerProps) {
     setHours(newHours);
     setPeriod(newHours >= 12 ? "PM" : "AM");
     updateTime(newHours, minutes);
-    console.log("HandleHourChange:", newHours, minutes);
   };
 
   const handleMinuteChange = (delta: number) => {
@@ -36,7 +35,6 @@ export function TimePicker({ value, onChange, disabled }: TimePickerProps) {
     if (newMinutes < 0) newMinutes = 59;
     setMinutes(newMinutes);
     updateTime(hours, newMinutes);
-    console.log("HandleMinChange:", hours, newMinutes);
   };
 
   const togglePeriod = () => {
@@ -44,7 +42,6 @@ export function TimePicker({ value, onChange, disabled }: TimePickerProps) {
     setHours(newHours);
     setPeriod(period === "AM" ? "PM" : "AM");
     updateTime(newHours, minutes);
-    console.log("TogglePeriod:", newHours, minutes);
   };
 
   const updateTime = (h: number, m: number) => {
@@ -54,7 +51,6 @@ export function TimePicker({ value, onChange, disabled }: TimePickerProps) {
     date.setSeconds(0);
     date.setMilliseconds(0);
     const timeString = date.toISOString();
-    console.log("UpdateTime:", typeof timeString, timeString);
 
     onChange(timeString);
   };

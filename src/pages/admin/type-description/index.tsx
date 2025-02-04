@@ -45,8 +45,6 @@ export default function TypeDescription() {
     }
   }, [allProjectTypeDesc]);
 
-  console.log(allProjectTypeDesc);
-
   const formattedTypeDesc =
     allProjectTypeDesc?.data?.response?.map((projectType) => ({
       project:

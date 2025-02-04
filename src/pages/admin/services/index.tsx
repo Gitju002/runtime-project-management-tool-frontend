@@ -51,8 +51,6 @@ export default function Services() {
     }
   }, [servicesData]);
 
-  console.log(servicesData?.data?.paginationData?.totalPages);
-
   const formattedServices: Service[] =
     servicesData?.data?.services?.map((service, index) => ({
       id: (limit * (currentPage - 1) + index + 1).toString(),

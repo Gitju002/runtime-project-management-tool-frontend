@@ -55,7 +55,6 @@ export const addTaskSchema = z
 
 //     const [startHour, startMinute] = data.startTime.split(":").map(Number);
 //     const [finishHour, finishMinute] = data.finishTime.split(":").map(Number);
-//     console.log(data.startTime, data.finishTime);
 
 //     return (
 //       startDate.getTime() === finishDate.getTime() &&
