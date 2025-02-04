@@ -131,11 +131,13 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
                   <FormLabel>Project Period (in Days)</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter project period"
                       type="number"
-                      value={field.value}
+                      placeholder="Enter project period (in days)"
+                      value={field.value === 0 ? "" : field.value} // Show empty string if the value is 0
                       onChange={(e) => {
-                        field.onChange(parseInt(e.target.value) || 0);
+                        const value = e.target.value;
+                        // Allow empty string or convert to integer
+                        field.onChange(value === "" ? "" : parseInt(value));
                       }}
                       disabled={loading} // Disabled when loading
                     />
