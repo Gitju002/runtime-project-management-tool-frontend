@@ -57,7 +57,6 @@ export default function ProjectTypeForm({
   const isFormDisabled = isSubmitting || isProjectLoading;
 
   async function onSubmit(values: z.infer<typeof projectTypeSchema>) {
-    console.log(values);
     const response = await createProjectTypeDesc({
       project: values.projectName,
       projectTypeDescription: values.typeDescription,

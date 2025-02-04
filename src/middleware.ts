@@ -20,7 +20,7 @@ export async function middleware(request: NextRequest) {
   }
 
   const isAdmin = roleID === 1;
-  console.log("Is Admin:", isAdmin);
+  // console.log("Is Admin:", isAdmin);
 
   const loginUrl = new URL("/login", origin);
   const adminUrl = new URL("/admin", origin);

@@ -35,7 +35,6 @@ export default function LoginForm() {
 
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
     try {
-      console.log("Values", values);
       const response = await login(values).unwrap();
       dispatch(
         setCredentials({

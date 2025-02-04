@@ -20,8 +20,6 @@ export function CustomPagination({
   totalPages,
   onPageChange,
 }: CustomPaginationProps) {
-  console.log("Current Page", currentPage);
-  console.log("Total Pages", totalPages);
   const getPageNumbers = () => {
     const pages = [];
 

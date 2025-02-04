@@ -44,7 +44,6 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
 
   async function onSubmit(values: z.infer<typeof addProjectSchema>) {
     setLoading(true); // Start loading
-    console.log("values", values);
     try {
       const response = await createProject(values).unwrap();
       if (response.success) {

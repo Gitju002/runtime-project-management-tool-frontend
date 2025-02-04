@@ -15,7 +15,6 @@ export default function Users() {
   const handlePageChange = (page: number) => {
     setPaginationLoading(true);
     setCurrentPage(page);
-    console.log("Page: ", page);
   };
 
   const {

@@ -88,7 +88,6 @@ export default function AdminSidebar() {
   }, []);
 
   const handleLogout = () => {
-    console.log("Logout");
     logout();
     dispatch(clearUserInfo());
     router.push("/login");
