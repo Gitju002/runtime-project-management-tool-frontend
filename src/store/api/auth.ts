@@ -23,7 +23,7 @@ export const authApi = createApi({
       },
       transformErrorResponse: (error) => {
         const apiError = error.data as UserResponse;
-        toast.error(apiError.data.error);
+        toast.error(apiError?.data?.error || "Error logging in");
         return error;
       },
     }),
@@ -38,7 +38,7 @@ export const authApi = createApi({
       },
       transformErrorResponse: (error) => {
         const apiError = error.data as UserResponse;
-        toast.error(apiError.message);
+        toast.error(apiError?.message || "Error logging out");
         return error;
       },
     }),
