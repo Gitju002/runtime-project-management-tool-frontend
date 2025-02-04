@@ -18,6 +18,7 @@ import {
   useGetProjectListQuery,
 } from "@/store/api/project";
 import { useCreateServiceMutation } from "@/store/api/service";
+import { Loader2 } from "lucide-react";
 
 const serviceSchema = z.object({
   project: z.string().min(2, {
@@ -47,7 +48,7 @@ export default function ServiceForm({ onSuccess }: { onSuccess: () => void }) {
   const [
     createService,
     {
-      isLoading: isCreatingService,
+      isLoading: isServiceLoading,
       isSuccess: isServiceCreated,
       isError: isServiceError,
       error: serviceError,
@@ -64,6 +65,8 @@ export default function ServiceForm({ onSuccess }: { onSuccess: () => void }) {
     }
   }
 
+  const isFormDisabled = isProjectLoading || isServiceLoading;
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -78,7 +81,7 @@ export default function ServiceForm({ onSuccess }: { onSuccess: () => void }) {
                   <Combobox
                     value={field.value}
                     onChange={field.onChange}
-                    disabled={isProjectLoading}
+                    disabled={isFormDisabled}
                     data={projectLists?.data?.map((item) => ({
                       label: item,
                       value: item,
@@ -97,7 +100,11 @@ export default function ServiceForm({ onSuccess }: { onSuccess: () => void }) {
             <FormItem>
               <FormLabel>Service Name</FormLabel>
               <FormControl>
-                <Input placeholder="Enter service name" {...field} />
+                <Input
+                  placeholder="Enter service name"
+                  {...field}
+                  disabled={isFormDisabled}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -110,7 +117,11 @@ export default function ServiceForm({ onSuccess }: { onSuccess: () => void }) {
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="Enter service description" {...field} />
+                <Textarea
+                  placeholder="Enter service description"
+                  {...field}
+                  disabled={isFormDisabled}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -119,8 +130,15 @@ export default function ServiceForm({ onSuccess }: { onSuccess: () => void }) {
         <Button
           type="submit"
           className="w-full transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35 "
+          disabled={isFormDisabled}
         >
-          Submit
+          {isFormDisabled ? (
+            <>
+              <Loader2 className="animate-spin mr-2 h-5 w-5" /> Submitting...
+            </>
+          ) : (
+            "Submit"
+          )}
         </Button>
       </form>
     </Form>

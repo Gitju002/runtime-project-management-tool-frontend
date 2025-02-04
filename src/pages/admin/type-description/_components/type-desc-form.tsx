@@ -16,6 +16,7 @@ import { Combobox } from "@/components/ui/combo-box";
 import { useState } from "react";
 import { useGetProjectListQuery } from "@/store/api/project";
 import { useCreateProjectTypeDescMutation } from "@/store/api/projectTypeDesc";
+import { Loader2 } from "lucide-react";
 
 const projectTypeSchema = z.object({
   projectName: z.string().min(2, {
@@ -27,27 +28,16 @@ const projectTypeSchema = z.object({
   location: z.string().optional(),
 });
 
-const existingProjects = [
-  { value: "cosmos", label: "Cosmos DashBoard" },
-  { value: "jaro", label: "Jaro for Education" },
-  { value: "academy", label: "The Academy Group" },
-  { value: "invespy", label: "Invespy for Real Estate" },
-];
-
 export default function ProjectTypeForm({
   onSuccess,
 }: {
   onSuccess: () => void;
 }) {
-  const [selectedExistingProjects, setSelectedExistingProjects] = useState(
-    existingProjects[0]?.value || ""
-  );
-
   const [
     createProjectTypeDesc,
     {
       data: createdProjectType,
-      isLoading: isCreatingProjectType,
+      isLoading: isSubmitting,
       isSuccess: isProjectTypeCreated,
     },
   ] = useCreateProjectTypeDescMutation();
@@ -63,6 +53,8 @@ export default function ProjectTypeForm({
       location: "",
     },
   });
+
+  const isFormDisabled = isSubmitting || isProjectLoading;
 
   async function onSubmit(values: z.infer<typeof projectTypeSchema>) {
     console.log(values);
@@ -92,7 +84,7 @@ export default function ProjectTypeForm({
                   <Combobox
                     value={field.value}
                     onChange={field.onChange}
-                    disabled={isProjectLoading}
+                    disabled={isFormDisabled}
                     data={projectLists?.data?.map((item) => ({
                       label: item,
                       value: item,
@@ -114,6 +106,7 @@ export default function ProjectTypeForm({
                 <Textarea
                   placeholder="Enter project type description"
                   {...field}
+                  disabled={isFormDisabled}
                 />
               </FormControl>
               <FormMessage />
@@ -127,7 +120,11 @@ export default function ProjectTypeForm({
             <FormItem>
               <FormLabel>Location (Optional)</FormLabel>
               <FormControl>
-                <Input placeholder="Enter location" {...field} />
+                <Input
+                  placeholder="Enter location"
+                  {...field}
+                  disabled={isFormDisabled}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -136,8 +133,15 @@ export default function ProjectTypeForm({
         <Button
           type="submit"
           className="w-full transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35"
+          disabled={isFormDisabled}
         >
-          Submit
+          {isFormDisabled ? (
+            <>
+              <Loader2 className="animate-spin mr-2 h-5 w-5" /> Submitting...
+            </>
+          ) : (
+            "Submit"
+          )}
         </Button>
       </form>
     </Form>
