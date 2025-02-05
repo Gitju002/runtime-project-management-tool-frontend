@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/chart";
 import { useGetTasksPerStatusQuery } from "@/store/api/analytics";
 import { TaskStatus } from "@/types/types";
-import { set } from "date-fns";
 
 const chart_Data: TaskStatus[] = [
   { status: "Completed", count: 2, fill: "var(--color-Completed)" },
@@ -57,14 +56,6 @@ export default function TaskCompletedComponent({
     userName,
   });
 
-  // console.log(
-  //   "Task Analytics Data",
-  //   taskAnalyticsData,
-  //   isLoading,
-  //   isSuccess,
-  //   isError
-  // );
-
   React.useEffect(() => {
     if (taskAnalyticsData) {
       const data = taskAnalyticsData.data.tasks.map((task) => ({
@@ -76,8 +67,6 @@ export default function TaskCompletedComponent({
       setTotalValue(taskAnalyticsData.data.totalTasks);
     }
   }, [taskAnalyticsData]);
-
-  console.log("Chart Data", chartConfig.Initiated.color);
 
   return (
     <Card className="flex flex-col">

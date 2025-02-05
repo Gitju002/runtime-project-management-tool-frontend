@@ -263,3 +263,15 @@ export interface TaskStatusResponse {
   message: string; // Success message
   data: TaskStatusData; // Response data
 }
+
+export interface TasksPerProject {
+  success: boolean; // Request status
+  message: string; // Success message
+  data: {
+    tasks: {
+      projectName: string; // Project name
+      totalTasks: number; // Total number of tasks
+    }[];
+    total: string;
+  };
+}

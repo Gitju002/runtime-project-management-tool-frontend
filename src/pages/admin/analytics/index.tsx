@@ -102,7 +102,7 @@ export default function Analytics() {
     }
   }, [usersData]);
 
-  console.log("Tasks Data", tasksData);
+  // console.log("Tasks Data", tasksData);
 
   const formattedTasks = tasksIsError ? [] : transformTasks(tasksData, limit);
   return (
@@ -120,7 +120,7 @@ export default function Analytics() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
           <TaskCompletedComponent userName={selectedUser} />
-          <PieChartComponent />
+          <PieChartComponent userName={selectedUser} />
           <BarChartComponent />
         </div>
         <h1 className="text-sm md:text-base lg:text-xl font-bold">
