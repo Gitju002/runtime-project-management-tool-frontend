@@ -1,4 +1,9 @@
-import { GetAllProjectsQueryParams, TaskStatusResponse } from "@/types/types";
+import {
+  GetAllProjectsQueryParams,
+  TasksDuration,
+  TasksPerProject,
+  TaskStatusResponse,
+} from "@/types/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { toast } from "sonner";
 
@@ -30,7 +35,54 @@ export const analyticsApi = createApi({
         return apiError;
       },
     }),
+    getTasksPerProject: builder.query<
+      TasksPerProject,
+      Partial<GetAllProjectsQueryParams>
+    >({
+      query: ({ userName }) => ({
+        url: "analytics/task-per-project",
+        params: { userName },
+      }),
+      providesTags: ["Analytics"],
+      transformResponse: (response) => {
+        const apiResponse = response as TasksPerProject;
+        toast.success("Tasks per project fetched successfully");
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as TasksPerProject;
+        toast.error("Error fetching tasks per project");
+        return apiError;
+      },
+    }),
+
+    getDurationPerProject: builder.query<
+      TasksDuration,
+      Partial<GetAllProjectsQueryParams>
+    >({
+      query: ({ userName }) => ({
+        url: "analytics/project-work-duration",
+        params: {
+          userName,
+        },
+      }),
+      providesTags: ["Analytics"],
+      transformResponse: (response) => {
+        const apiResponse = response as TasksDuration;
+        toast.success("Duration per project fetched successfully");
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as TasksDuration;
+        toast.error("Error fetching duration per project");
+        return apiError;
+      },
+    }),
   }),
 });
 
-export const { useGetTasksPerStatusQuery } = analyticsApi;
+export const {
+  useGetTasksPerStatusQuery,
+  useGetTasksPerProjectQuery,
+  useGetDurationPerProjectQuery,
+} = analyticsApi;

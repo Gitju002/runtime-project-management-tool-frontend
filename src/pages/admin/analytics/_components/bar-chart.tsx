@@ -15,7 +15,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-const chartData = [
+import { useGetDurationPerProjectQuery } from "@/store/api/analytics";
+import { useEffect, useState } from "react";
+const chart_Data = [
   { projectName: "cosmos", duration: 10 },
   { projectName: "jaro", duration: 20 },
   { projectName: "invespy", duration: 15 },
@@ -26,12 +28,22 @@ const chartData = [
 
 const chartConfig = {
   duration: {
-    label: "No. of Days",
+    label: "No. of Hours",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
 
-export default function BarChartComponent() {
+export default function BarChartComponent({ userName }: { userName: string }) {
+  const [chartData, setChartData] = useState(chart_Data);
+  const { data, isLoading, isSuccess, isError } = useGetDurationPerProjectQuery(
+    { userName }
+  );
+
+  useEffect(() => {
+    if (data) {
+      setChartData(data.data.tasks);
+    }
+  }, [data]);
   return (
     <Card>
       <CardHeader className="flex items-center">
@@ -41,24 +53,30 @@ export default function BarChartComponent() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="projectName"
-              className="capitalize"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => value.slice(0, 10)}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Bar dataKey="duration" fill="var(--color-duration)" radius={8} />
-          </BarChart>
-        </ChartContainer>
+        {chartData.length === 0 || !chartConfig || isError ? (
+          <div className="flex items-center justify-center h-32">
+            {isLoading ? "Loading..." : "No data available"}
+          </div>
+        ) : (
+          <ChartContainer config={chartConfig}>
+            <BarChart accessibilityLayer data={chartData}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="projectName"
+                className="capitalize"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                tickFormatter={(value) => value.slice(0, 20)}
+              />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Bar dataKey="duration" fill="var(--color-duration)" radius={8} />
+            </BarChart>
+          </ChartContainer>
+        )}
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
