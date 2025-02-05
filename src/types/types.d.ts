@@ -275,3 +275,14 @@ export interface TasksPerProject {
     total: string;
   };
 }
+
+export interface TasksDuration {
+  success: boolean; // Request status
+  message: string; // Success message
+  data: {
+    tasks: {
+      projectName: string; // Project name
+      duration: number; // Total duration of tasks
+    }[];
+  };
+}

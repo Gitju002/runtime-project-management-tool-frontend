@@ -19,37 +19,6 @@ import {
 import { useGetTasksPerProjectQuery } from "@/store/api/analytics";
 import { useEffect, useState } from "react";
 
-// const chartData = [
-//   { projectName: "cosmos", totalTasks: 16, fill: "var(--color-cosmos)" },
-//   { projectName: "jaro", totalTasks: 20, fill: "var(--color-jaro)" },
-//   { projectName: "invespy", totalTasks: 12, fill: "var(--color-invespy)" },
-//   { projectName: "academy", totalTasks: 4, fill: "var(--color-academy)" },
-//   { projectName: "ai", totalTasks: 2, fill: "var(--color-ai)" },
-// ];
-
-// const chartConfig = {
-//   cosmos: {
-//     label: "Cosmos DashBoard",
-//     color: "hsl(var(--chart-1))",
-//   },
-//   jaro: {
-//     label: "Jaro for Education",
-//     color: "hsl(var(--chart-2))",
-//   },
-//   invespy: {
-//     label: "Invespy for Real Estate",
-//     color: "hsl(var(--chart-3))",
-//   },
-//   academy: {
-//     label: "The Academy Group",
-//     color: "hsl(var(--chart-4))",
-//   },
-//   ai: {
-//     label: "AI Models",
-//     color: "hsl(var(--chart-5))",
-//   },
-// } satisfies ChartConfig;
-
 export default function PieChartComponent({ userName }: { userName: string }) {
   const [chartData, setChartData] = useState<
     { projectName: string; totalTasks: number; fill: string }[]
@@ -102,35 +71,37 @@ export default function PieChartComponent({ userName }: { userName: string }) {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
-        {chartData.length === 0 || !chartConfig ? (
+        {chartData.length === 0 || !chartConfig || isError ? (
           <div className="flex items-center justify-center h-48">
             No Data Found
           </div>
         ) : (
-          <ChartContainer
-            config={chartConfig}
-            className="mx-auto text-nowrap aspect-square max-h-[300px]"
-          >
-            <PieChart>
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent hideLabel />}
-              />
-              <Pie
-                data={chartData}
-                dataKey="totalTasks"
-                nameKey="projectName"
-              />
-              <ChartLegend
-                content={<ChartLegendContent nameKey="projectName" />}
-                className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
-              />
-            </PieChart>
-          </ChartContainer>
+          <>
+            <ChartContainer
+              config={chartConfig}
+              className="mx-auto text-nowrap aspect-square max-h-[300px]"
+            >
+              <PieChart>
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Pie
+                  data={chartData}
+                  dataKey="totalTasks"
+                  nameKey="projectName"
+                />
+                <ChartLegend
+                  content={<ChartLegendContent nameKey="projectName" />}
+                  className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
+                />
+              </PieChart>
+            </ChartContainer>
+          </>
         )}
       </CardContent>
       <CardFooter className="leading-none text-muted-foreground text-sm justify-center">
-        {chartData.length > 0 && (
+        {isSuccess && chartData.length > 0 && (
           <div>
             Maximum Tasks accomplished for{" "}
             {

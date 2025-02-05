@@ -1,5 +1,6 @@
 import {
   GetAllProjectsQueryParams,
+  TasksDuration,
   TasksPerProject,
   TaskStatusResponse,
 } from "@/types/types";
@@ -54,8 +55,34 @@ export const analyticsApi = createApi({
         return apiError;
       },
     }),
+
+    getDurationPerProject: builder.query<
+      TasksDuration,
+      Partial<GetAllProjectsQueryParams>
+    >({
+      query: ({ userName }) => ({
+        url: "analytics/project-work-duration",
+        params: {
+          userName,
+        },
+      }),
+      providesTags: ["Analytics"],
+      transformResponse: (response) => {
+        const apiResponse = response as TasksDuration;
+        toast.success("Duration per project fetched successfully");
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as TasksDuration;
+        toast.error("Error fetching duration per project");
+        return apiError;
+      },
+    }),
   }),
 });
 
-export const { useGetTasksPerStatusQuery, useGetTasksPerProjectQuery } =
-  analyticsApi;
+export const {
+  useGetTasksPerStatusQuery,
+  useGetTasksPerProjectQuery,
+  useGetDurationPerProjectQuery,
+} = analyticsApi;

@@ -118,10 +118,12 @@ export default function Analytics() {
             />
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <TaskCompletedComponent userName={selectedUser} />
           <PieChartComponent userName={selectedUser} />
-          <BarChartComponent />
+          <div className="col-span-2">
+            <BarChartComponent userName={selectedUser} />
+          </div>
         </div>
         <h1 className="text-sm md:text-base lg:text-xl font-bold">
           Daily Update Task Table of{" "}
