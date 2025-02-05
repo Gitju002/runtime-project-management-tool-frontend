@@ -35,7 +35,7 @@ export default function Users() {
     <div className="container  mx-auto w-full py-6">
       <div className="grid grid-cols-1 gap-2">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Runtime Solutions User List</h1>
+          <h1 className="text-2xl font-bold">User Management</h1>
         </div>
       </div>
       {

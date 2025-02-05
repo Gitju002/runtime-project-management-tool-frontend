@@ -172,6 +172,7 @@ export type GetAllProjectsQueryParams = {
   userName?: string;
   limit?: number;
   page?: number;
+  sortBy?: string[];
 };
 
 export type GetAllTaskResponse = {
