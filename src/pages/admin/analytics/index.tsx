@@ -9,6 +9,7 @@ import { columns } from "../../../components/table/table-columns/analytics-colum
 import { useGetTaskByUserIDQuery } from "@/store/api/tasks";
 import { transformTasks } from "@/utils/tasksFormatting";
 import { useGetUsersListQuery } from "@/store/api/user";
+import { useSearchParams } from "next/navigation";
 
 // const users = [
 //   { value: "snehashis", label: "Snehashis Gharai" },
@@ -63,6 +64,13 @@ export default function Analytics() {
   const [totalPages, setTotalPages] = useState(1);
   const [users, setUsers] = useState<{ value: string; label: string }[]>([]);
   const [selectedUser, setSelectedUser] = useState("");
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    const userName = params.get("userName");
+    setSelectedUser(userName || "");
+  });
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -109,14 +117,20 @@ export default function Analytics() {
     <div className="container mx-auto w-full py-6">
       <div className="grid grid-cols-1 gap-y-4">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="block w-full text-2xl font-bold">Analytics</h1>
-          <div className="w-full">
+          <h1 className="block w-full text-2xl font-bold">
+            Analytics of{" "}
+            <span className="text-teal-shade dark:text-lime-shade">
+              {selectedUser}
+            </span>
+          </h1>
+
+          {/* <div className="w-full">
             <Combobox
               value={selectedUser}
               onChange={handleNameChange}
               data={users}
             />
-          </div>
+          </div> */}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
           <TaskCompletedComponent userName={selectedUser} />

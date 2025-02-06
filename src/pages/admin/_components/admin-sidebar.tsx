@@ -66,12 +66,12 @@ const items = [
     label: "Users",
     href: "/admin/users",
   },
-  {
-    icon: BarChart2,
-    title: "Analytics",
-    label: "Analytics",
-    href: "/admin/analytics",
-  },
+  // {
+  //   icon: BarChart2,
+  //   title: "Analytics",
+  //   label: "Analytics",
+  //   href: "/admin/analytics",
+  // },
 ];
 
 export default function AdminSidebar() {
