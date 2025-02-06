@@ -34,7 +34,7 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
       projectPeriod: 0,
       clientName: "",
       clientEmail: "",
-      projectType: "",
+      // projectType: "",
       cost: 0,
     },
   });
@@ -55,6 +55,7 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
     } finally {
       setLoading(false); // End loading
     }
+    console.log("Submitted:", values);
   }
 
   return (
@@ -184,7 +185,7 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
             />
           </div>
           <div className="flex gap-2">
-            <FormField
+            {/* <FormField
               control={form.control}
               name="projectType"
               render={({ field }) => (
@@ -200,7 +201,7 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="cost"

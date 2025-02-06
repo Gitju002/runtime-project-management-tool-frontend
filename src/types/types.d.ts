@@ -31,7 +31,7 @@ export type AddedProjectType = {
   projectPeriod: number;
   clientName: string;
   clientEmail: string;
-  projectType: string;
+  projectType?: string;
   cost: number;
 };
 

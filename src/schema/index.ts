@@ -76,26 +76,26 @@ export const loginFormSchema = z.object({
   }),
 });
 
-export const formSchema = z.object({
-  projectName: z
-    .string()
-    .min(2, { message: "Project name must be at least 2 characters." }),
-  projectDesc: z.string().min(10, {
-    message: "Project description must be at least 10 characters.",
-  }),
-  date: z.string().refine((val) => !isNaN(Date.parse(val)), {
-    message: "Invalid date format.",
-  }),
-  projectPeriod: z.number().min(1, { message: "Project period is required." }),
-  clientName: z
-    .string()
-    .min(2, { message: "Client name must be at least 2 characters." }),
-  clientEmail: z.string().email({ message: "Invalid email address." }),
-  projectType: z
-    .string()
-    .min(2, { message: "Project type must be at least 2 characters." }),
-  cost: z.number().positive({ message: "Cost must be a positive number." }),
-});
+// export const formSchema = z.object({
+//   projectName: z
+//     .string()
+//     .min(2, { message: "Project name must be at least 2 characters." }),
+//   projectDesc: z.string().min(10, {
+//     message: "Project description must be at least 10 characters.",
+//   }),
+//   date: z.string().refine((val) => !isNaN(Date.parse(val)), {
+//     message: "Invalid date format.",
+//   }),
+//   projectPeriod: z.number().min(1, { message: "Project period is required." }),
+//   clientName: z
+//     .string()
+//     .min(2, { message: "Client name must be at least 2 characters." }),
+//   clientEmail: z.string().email({ message: "Invalid email address." }),
+//   projectType: z
+//     .string()
+//     .min(2, { message: "Project type must be at least 2 characters." }),
+//   cost: z.number().positive({ message: "Cost must be a positive number." }),
+// });
 
 export const addProjectSchema = z.object({
   projectName: z.string().min(2, {
@@ -117,9 +117,12 @@ export const addProjectSchema = z.object({
     .string()
     .email("Invalid email address.")
     .nonempty("Client email is required."),
-  projectType: z.string().min(2, {
-    message: "Project type must be specified.",
-  }),
+  // projectType: z
+  //   .string()
+  //   .min(2, {
+  //     message: "Project type must be specified.",
+  //   })
+  //   .optional(),
 
   cost: z
     .number()
