@@ -15,6 +15,7 @@ import { format } from "date-fns";
 import { useGetTaskByUserIDQuery } from "@/store/api/tasks";
 import { transformTasks } from "@/utils/tasksFormatting";
 import { CustomPagination } from "@/components/ui/custom-pagination";
+import { Input } from "@/components/ui/input";
 
 const User = () => {
   const [isOpened, setIsOpened] = useState(false);
@@ -85,6 +86,7 @@ const User = () => {
           <div>Error fetching data</div>
         ) : tasksSuccess ? (
           <>
+            <Input />
             <DataTable columns={columns} data={formattedTasks} />
             <CustomPagination
               currentPage={currentPage}
