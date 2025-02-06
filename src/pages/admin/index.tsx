@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useGetProjectListQuery } from "@/store/api/project";
+import { useGetAllUsersQuery } from "@/store/api/user";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // Type Definitions
 interface Stat {
@@ -9,12 +11,12 @@ interface Stat {
 }
 
 // Stats Data
-const stats: Stat[] = [
-  { title: "Total Users", value: 24 },
-  { title: "Initiated Projects", value: 12 },
-  { title: "Ongoing Projects", value: 8 },
-  { title: "Completed Projects", value: 156 },
-];
+// const stats: Stat[] = [
+//   { title: "Total Users", value: 24 },
+//   { title: "Initiated Projects", value: 12 },
+//   { title: "Ongoing Projects", value: 8 },
+//   { title: "Completed Projects", value: 156 },
+// ];
 
 // Reusable Stat Card Component
 interface StatCardProps {
@@ -49,6 +51,36 @@ const StatCard: React.FC<StatCardProps> = ({ title, targetValue }) => {
 
 // Main Admin Component
 const Admin: React.FC = () => {
+  const [stats, setStats] = useState<Stat[]>([]);
+  const { data: userData } = useGetAllUsersQuery({});
+
+  const { data: projectLists, isLoading: isProjectLoading } =
+    useGetProjectListQuery();
+
+  useEffect(() => {
+    if (userData) {
+      setStats((prev) => [
+        ...prev,
+        {
+          title: "Total Users",
+          value: userData?.data.paginationData.totalUsers,
+        },
+      ]);
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    if (projectLists) {
+      setStats((prev) => [
+        ...prev,
+        {
+          title: "Total Projects",
+          value: projectLists?.data.length,
+        },
+      ]);
+    }
+  }, [projectLists]);
+
   return (
     <div className="container mx-auto w-full py-6">
       <div className="flex justify-between items-center mb-6">

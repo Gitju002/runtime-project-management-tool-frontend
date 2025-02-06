@@ -147,6 +147,7 @@ export type PaginationData = {
   currentPage: number;
   totalPages: number;
   totalTasks: number;
+  totalUsers: number;
 };
 
 export type TaskResponse = {
