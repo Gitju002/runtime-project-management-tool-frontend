@@ -169,6 +169,7 @@ export type ServiceResponse = {
 
 export type GetAllProjectsQueryParams = {
   projectName?: string;
+  serviceName?: string;
   userName?: string;
   limit?: number;
   page?: number;

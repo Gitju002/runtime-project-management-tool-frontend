@@ -36,8 +36,10 @@ export default function LoginForm() {
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
     try {
       const response = await login(values).unwrap();
+      // console.log(response);
       dispatch(
         setCredentials({
+          name: response?.data?.user?.name,
           token: response?.data?.token,
           role: response?.data?.user?.role,
         })

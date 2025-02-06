@@ -54,6 +54,8 @@ export default function Projects() {
     const params = new URLSearchParams(searchParams);
 
     if (value) {
+      // clear the page number when searching
+      params.delete("page");
       params.set("projectName", value);
     } else {
       params.delete("projectName");
@@ -82,7 +84,11 @@ export default function Projects() {
 
   useEffect(() => {
     if (projectData) {
+      handlePageChange(projectData?.data.paginationData.currentPage);
       setTotalPages(projectData?.data.paginationData.totalPages);
+      console.log("Total Pages", projectData?.data.paginationData.totalPages);
+      console.log("Current Page", projectData?.data.paginationData.currentPage);
+
       // setPaginationLoading(false);
     }
   }, [projectData]);
