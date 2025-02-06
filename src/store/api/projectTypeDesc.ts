@@ -25,7 +25,7 @@ export const project_TD_Api = createApi({
       }),
       transformResponse: (response) => {
         const apiResponse = response as GetAllTypeDescResponse;
-        toast.success(apiResponse.message);
+        // toast.success(apiResponse.message);
         return apiResponse;
       },
       transformErrorResponse: (error) => {
@@ -46,7 +46,7 @@ export const project_TD_Api = createApi({
       }),
       transformResponse: (response) => {
         const apiResponse = response as GetAllTypeDescResponse;
-        toast.success(apiResponse.message);
+        // toast.success(apiResponse.message);
         return apiResponse;
       },
       transformErrorResponse: (error) => {

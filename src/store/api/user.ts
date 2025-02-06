@@ -23,7 +23,7 @@ export const userApi = createApi({
       providesTags: ["User"],
       transformResponse: (response) => {
         const apiResponse = response as GetAllUserResponse;
-        toast.success(apiResponse.message);
+        // toast.success(apiResponse.message);
         return apiResponse;
       },
       transformErrorResponse: (error) => {
@@ -39,7 +39,7 @@ export const userApi = createApi({
       providesTags: ["User"],
       transformResponse: (response) => {
         const apiResponse = response as GetAllUsersListResponse;
-        toast.success("User list fetched successfully");
+        // toast.success("User list fetched successfully");
         return apiResponse;
       },
       transformErrorResponse: (error) => {

@@ -62,7 +62,7 @@ export const serviceApi = createApi({
       }),
       invalidatesTags: ["Service"],
       transformResponse: (response: CreateServiceResponse) => {
-        toast.success(response.message);
+        // toast.success(response.message);
         return response;
       },
       transformErrorResponse: (error) => {

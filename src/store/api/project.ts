@@ -37,7 +37,7 @@ export const projectApi = createApi({
       }),
       transformResponse: (response) => {
         const apiResponse = response as GetAllProjectResponse;
-        toast.success(apiResponse.message);
+        // toast.success(apiResponse.message);
         return apiResponse;
       },
       transformErrorResponse: (error) => {
@@ -57,7 +57,7 @@ export const projectApi = createApi({
         },
       }),
       transformResponse: (response: CreateProjectResponse) => {
-        toast.success(response.message); // Show success message
+        // toast.success(response.message); // Show success message
         return response;
       },
       transformErrorResponse: (error: any) => {

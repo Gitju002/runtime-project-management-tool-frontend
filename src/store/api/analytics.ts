@@ -26,7 +26,7 @@ export const analyticsApi = createApi({
       providesTags: ["Analytics"],
       transformResponse: (response) => {
         const apiResponse = response as TaskStatusResponse;
-        toast.success("Tasks per status fetched successfully");
+        // toast.success("Tasks per status fetched successfully");
         return apiResponse;
       },
       transformErrorResponse: (error) => {
@@ -46,7 +46,7 @@ export const analyticsApi = createApi({
       providesTags: ["Analytics"],
       transformResponse: (response) => {
         const apiResponse = response as TasksPerProject;
-        toast.success("Tasks per project fetched successfully");
+        // toast.success("Tasks per project fetched successfully");
         return apiResponse;
       },
       transformErrorResponse: (error) => {
@@ -69,7 +69,7 @@ export const analyticsApi = createApi({
       providesTags: ["Analytics"],
       transformResponse: (response) => {
         const apiResponse = response as TasksDuration;
-        toast.success("Duration per project fetched successfully");
+        // toast.success("Duration per project fetched successfully");
         return apiResponse;
       },
       transformErrorResponse: (error) => {
