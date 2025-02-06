@@ -33,6 +33,8 @@ const TaskForm = ({
 }: {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  const formatISOTime = (date: Date) => date.toISOString();
+
   const form = useForm<z.infer<typeof addTaskSchema>>({
     resolver: zodResolver(addTaskSchema),
     defaultValues: {
@@ -41,9 +43,9 @@ const TaskForm = ({
       service: "",
       purpose: "",
       startDate: new Date().toISOString(),
-      startTime: "",
+      startTime: formatISOTime(new Date()),
       finishDate: new Date().toISOString(),
-      finishTime: "",
+      finishTime: formatISOTime(new Date()),
       status: "Initiated",
     },
   });

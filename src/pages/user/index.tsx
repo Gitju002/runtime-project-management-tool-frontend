@@ -136,7 +136,7 @@ const User = () => {
                 </Button>
               </motion.div>
             </DialogTrigger>
-            <DialogContent className="bg-background dark:hover:shadow-2xl dark:hover:shadow-teal-shade/60 transition-all duration-200">
+            <DialogContent className="form-bg dark:hover:shadow-2xl dark:hover:shadow-teal-shade/60 transition-all duration-200">
               <DialogTitle className="text-center text-sm border border-gray-200 rounded-md p-2 mt-4">
                 Add Task(s) for{" "}
                 <span className="text-blue-500">
@@ -148,7 +148,7 @@ const User = () => {
           </Dialog>
         </div>
 
-        <div className="flex gap-4 justify-between items-center w-1/4">
+        <div className="flex gap-4 justify-between items-center w-full md:1/2 lg:w-1/4">
           <Input
             placeholder="Filter by Project Names..."
             onChange={handleProjectChange}

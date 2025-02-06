@@ -110,7 +110,7 @@ export default function Projects() {
                 </Button>
               </motion.div>
             </DialogTrigger>
-            <DialogContent className="bg-background dark:hover:shadow-2xl dark:hover:shadow-teal-shade/60 transition-all duration-200">
+            <DialogContent className="form-bg dark:hover:shadow-2xl dark:hover:shadow-teal-shade/60 transition-all duration-200">
               <DialogTitle>Add New Project</DialogTitle>
               <ProjectForm onSuccess={() => setOpen(false)} />
             </DialogContent>

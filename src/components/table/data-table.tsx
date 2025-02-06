@@ -22,6 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
+import { Eye, EyeClosed } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -53,7 +54,7 @@ export function DataTable<TData, TValue>({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columns
+              <Eye size={16} />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

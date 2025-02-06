@@ -39,7 +39,7 @@ export function Combobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full truncate justify-between"
+          className="w-full truncate justify-between "
           disabled={disabled}
         >
           {value

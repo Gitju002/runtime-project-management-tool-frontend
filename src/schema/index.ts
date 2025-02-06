@@ -29,11 +29,11 @@ export const addTaskSchema = z
       }),
     startDate: z.string(),
     finishDate: z.string(),
-    startTime: z.string({
-      message: "Please select a valid start time (HH:MM format)",
+    startTime: z.string().refine((val) => !isNaN(Date.parse(val)), {
+      message: "Please select a valid start time",
     }),
-    finishTime: z.string({
-      message: "Please select a valid finish time (HH:MM format)",
+    finishTime: z.string().refine((val) => !isNaN(Date.parse(val)), {
+      message: "Please select a valid finish time",
     }),
     status: z.enum(["Initiated", "Ongoing", "Completed"]),
   })

@@ -75,7 +75,7 @@ export default function Services() {
                 </Button>
               </motion.div>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="form-bg dark:hover:shadow-2xl dark:hover:shadow-teal-shade/60 transition-all duration-200">
               <DialogTitle>Add New Service</DialogTitle>
               <ServiceForm onSuccess={() => setOpen(false)} />
             </DialogContent>

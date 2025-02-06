@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Clock, ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "./button";
+import { init } from "next/dist/compiled/webpack/webpack";
 
 interface TimePickerProps {
   value: string;
@@ -12,9 +13,9 @@ export function TimePicker({ value, onChange, disabled }: TimePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   // Parse initial time
-  const initialTime = value ? new Date(`2000/01/01 ${value}`) : new Date();
-  const [hours, setHours] = useState(initialTime.getHours());
-  const [minutes, setMinutes] = useState(initialTime.getMinutes());
+  const initialDate = value ? new Date(value) : new Date(); // Parse value as Date
+  const [hours, setHours] = useState(initialDate.getHours());
+  const [minutes, setMinutes] = useState(initialDate.getMinutes());
   const [period, setPeriod] = useState(hours >= 12 ? "PM" : "AM");
 
   // Convert 24h to 12h format
@@ -45,15 +46,16 @@ export function TimePicker({ value, onChange, disabled }: TimePickerProps) {
   };
 
   const updateTime = (h: number, m: number) => {
-    const date = new Date();
-    date.setHours(h);
-    date.setMinutes(m);
-    date.setSeconds(0);
-    date.setMilliseconds(0);
-    const timeString = date.toISOString();
+    const currentDate = new Date();
+    currentDate.setHours(h);
+    currentDate.setMinutes(m);
+    currentDate.setSeconds(0);
+    currentDate.setMilliseconds(0);
 
-    onChange(timeString);
+    onChange(currentDate.toISOString()); // ✅ Return as full ISO string
   };
+
+  console.log("TimePicker: ", value);
 
   return (
     <div className="relative">
@@ -83,7 +85,7 @@ export function TimePicker({ value, onChange, disabled }: TimePickerProps) {
                 variant={"outline"}
                 size={"icon"}
                 onClick={() => handleHourChange(1)}
-                className="p-1 my-1 dark:shadow-md dark:shadow-teal-shade/40 dark:hover:bg-white  "
+                className="p-1 my-1 dark:hover:bg-white  "
               >
                 <ChevronUp className="w-5 h-5 dark:text-teal-shade text-gray-600" />
               </Button>
@@ -95,7 +97,7 @@ export function TimePicker({ value, onChange, disabled }: TimePickerProps) {
                 variant={"outline"}
                 size={"icon"}
                 onClick={() => handleHourChange(-1)}
-                className="p-1 hover:bg-white  my-1 dark:shadow-md dark:shadow-teal-shade/40"
+                className="p-1 hover:bg-white  my-1 dark:shadow-md"
               >
                 <ChevronDown className="w-5 h-5 dark:text-teal-shade text-gray-600" />
               </Button>
@@ -110,7 +112,7 @@ export function TimePicker({ value, onChange, disabled }: TimePickerProps) {
                 variant={"outline"}
                 size={"icon"}
                 onClick={() => handleMinuteChange(1)}
-                className="p-1 hover:bg-white  my-1 dark:shadow-md dark:shadow-teal-shade/40"
+                className="p-1 hover:bg-white  my-1"
               >
                 <ChevronUp className="w-5 h-5 dark:text-teal-shade text-gray-600" />
               </Button>
@@ -122,7 +124,7 @@ export function TimePicker({ value, onChange, disabled }: TimePickerProps) {
                 variant={"outline"}
                 size={"icon"}
                 onClick={() => handleMinuteChange(-1)}
-                className="p-1 hover:bg-white  my-1 dark:shadow-md dark:shadow-teal-shade/40"
+                className="p-1 hover:bg-white  my-1"
               >
                 <ChevronDown className="w-5 h-5 dark:text-teal-shade text-gray-600" />
               </Button>
@@ -134,7 +136,7 @@ export function TimePicker({ value, onChange, disabled }: TimePickerProps) {
               variant={"outline"}
               size={"icon"}
               onClick={togglePeriod}
-              className="px-3 py-2 rounded-lg text-sm font-semibold bg-white dark:hover:bg-white dark:bg-background dark:text-teal-shade my-1 dark:shadow-md dark:shadow-teal-shade/40 "
+              className="px-3 py-2 rounded-lg text-sm font-semibold bg-white dark:hover:bg-white dark:bg-background dark:text-teal-shade my-1 "
             >
               {period}
             </Button>
