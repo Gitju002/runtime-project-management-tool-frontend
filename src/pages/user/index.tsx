@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { columns } from "@/components/table/table-columns/user-columns";
+import { getColumns } from "@/components/table/table-columns/user-columns";
 import { DataTable } from "@/components/table/data-table";
 import {
   Dialog,
@@ -16,34 +16,112 @@ import { useGetTaskByUserIDQuery } from "@/store/api/tasks";
 import { transformTasks } from "@/utils/tasksFormatting";
 import { CustomPagination } from "@/components/ui/custom-pagination";
 import { Input } from "@/components/ui/input";
+import TaskCompletedComponent from "../admin/analytics/_components/task-completed";
+import PieChartComponent from "../admin/analytics/_components/pie-chart";
+import BarChartComponent from "../admin/analytics/_components/bar-chart";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 
 const User = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const projectName = searchParams.get("projectName") || ""; // Reading from URL
+  const serviceName = searchParams.get("services") || ""; // Reading from URL
+  const sortBy = searchParams.get("sortBy")
+    ? [searchParams.get("sortBy")!]
+    : [];
   const [isOpened, setIsOpened] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const currentPage = Number(searchParams.get("page")) || 1;
   const [limit, setLimit] = useState(10); // Items per page
   const [totalPages, setTotalPages] = useState(1);
-  const [paginationLoading, setPaginationLoading] = useState(false);
-  const handlePageChange = (page: number) => {
-    setPaginationLoading(true);
-    setCurrentPage(page);
-  };
+  // const [paginationLoading, setPaginationLoading] = useState(false);
 
   const {
     data: tasksData,
     isLoading: tasksLoading,
     isSuccess: tasksSuccess,
     isError: tasksIsError,
-  } = useGetTaskByUserIDQuery({ page: currentPage, limit });
+    isFetching,
+  } = useGetTaskByUserIDQuery({
+    projectName,
+    serviceName,
+    page: currentPage,
+    limit,
+    sortBy,
+  });
 
   //console.log("Tasks Data", tasksData);
   useEffect(() => {
     if (tasksData) {
+      handlePageChange(tasksData.data.paginationData.currentPage);
       setTotalPages(tasksData?.data.paginationData.totalPages);
-      setPaginationLoading(false);
+      console.log("Total Pages", tasksData?.data.paginationData.totalPages);
+      console.log("Current Page", tasksData?.data.paginationData.currentPage);
     }
   }, [tasksData]);
 
+  const handlePageChange = (page: number) => {
+    // setPaginationLoading
+    const params = new URLSearchParams(searchParams);
+    params.set("page", page.toString());
+    router.push(`?${params.toString()}`);
+  };
+
+  const handleSortClick = useCallback(
+    (columnName: string) => {
+      const params = new URLSearchParams(searchParams);
+      const currentSort = params.get("sortBy");
+
+      if (currentSort === columnName) {
+        params.set("sortBy", `-${columnName}`); // Toggle to Descending
+      } else if (currentSort === `-${columnName}`) {
+        params.delete("sortBy"); // Remove Sorting
+      } else {
+        params.set("sortBy", columnName); // Apply Ascending
+      }
+
+      router.push(`?${params.toString()}`);
+    },
+    [searchParams, router]
+  );
+
+  const handleProjectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const params = new URLSearchParams(searchParams);
+
+    if (value) {
+      params.delete("page");
+      params.set("projectName", value);
+    } else {
+      params.delete("projectName");
+    }
+
+    router.push(`?${params.toString()}`);
+  };
+
+  const handleServiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const params = new URLSearchParams(searchParams);
+
+    if (value) {
+      params.delete("page");
+      params.set("services", value);
+    } else {
+      params.delete("services");
+    }
+
+    router.push(`?${params.toString()}`);
+  };
+
+  const columns = getColumns(handleSortClick); // Pass the function here
+
   const formattedTasks = transformTasks(tasksData, limit);
+
+  const userName = useSelector((state: RootState) => state.userInfo.name);
+
+  console.log("username ", userName);
 
   return (
     <div className="container  mx-auto min-h-screen w-full py-10">
@@ -69,7 +147,22 @@ const User = () => {
             </DialogContent>
           </Dialog>
         </div>
-        {tasksLoading || paginationLoading ? (
+
+        <div className="flex gap-4 justify-between items-center w-1/4">
+          <Input
+            placeholder="Filter by Project Names..."
+            onChange={handleProjectChange}
+            value={projectName}
+            className="w-full border dark:border-lime-shade border-teal-shade"
+          />
+          <Input
+            placeholder="Filter by Services ..."
+            onChange={handleServiceChange}
+            value={serviceName}
+            className="w-full border dark:border-lime-shade border-teal-shade"
+          />
+        </div>
+        {tasksLoading || isFetching ? (
           <div className="flex justify-center items-center h-96">
             <motion.div
               animate={{ opacity: [1, 0.5, 1], rotate: 360 }}
@@ -83,10 +176,21 @@ const User = () => {
             </motion.div>
           </div>
         ) : tasksIsError ? (
-          <div>Error fetching data</div>
+          <div className="flex flex-col items-center justify-center h-96">
+            <img
+              src="/images/missing.png"
+              alt="No projects found"
+              className="w-36 h-36 mb-4"
+            />
+            <p className="text-lg font-semibold text-gray-600">
+              No tasks found.
+            </p>
+            <p className="text-sm text-gray-500">
+              Please verify the search criteria and try again.
+            </p>
+          </div>
         ) : tasksSuccess ? (
           <>
-            <Input />
             <DataTable columns={columns} data={formattedTasks} />
             <CustomPagination
               currentPage={currentPage}
@@ -95,6 +199,11 @@ const User = () => {
             />
           </>
         ) : null}
+        <div className="grid grid-cols-1 md:grid-cols-3 mt-2 gap-2 ">
+          <TaskCompletedComponent userName={userName} />
+          <PieChartComponent userName={userName} />
+          <BarChartComponent userName={userName} />
+        </div>
       </div>
     </div>
   );
