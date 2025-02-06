@@ -84,15 +84,7 @@ export const getColumns = (
 
     {
       accessorKey: "projectDescription",
-      header: () => (
-        <div
-          className="flex items-center cursor-pointer"
-          onClick={() => handleSortClick("projectDescription")}
-        >
-          Project Description
-          {renderSortIcon("projectDescription")}
-        </div>
-      ),
+      header: () => <div>Project Description</div>,
       cell: ({ row }) => (
         <ExpandedComponent data={row.original.projectDescription} />
       ),
@@ -125,56 +117,56 @@ export const getColumns = (
       ),
     },
 
-    {
-      accessorKey: "clientName",
-      header: () => (
-        <div
-          className="flex items-center cursor-pointer"
-          onClick={() => handleSortClick("clientName")}
-        >
-          Client Name
-          {renderSortIcon("clientName")}
-        </div>
-      ),
-    },
+    // {
+    //   accessorKey: "clientName",
+    //   header: () => (
+    //     <div
+    //       className="flex items-center cursor-pointer"
+    //       onClick={() => handleSortClick("clientName")}
+    //     >
+    //       Client Name
+    //       {renderSortIcon("clientName")}
+    //     </div>
+    //   ),
+    // },
 
-    {
-      accessorKey: "clientEmail",
-      header: () => (
-        <div
-          className="flex items-center cursor-pointer"
-          onClick={() => handleSortClick("clientEmail")}
-        >
-          Client Email
-          {renderSortIcon("clientEmail")}
-        </div>
-      ),
-    },
+    // {
+    //   accessorKey: "clientEmail",
+    //   header: () => (
+    //     <div
+    //       className="flex items-center cursor-pointer"
+    //       onClick={() => handleSortClick("clientEmail")}
+    //     >
+    //       Client Email
+    //       {renderSortIcon("clientEmail")}
+    //     </div>
+    //   ),
+    // },
 
-    {
-      accessorKey: "projectType",
-      header: () => (
-        <div
-          className="flex items-center cursor-pointer"
-          onClick={() => handleSortClick("projectType")}
-        >
-          Project Type
-          {renderSortIcon("projectType")}
-        </div>
-      ),
-    },
+    // {
+    //   accessorKey: "projectType",
+    //   header: () => (
+    //     <div
+    //       className="flex items-center cursor-pointer"
+    //       onClick={() => handleSortClick("projectType")}
+    //     >
+    //       Project Type
+    //       {renderSortIcon("projectType")}
+    //     </div>
+    //   ),
+    // },
 
-    {
-      accessorKey: "cost",
-      header: () => (
-        <div
-          className="flex items-center cursor-pointer"
-          onClick={() => handleSortClick("cost")}
-        >
-          Cost
-          {renderSortIcon("cost")}
-        </div>
-      ),
-    },
+    // {
+    //   accessorKey: "cost",
+    //   header: () => (
+    //     <div
+    //       className="flex items-center cursor-pointer"
+    //       onClick={() => handleSortClick("cost")}
+    //     >
+    //       Cost
+    //       {renderSortIcon("cost")}
+    //     </div>
+    //   ),
+    // },
   ];
 };
