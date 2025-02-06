@@ -54,7 +54,32 @@ export const taskApi = createApi({
         return error;
       },
     }),
+
+    getAllTask: builder.query<
+      Partial<GetAllTaskResponse>,
+      Partial<GetAllProjectsQueryParams>
+    >({
+      query: ({ projectName }) => ({
+        url: "/task/all",
+        params: { projectName },
+      }),
+      providesTags: ["Task"],
+      transformResponse: (response) => {
+        const apiResponse = response as GetAllTaskResponse;
+        // toast.success("Task list fetched successfully");
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as GetAllTaskResponse;
+        toast.error(apiError.message);
+        return error;
+      },
+    }),
   }),
 });
 
-export const { useCreateTaskMutation, useGetTaskByUserIDQuery } = taskApi;
+export const {
+  useCreateTaskMutation,
+  useGetTaskByUserIDQuery,
+  useGetAllTaskQuery,
+} = taskApi;

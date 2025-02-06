@@ -3,9 +3,10 @@ import type { Project } from "@/types/types";
 import { format } from "date-fns";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+// import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 
 const ExpandedComponent = ({ data }: { data: string }) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
@@ -29,6 +30,22 @@ const ExpandedComponent = ({ data }: { data: string }) => {
   );
 };
 
+export const ProjectDetails = ({ projectName }: { projectName: string }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const handleClick = () => {
+    const params = new URLSearchParams(searchParams);
+    params.delete("page");
+    params.set("projectName", projectName);
+    router.push(`/admin/projects/project-details?${params.toString()}`);
+  };
+  return (
+    <div className="cursor-pointer" onClick={handleClick}>
+      {projectName}
+    </div>
+  );
+};
+
 // Accept handleSortClick as a parameter
 export const getColumns = (
   handleSortClick: (columnName: string) => void
@@ -46,28 +63,28 @@ export const getColumns = (
   };
 
   return [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
+    // {
+    //   id: "select",
+    //   header: ({ table }) => (
+    //     <Checkbox
+    //       checked={
+    //         table.getIsAllPageRowsSelected() ||
+    //         (table.getIsSomePageRowsSelected() && "indeterminate")
+    //       }
+    //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+    //       aria-label="Select all"
+    //     />
+    //   ),
+    //   cell: ({ row }) => (
+    //     <Checkbox
+    //       checked={row.getIsSelected()}
+    //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+    //       aria-label="Select row"
+    //     />
+    //   ),
+    //   enableSorting: false,
+    //   enableHiding: false,
+    // },
 
     {
       accessorKey: "projectName",
@@ -79,6 +96,10 @@ export const getColumns = (
           Project Name
           {renderSortIcon("projectName")}
         </div>
+      ),
+
+      cell: ({ row }) => (
+        <ProjectDetails projectName={row.original.projectName} />
       ),
     },
 

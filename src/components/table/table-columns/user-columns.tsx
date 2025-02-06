@@ -3,16 +3,17 @@ import { TableTask } from "@/types/types";
 import { Badge } from "@/components/ui/badge";
 import { useSearchParams } from "next/navigation";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { MoreHorizontal } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+// import { MoreHorizontal } from "lucide-react";
+// import { Button } from "@/components/ui/button";
+// import {
+//   DropdownMenu,
+//   DropdownMenuContent,
+//   DropdownMenuItem,
+//   DropdownMenuLabel,
+//   DropdownMenuSeparator,
+//   DropdownMenuTrigger,
+// } from "@/components/ui/dropdown-menu";
+
 // Accept handleSortClick as a parameter
 export const getColumns = (
   handleSortClick: (columnName: string) => void
