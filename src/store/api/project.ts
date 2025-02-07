@@ -31,9 +31,9 @@ export const projectApi = createApi({
       GetAllProjectResponse,
       GetAllProjectsQueryParams
     >({
-      query: ({ projectName, limit, page, sortBy } = {}) => ({
+      query: ({ projectName, limit, page, sortBy, fromDate, toDate } = {}) => ({
         url: `project/all`,
-        params: { projectName, limit, page, sortBy }, // Add query params here
+        params: { projectName, limit, page, sortBy, fromDate, toDate }, // Add query params here
       }),
       transformResponse: (response) => {
         const apiResponse = response as GetAllProjectResponse;

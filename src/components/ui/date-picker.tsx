@@ -37,7 +37,7 @@ export function DatePicker({
   btnDisabled,
 }: {
   placeholder: string;
-  value: Date;
+  value: Date | null;
   onChange: (date: Date | undefined) => void;
   disabled?: (date: Date) => boolean;
   btnDisabled?: boolean;
@@ -60,7 +60,7 @@ export function DatePicker({
       <PopoverContent className="w-auto p-0">
         <Calendar
           mode="single"
-          selected={value}
+          selected={value ? value : new Date()}
           disabled={disabled}
           onSelect={onChange}
           initialFocus

@@ -169,6 +169,8 @@ export type ServiceResponse = {
 };
 
 export type GetAllProjectsQueryParams = {
+  toDate?: string;
+  fromDate?: string;
   projectName?: string;
   serviceName?: string;
   userName?: string;

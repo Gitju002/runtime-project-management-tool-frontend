@@ -17,6 +17,8 @@ import { useGetAllProjectsQuery } from "@/store/api/project";
 import { CustomPagination } from "@/components/ui/custom-pagination";
 import { Input } from "@/components/ui/input";
 import CustomLoader from "@/components/ui/custom-loader";
+import { DatePicker } from "@/components/ui/date-picker";
+import { format } from "date-fns";
 
 export default function Projects() {
   const router = useRouter();
@@ -29,6 +31,8 @@ export default function Projects() {
     : [];
   const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
+  const fromDate = searchParams.get("fromDate");
+  const toDate = searchParams.get("toDate");
 
   const {
     data: projectData,
@@ -36,7 +40,9 @@ export default function Projects() {
     isFetching,
     error,
   } = useGetAllProjectsQuery({
-    projectName: searchParams.get("projectName") || "", // Taken from URL
+    projectName: searchParams.get("projectName") || "",
+    fromDate: searchParams.get("fromDate") || "",
+    toDate: searchParams.get("toDate") || "",
     page: currentPage,
     limit,
     sortBy,
@@ -57,6 +63,31 @@ export default function Projects() {
 
     return () => clearTimeout(delay);
   }, [projectSearch]);
+
+  const handleFromDateChange = (date: Date | undefined) => {
+    let params = new URLSearchParams(searchParams);
+    if (!date) {
+      params.delete("fromDate");
+      router.push(`?${params.toString()}`);
+      return;
+    }
+    // add 1 day to the selected date
+    const formattedDate = format(new Date(date), "yyyy-MM-dd");
+    params.set("fromDate", formattedDate);
+    router.push(`?${params.toString()}`);
+  };
+
+  const handleDateSelection = (date: Date | undefined) => {
+    let params = new URLSearchParams(searchParams);
+    if (!date) {
+      params.delete("toDate");
+      router.push(`?${params.toString()}`);
+      return;
+    }
+    const formattedDate = format(new Date(date), "yyyy-MM-dd");
+    params.set("toDate", formattedDate);
+    router.push(`?${params.toString()}`);
+  };
 
   const handlePageChange = (page: number) => {
     const params = new URLSearchParams(searchParams);
@@ -111,11 +142,21 @@ export default function Projects() {
           </Dialog>
         </div>
 
-        <div>
+        <div className="flex justify-between gap-4 items-center mb-6">
           <Input
             placeholder="Filter by Project Names..."
             onChange={(e) => setProjectSearch(e.target.value)}
             value={projectSearch}
+          />
+          <DatePicker
+            placeholder="Pick From Date"
+            value={fromDate ? new Date(fromDate) : null}
+            onChange={(date) => handleFromDateChange(date)}
+          />
+          <DatePicker
+            placeholder="Pick To Date"
+            value={toDate ? new Date(toDate) : null}
+            onChange={(date) => handleDateSelection(date)}
           />
         </div>
 
