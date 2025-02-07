@@ -22,14 +22,23 @@ import { useEffect, useState } from "react";
 import { useGetAllProjectTypedescQuery } from "@/store/api/projectTypeDesc";
 import { useGetAllServicesQuery } from "@/store/api/service";
 import { useGetAllTaskQuery } from "@/store/api/tasks";
-import { GetAllTaskResponse } from "@/types/types";
+import {
+  GetAllTaskResponse,
+  Project,
+  ProjectTypeDesc,
+  Service,
+  Task,
+} from "@/types/types";
 
 export default function ProjectDetails() {
   const searchParams = useSearchParams();
   const projectName = searchParams.get("projectName") || "";
-  const [data, setData] = useState<{
-    tasks: GetAllTaskResponse[];
-  } | null>(null);
+  // const [taskData, setTaskData] = useState<Task>({} as Task);
+  // const [projectDetails, setProjectDetails] = useState<Project>({} as Project);
+  // const [projectTypeDesc, setProjectTypeDesc] = useState<ProjectTypeDesc>(
+  //   {} as ProjectTypeDesc
+  // );
+  // const [services, setServices] = useState<Service>({} as Service);
 
   const {
     data: tasksData,
@@ -38,22 +47,6 @@ export default function ProjectDetails() {
   } = useGetAllTaskQuery({
     projectName,
   });
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        if (tasksData?.data) {
-          setData(tasksData.data); // Ensure data is assigned correctly
-        } else {
-          setData(null); // Fallback to null if no data
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    }
-
-    fetchData();
-  }, [tasksData]); // Dependency on `tasksData`
 
   const {
     data: projectData,
@@ -81,16 +74,28 @@ export default function ProjectDetails() {
     projectName,
   });
 
-  console.log("Task Data:", tasksData);
+  console.log("tasksData", tasksData?.data);
+  console.log("projectData", projectData);
+  console.log("allProjectTypeDesc", allProjectTypeDesc);
+  console.log("servicesData", servicesData);
 
-  useEffect(() => {
-    if (projectData && allProjectTypeDesc && servicesData && tasksData) {
-      // Perform any necessary actions when projectData changes
-      projectData && allProjectTypeDesc && servicesData && tasksData;
-    }
-  }, [projectData, allProjectTypeDesc && servicesData && tasksData]);
+  // useEffect(() => {
+  //   if (tasksData) {
+  //     setTaskData(tasksData.data?.tasks);
+  //   }
+  // }, [tasksData]);
 
-  // const tasksData: GetAllTaskResponse[] = [...];
+  // useEffect(() => {
+  //   if (projectData) {
+  //     setProjectDetails(projectData.data.projects);
+  //   }
+  // }, [projectData]);
+
+  // useEffect(() => {
+  //   if (allProjectTypeDesc) {
+  //     setProjectTypeDesc(allProjectTypeDesc.data.response);
+  //   }
+  // }, [allProjectTypeDesc]);
 
   return (
     <div className="bg-gradient-to-b from-background to-muted/20">

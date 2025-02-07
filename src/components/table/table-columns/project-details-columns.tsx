@@ -1,10 +1,10 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import { GetAllTaskResponse } from "@/types/types";
+import { Task } from "@/types/types";
 
-export const columns: ColumnDef<GetAllTaskResponse>[] = [
+export const columns: ColumnDef<Task>[] = [
   {
-    accessorKey: "username",
+    accessorKey: "user.name",
     header: "Username",
   },
   {
@@ -12,7 +12,7 @@ export const columns: ColumnDef<GetAllTaskResponse>[] = [
     header: "Date",
   },
   {
-    accessorKey: "service",
+    accessorKey: "service.serviceName",
     header: "Service",
   },
   {

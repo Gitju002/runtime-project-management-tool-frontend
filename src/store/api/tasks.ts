@@ -5,6 +5,7 @@ import {
   GetAllProjectsQueryParams,
   GetAllTaskResponse,
   TaskResponse,
+  TaskResponsePerUser,
 } from "@/types/types";
 
 export const taskApi = createApi({
@@ -56,7 +57,7 @@ export const taskApi = createApi({
     }),
 
     getAllTask: builder.query<
-      Partial<GetAllTaskResponse>,
+      TaskResponsePerUser,
       Partial<GetAllProjectsQueryParams>
     >({
       query: ({ projectName }) => ({
@@ -65,12 +66,12 @@ export const taskApi = createApi({
       }),
       providesTags: ["Task"],
       transformResponse: (response) => {
-        const apiResponse = response as GetAllTaskResponse;
+        const apiResponse = response as TaskResponsePerUser;
         // toast.success("Task list fetched successfully");
         return apiResponse;
       },
       transformErrorResponse: (error) => {
-        const apiError = error.data as GetAllTaskResponse;
+        const apiError = error.data as TaskResponsePerUser;
         toast.error(apiError.message);
         return error;
       },

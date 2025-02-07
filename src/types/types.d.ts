@@ -185,6 +185,13 @@ export type GetAllTaskResponse = {
     paginationData: PaginationData;
   };
 };
+
+export type TaskResponsePerUser = {
+  success: boolean;
+  message: string;
+  data: Task[];
+};
+
 export type GetAllProjectResponse = {
   success: boolean;
   message: string;
