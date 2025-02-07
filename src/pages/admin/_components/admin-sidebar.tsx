@@ -33,6 +33,7 @@ import { useLogoutMutation } from "@/store/api/auth";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { clearUserInfo } from "@/store/features/userInfo";
+import { useGetUserQuery } from "@/store/api/user";
 
 const items = [
   {
@@ -79,6 +80,12 @@ export default function AdminSidebar() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  const {
+    data: userData,
+    isLoading: userLoading,
+    error: userError,
+  } = useGetUserQuery();
+  console.log(userData);
   const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
   useEffect(() => {
@@ -130,7 +137,7 @@ export default function AdminSidebar() {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
                   <UserCircle2 className="text-teal-shade dark:text-lime-shade dark:hover:text-lime-shade" />{" "}
-                  Username
+                  {userData?.data?.name}
                   <ChevronUp className="ml-auto text-teal-shade dark:text-lime-shade dark:hover:text-lime-shade" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>

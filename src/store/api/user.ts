@@ -4,6 +4,7 @@ import {
   GetAllProjectsQueryParams,
   GetAllUserResponse,
   GetAllUsersListResponse,
+  GetUserResponse,
 } from "@/types/types";
 import { toast } from "sonner";
 
@@ -48,7 +49,24 @@ export const userApi = createApi({
         return error;
       },
     }),
+    getUser: builder.query<GetUserResponse, void>({
+      query: () => ({
+        url: "/user/get-user",
+      }),
+      providesTags: ["User"],
+      transformResponse: (response) => {
+        const apiResponse = response as GetUserResponse;
+        // toast.success("User fetched successfully");
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as GetUserResponse;
+        // toast.error(apiError.message);
+        return error;
+      },
+    }),
   }),
 });
 
-export const { useGetAllUsersQuery, useGetUsersListQuery } = userApi;
+export const { useGetAllUsersQuery, useGetUsersListQuery, useGetUserQuery } =
+  userApi;

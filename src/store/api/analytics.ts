@@ -31,7 +31,7 @@ export const analyticsApi = createApi({
       },
       transformErrorResponse: (error) => {
         const apiError = error.data as TaskStatusResponse;
-        toast.error("Error fetching tasks per status");
+        // toast.error("Error fetching tasks per status");
         return apiError;
       },
     }),
@@ -51,7 +51,7 @@ export const analyticsApi = createApi({
       },
       transformErrorResponse: (error) => {
         const apiError = error.data as TasksPerProject;
-        toast.error("Error fetching tasks per project");
+        // toast.error("Error fetching tasks per project");
         return apiError;
       },
     }),
@@ -74,7 +74,7 @@ export const analyticsApi = createApi({
       },
       transformErrorResponse: (error) => {
         const apiError = error.data as TasksDuration;
-        toast.error("Error fetching duration per project");
+        // toast.error("Error fetching duration per project");
         return apiError;
       },
     }),
