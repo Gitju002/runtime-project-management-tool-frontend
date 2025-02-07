@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import TaskForm from "./_components/task-form";
-import { PlusCircleIcon } from "lucide-react";
+import { Logs, PieChartIcon, PlusCircleIcon } from "lucide-react";
 import { format } from "date-fns";
 import { useGetTaskByUserIDQuery } from "@/store/api/tasks";
 import { transformTasks } from "@/utils/tasksFormatting";
@@ -125,9 +125,46 @@ const User = () => {
 
   return (
     <div className="container  mx-auto min-h-screen w-full py-10">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-semibold">
+          User Analytics Overview{" "}
+          <PieChartIcon
+            size={20}
+            className="inline text-teal-shade dark:text-lime-shade"
+          />{" "}
+        </h1>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2 gap-2 ">
+        <TaskCompletedComponent userName={userName} />
+        <PieChartComponent userName={userName} />
+        <BarChartComponent userName={userName} />
+      </div>
       <div className="grid grid-cols-1 gap-2">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-semibold">User Page</h1>
+          <h1 className="text-2xl font-semibold">
+            User Task Logs{" "}
+            <Logs
+              size={20}
+              className="inline text-teal-shade dark:text-lime-shade"
+            />{" "}
+          </h1>
+        </div>
+
+        <div className="flex gap-4 justify-between items-center w-full">
+          <div className="flex justify-between items-center gap-4">
+            <Input
+              placeholder="Filter by Project Names..."
+              onChange={handleProjectChange}
+              value={projectName}
+              className="w-full border  border-teal-shade"
+            />
+            <Input
+              placeholder="Filter by Services ..."
+              onChange={handleServiceChange}
+              value={serviceName}
+              className="w-full border  border-teal-shade"
+            />
+          </div>
           <Dialog open={isOpened} onOpenChange={setIsOpened}>
             <DialogTrigger asChild>
               <motion.div whileHover={{ scale: 1.05 }}>
@@ -146,21 +183,6 @@ const User = () => {
               <TaskForm setIsOpen={setIsOpened} />
             </DialogContent>
           </Dialog>
-        </div>
-
-        <div className="flex gap-4 justify-between items-center w-full md:1/2 lg:w-1/4">
-          <Input
-            placeholder="Filter by Project Names..."
-            onChange={handleProjectChange}
-            value={projectName}
-            className="w-full border dark:border-lime-shade border-teal-shade"
-          />
-          <Input
-            placeholder="Filter by Services ..."
-            onChange={handleServiceChange}
-            value={serviceName}
-            className="w-full border dark:border-lime-shade border-teal-shade"
-          />
         </div>
         {tasksLoading || isFetching ? (
           <div className="flex justify-center items-center h-96">
@@ -199,11 +221,6 @@ const User = () => {
             />
           </>
         ) : null}
-        <div className="grid grid-cols-1 md:grid-cols-3 mt-2 gap-2 ">
-          <TaskCompletedComponent userName={userName} />
-          <PieChartComponent userName={userName} />
-          <BarChartComponent userName={userName} />
-        </div>
       </div>
     </div>
   );
