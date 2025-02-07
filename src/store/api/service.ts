@@ -32,9 +32,9 @@ export const serviceApi = createApi({
       GetAllServiceResponse,
       GetAllProjectsQueryParams
     >({
-      query: ({ projectName, limit, page } = {}) => ({
+      query: ({ projectName, serviceName, limit, page } = {}) => ({
         url: `service/all`,
-        params: { projectName, limit, page },
+        params: { projectName, serviceName, limit, page },
       }),
       transformResponse: (response) => {
         const apiResponse = response as GetAllServiceResponse;

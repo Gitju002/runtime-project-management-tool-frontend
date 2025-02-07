@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import {
@@ -13,34 +15,53 @@ import { PlusCircle } from "lucide-react";
 import ProjectTypeForm from "@/pages/admin/type-description/_components/type-desc-form";
 import { useGetAllProjectTypedescQuery } from "@/store/api/projectTypeDesc";
 import { CustomPagination } from "@/components/ui/custom-pagination";
+import { Input } from "@/components/ui/input";
 
 export default function TypeDescription() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
-  const [projectName, setProjectName] = useState(""); // For search
-  const [currentPage, setCurrentPage] = useState(1); // For pagination
-  const [limit, setLimit] = useState(10); // Items per page
-  const [totalPages, setTotalPages] = useState(1); // Total pages
-  const [paginationLoading, setPaginationLoading] = useState(false);
 
-  const handlePageChange = (page: number) => {
-    setPaginationLoading(true);
-    setCurrentPage(page);
-  };
+  const [projectSearch, setProjectSearch] = useState(""); // Debounced search state
+  const currentPage = Number(searchParams.get("page")) || 1;
+  const [limit, setLimit] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
 
   const {
     data: allProjectTypeDesc,
     isLoading,
-    isSuccess,
+    isFetching,
     error,
   } = useGetAllProjectTypedescQuery({
-    projectName,
+    projectName: searchParams.get("projectName") || "",
     page: currentPage,
     limit,
   });
 
+  // Debounced Effect for Search Input (3-second delay)
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      const params = new URLSearchParams(searchParams);
+      if (projectSearch) {
+        params.delete("page"); // Reset page when searching
+        params.set("projectName", projectSearch);
+      } else {
+        params.delete("projectName");
+      }
+      router.push(`?${params.toString()}`);
+    }, 3000); // 3-second debounce
+
+    return () => clearTimeout(delay);
+  }, [projectSearch]);
+
+  const handlePageChange = (page: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", page.toString());
+    router.push(`?${params.toString()}`);
+  };
+
   useEffect(() => {
     if (allProjectTypeDesc) {
-      setPaginationLoading(false);
       setTotalPages(allProjectTypeDesc?.data?.paginationData?.totalPages);
     }
   }, [allProjectTypeDesc]);
@@ -56,7 +77,7 @@ export default function TypeDescription() {
     })) || [];
 
   return (
-    <div className="container  mx-auto w-full py-6">
+    <div className="container mx-auto w-full py-6">
       <div className="grid grid-cols-1 gap-2">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Project Types Description</h1>
@@ -74,7 +95,15 @@ export default function TypeDescription() {
             </DialogContent>
           </Dialog>
         </div>
-        {isLoading || paginationLoading ? (
+        <div>
+          <Input
+            placeholder="Search by Project Name..."
+            onChange={(e) => setProjectSearch(e.target.value)}
+            value={projectSearch}
+          />
+        </div>
+
+        {isLoading || isFetching ? (
           <div className="flex justify-center items-center h-96">
             <motion.div
               animate={{ opacity: [1, 0.5, 1], rotate: 360 }}
@@ -88,8 +117,20 @@ export default function TypeDescription() {
             </motion.div>
           </div>
         ) : error ? (
-          <div>Error fetching data</div>
-        ) : (
+          <div className="flex flex-col items-center justify-center h-96">
+            <img
+              src="/images/missing.png"
+              alt="No projects found"
+              className="w-36 h-36 mb-4"
+            />
+            <p className="text-lg font-semibold text-gray-600">
+              No projects found.
+            </p>
+            <p className="text-sm text-gray-500">
+              Please verify the search criteria and try again.
+            </p>
+          </div>
+        ) : allProjectTypeDesc?.data?.response?.length ? (
           <>
             <DataTable columns={columns} data={formattedTypeDesc} />
             <CustomPagination
@@ -98,6 +139,8 @@ export default function TypeDescription() {
               onPageChange={handlePageChange}
             />
           </>
+        ) : (
+          <div>No data found</div>
         )}
       </div>
     </div>

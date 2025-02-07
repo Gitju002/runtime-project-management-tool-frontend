@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import {
@@ -15,21 +16,19 @@ import ProjectForm from "@/pages/admin/projects/_components/project-form";
 import { useGetAllProjectsQuery } from "@/store/api/project";
 import { CustomPagination } from "@/components/ui/custom-pagination";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/router";
 import CustomLoader from "@/components/ui/custom-loader";
 
 export default function Projects() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
-  const projectName = searchParams.get("projectName") || ""; // Reading from URL
+  const [projectSearch, setProjectSearch] = useState(""); // Debounced State
   const currentPage = Number(searchParams.get("page")) || 1;
   const sortBy = searchParams.get("sortBy")
     ? [searchParams.get("sortBy")!]
     : [];
   const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
-  // const [paginationLoading, setPaginationLoading] = useState(false);
 
   const {
     data: projectData,
@@ -37,30 +36,31 @@ export default function Projects() {
     isFetching,
     error,
   } = useGetAllProjectsQuery({
-    projectName, // Now taken from URL
+    projectName: searchParams.get("projectName") || "", // Taken from URL
     page: currentPage,
     limit,
     sortBy,
   });
 
+  // Debounced Effect for Search Input (3-second delay)
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      const params = new URLSearchParams(searchParams);
+      if (projectSearch) {
+        params.delete("page"); // Reset page when searching
+        params.set("projectName", projectSearch);
+      } else {
+        params.delete("projectName");
+      }
+      router.push(`?${params.toString()}`);
+    }, 2000); // 3-second debounce
+
+    return () => clearTimeout(delay);
+  }, [projectSearch]);
+
   const handlePageChange = (page: number) => {
     const params = new URLSearchParams(searchParams);
     params.set("page", page.toString());
-    router.push(`?${params.toString()}`);
-  };
-
-  const handleProjectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const params = new URLSearchParams(searchParams);
-
-    if (value) {
-      // clear the page number when searching
-      params.delete("page");
-      params.set("projectName", value);
-    } else {
-      params.delete("projectName");
-    }
-
     router.push(`?${params.toString()}`);
   };
 
@@ -86,16 +86,10 @@ export default function Projects() {
     if (projectData) {
       handlePageChange(projectData?.data.paginationData.currentPage);
       setTotalPages(projectData?.data.paginationData.totalPages);
-      console.log("Total Pages", projectData?.data.paginationData.totalPages);
-      console.log("Current Page", projectData?.data.paginationData.currentPage);
-
-      // setPaginationLoading(false);
     }
   }, [projectData]);
 
-  const columns = getColumns(handleSortClick); // Pass the function here
-
-  console.log(isLoading);
+  const columns = getColumns(handleSortClick);
 
   return (
     <div className="container mx-auto w-full py-6">
@@ -120,8 +114,8 @@ export default function Projects() {
         <div>
           <Input
             placeholder="Filter by Project Names..."
-            onChange={handleProjectChange}
-            value={projectName}
+            onChange={(e) => setProjectSearch(e.target.value)}
+            value={projectSearch}
           />
         </div>
 

@@ -1,6 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { Task } from "@/types/types";
+import { format } from "date-fns";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -10,6 +11,7 @@ export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: "date",
     header: "Date",
+    cell: ({ row }) => format(new Date(row.original.date), "PPP"),
   },
   {
     accessorKey: "service.serviceName",

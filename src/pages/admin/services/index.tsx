@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import {
@@ -13,6 +13,10 @@ import { PlusCircle } from "lucide-react";
 import ServiceForm from "@/pages/admin/services/_components/services-form";
 import { useGetAllServicesQuery } from "@/store/api/service";
 import { CustomPagination } from "@/components/ui/custom-pagination";
+import { Input } from "@/components/ui/input";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
+import CustomLoader from "@/components/ui/custom-loader";
 
 export type Service = {
   id: string;
@@ -23,11 +27,16 @@ export type Service = {
 
 export default function Services() {
   const [open, setOpen] = useState(false);
-  const [projectName, setProjectName] = useState(""); // For search
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10); // Items per page
   const [totalPages, setTotalPages] = useState(1);
   const [paginationLoading, setPaginationLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const projectName = searchParams.get("projectName") || ""; // Reading from URL
+  const serviceName = searchParams.get("serviceName") || ""; // Reading from URL
+  const router = useRouter();
+  const [projectSearch, setProjectSearch] = useState("");
+  const [serviceSearch, setServiceSearch] = useState("");
 
   const handlePageChange = (page: number) => {
     setPaginationLoading(true);
@@ -40,6 +49,7 @@ export default function Services() {
     error,
   } = useGetAllServicesQuery({
     projectName,
+    serviceName,
     page: currentPage,
     limit,
   });
@@ -50,6 +60,42 @@ export default function Services() {
       setPaginationLoading(false);
     }
   }, [servicesData]);
+
+  useEffect(() => {
+    // Set initial values from URL
+    setProjectSearch(searchParams.get("projectName") || "");
+    setServiceSearch(searchParams.get("serviceName") || "");
+  }, []);
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      const params = new URLSearchParams(searchParams);
+      if (projectSearch) {
+        params.delete("page"); // Reset page when searching
+        params.set("projectName", projectSearch);
+      } else {
+        params.delete("projectName");
+      }
+      router.push(`?${params.toString()}`);
+    }, 2000); // 3-second delay
+
+    return () => clearTimeout(delay);
+  }, [projectSearch]);
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      const params = new URLSearchParams(searchParams);
+      if (serviceSearch) {
+        params.delete("page"); // Reset page when searching
+        params.set("serviceName", serviceSearch);
+      } else {
+        params.delete("serviceName");
+      }
+      router.push(`?${params.toString()}`);
+    }, 2000); // 3-second delay
+
+    return () => clearTimeout(delay);
+  }, [serviceSearch]);
 
   const formattedServices: Service[] =
     servicesData?.data?.services?.map((service, index) => ({
@@ -81,6 +127,19 @@ export default function Services() {
             </DialogContent>
           </Dialog>
         </div>
+        <div className="flex justify-between gap-5 items-center">
+          <Input
+            placeholder="Filter by Project Names..."
+            onChange={(e) => setProjectSearch(e.target.value)}
+            value={projectSearch}
+          />
+          <Input
+            placeholder="Filter by Service Names..."
+            onChange={(e) => setServiceSearch(e.target.value)}
+            value={serviceSearch}
+          />
+        </div>
+
         {
           // Loading
           isLoading || paginationLoading ? (
@@ -98,7 +157,19 @@ export default function Services() {
             </div>
           ) : // Error
           error ? (
-            <div>Error fetching data</div>
+            <div className="flex flex-col items-center justify-center h-96">
+              <img
+                src="/images/missing.png"
+                alt="No projects found"
+                className="w-36 h-36 mb-4"
+              />
+              <p className="text-lg font-semibold text-gray-600">
+                No projects found.
+              </p>
+              <p className="text-sm text-gray-500">
+                Please verify the search criteria and try again.
+              </p>
+            </div>
           ) : // Success
           servicesData?.data?.services?.length ? (
             <>
