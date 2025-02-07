@@ -98,7 +98,7 @@ export default function BarChartComponent({ userName }: { userName: string }) {
                 chartData.length
             )}
           </span>{" "}
-          days
+          Hours
         </div>
       </CardFooter>
     </Card>

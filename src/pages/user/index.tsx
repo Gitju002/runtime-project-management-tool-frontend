@@ -24,6 +24,7 @@ import { RootState } from "@/store/store";
 import { useRouter } from "next/router";
 import { useSearchParams } from "next/navigation";
 import { DatePicker } from "@/components/ui/date-picker";
+import CustomLoader from "@/components/ui/custom-loader";
 
 const User = () => {
   const router = useRouter();
@@ -163,6 +164,22 @@ const User = () => {
             className="inline text-teal-shade dark:text-lime-shade"
           />{" "}
         </h1>
+        <Dialog open={isOpened} onOpenChange={setIsOpened}>
+          <DialogTrigger asChild>
+            <motion.div whileHover={{ scale: 1.05 }}>
+              <Button className="transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35">
+                Add Task <PlusCircleIcon />
+              </Button>
+            </motion.div>
+          </DialogTrigger>
+          <DialogContent className="form-bg dark:hover:shadow-2xl dark:hover:shadow-teal-shade/60 transition-all duration-200">
+            <DialogTitle className="text-center text-sm border border-gray-200 rounded-md p-2 mt-4">
+              Add Task(s) for{" "}
+              <span className="text-blue-500">{format(new Date(), "PP")}</span>
+            </DialogTitle>
+            <TaskForm setIsOpen={setIsOpened} />
+          </DialogContent>
+        </Dialog>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2 gap-2 ">
         <TaskCompletedComponent userName={userName} />
@@ -205,37 +222,10 @@ const User = () => {
               onChange={(date) => handleDateSelection(date)}
             />
           </div>
-          <Dialog open={isOpened} onOpenChange={setIsOpened}>
-            <DialogTrigger asChild>
-              <motion.div whileHover={{ scale: 1.05 }}>
-                <Button className="transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35">
-                  Add Task <PlusCircleIcon />
-                </Button>
-              </motion.div>
-            </DialogTrigger>
-            <DialogContent className="form-bg dark:hover:shadow-2xl dark:hover:shadow-teal-shade/60 transition-all duration-200">
-              <DialogTitle className="text-center text-sm border border-gray-200 rounded-md p-2 mt-4">
-                Add Task(s) for{" "}
-                <span className="text-blue-500">
-                  {format(new Date(), "PP")}
-                </span>
-              </DialogTitle>
-              <TaskForm setIsOpen={setIsOpened} />
-            </DialogContent>
-          </Dialog>
         </div>
         {tasksLoading || isFetching ? (
           <div className="flex justify-center items-center h-96">
-            <motion.div
-              animate={{ opacity: [1, 0.5, 1], rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity }}
-            >
-              <img
-                src="/images/hourglass.png"
-                alt="loading..."
-                className="w-14 h-14 md:w-20 md:h-20"
-              />
-            </motion.div>
+            <CustomLoader width={"w-16 md:w-20"} height={"h-16 md:h-20"} />
           </div>
         ) : tasksIsError ? (
           <div className="flex flex-col items-center justify-center h-96">
