@@ -180,7 +180,7 @@ export default function Projects() {
           </div>
         ) : projectData?.data?.projects?.length ? (
           <>
-            <DataTable columns={columns} data={projectData.data.projects} />
+            <DataTable columns={columns} data={projectData?.data.projects} />
             <CustomPagination
               currentPage={currentPage}
               totalPages={totalPages}

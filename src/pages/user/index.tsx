@@ -23,6 +23,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useRouter } from "next/router";
 import { useSearchParams } from "next/navigation";
+import { DatePicker } from "@/components/ui/date-picker";
 
 const User = () => {
   const router = useRouter();
@@ -36,6 +37,8 @@ const User = () => {
   const currentPage = Number(searchParams.get("page")) || 1;
   const [limit, setLimit] = useState(10); // Items per page
   const [totalPages, setTotalPages] = useState(1);
+  const fromDate = searchParams.get("fromDate") || "";
+  const toDate = searchParams.get("toDate") || "";
   // const [paginationLoading, setPaginationLoading] = useState(false);
 
   const {
@@ -45,6 +48,8 @@ const User = () => {
     isError: tasksIsError,
     isFetching,
   } = useGetTaskByUserIDQuery({
+    toDate: toDate,
+    fromDate: fromDate,
     projectName,
     serviceName,
     page: currentPage,
@@ -57,8 +62,6 @@ const User = () => {
     if (tasksData) {
       handlePageChange(tasksData.data.paginationData.currentPage);
       setTotalPages(tasksData?.data.paginationData.totalPages);
-      console.log("Total Pages", tasksData?.data.paginationData.totalPages);
-      console.log("Current Page", tasksData?.data.paginationData.currentPage);
     }
   }, [tasksData]);
 
@@ -93,11 +96,38 @@ const User = () => {
 
     if (value) {
       params.delete("page");
+      params.delete("fromDate");
+      params.delete("toDate");
       params.set("projectName", value);
     } else {
       params.delete("projectName");
     }
 
+    router.push(`?${params.toString()}`);
+  };
+
+  const handleFromDateChange = (date: Date | undefined) => {
+    let params = new URLSearchParams(searchParams);
+    if (!date) {
+      params.delete("fromDate");
+      router.push(`?${params.toString()}`);
+      return;
+    }
+    // add 1 day to the selected date
+    const formattedDate = format(new Date(date), "yyyy-MM-dd");
+    params.set("fromDate", formattedDate);
+    router.push(`?${params.toString()}`);
+  };
+
+  const handleDateSelection = (date: Date | undefined) => {
+    let params = new URLSearchParams(searchParams);
+    if (!date) {
+      params.delete("toDate");
+      router.push(`?${params.toString()}`);
+      return;
+    }
+    const formattedDate = format(new Date(date), "yyyy-MM-dd");
+    params.set("toDate", formattedDate);
     router.push(`?${params.toString()}`);
   };
 
@@ -163,6 +193,16 @@ const User = () => {
               onChange={handleServiceChange}
               value={serviceName}
               className="w-full border  border-teal-shade"
+            />
+            <DatePicker
+              placeholder="Pick From Date"
+              value={fromDate ? new Date(fromDate) : null}
+              onChange={(date) => handleFromDateChange(date)}
+            />
+            <DatePicker
+              placeholder="Pick To Date"
+              value={toDate ? new Date(toDate) : null}
+              onChange={(date) => handleDateSelection(date)}
             />
           </div>
           <Dialog open={isOpened} onOpenChange={setIsOpened}>

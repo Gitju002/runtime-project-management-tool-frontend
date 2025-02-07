@@ -39,9 +39,27 @@ export const taskApi = createApi({
       GetAllTaskResponse,
       Partial<GetAllProjectsQueryParams>
     >({
-      query: ({ limit, page, userName, projectName, serviceName, sortBy }) => ({
+      query: ({
+        limit,
+        page,
+        userName,
+        projectName,
+        serviceName,
+        sortBy,
+        fromDate,
+        toDate,
+      }) => ({
         url: "/task/get-by-user",
-        params: { limit, page, userName, projectName, serviceName, sortBy },
+        params: {
+          limit,
+          page,
+          userName,
+          projectName,
+          serviceName,
+          sortBy,
+          fromDate,
+          toDate,
+        },
       }),
       providesTags: ["Task"],
       transformResponse: (response) => {
