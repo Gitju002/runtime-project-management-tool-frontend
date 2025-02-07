@@ -39,7 +39,7 @@ export default function Users() {
         params.delete("userName");
       }
       router.push(`?${params.toString()}`);
-    }, 2000); // 2-second debounce
+    }, 1250); // 2-second debounce
 
     return () => clearTimeout(delay);
   }, [userSearch]);

@@ -59,7 +59,7 @@ export default function Projects() {
         params.delete("projectName");
       }
       router.push(`?${params.toString()}`);
-    }, 2000); // 3-second debounce
+    }, 1250); // 3-second debounce
 
     return () => clearTimeout(delay);
   }, [projectSearch]);

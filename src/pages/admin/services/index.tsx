@@ -92,7 +92,7 @@ export default function Services() {
         params.delete("serviceName");
       }
       router.push(`?${params.toString()}`);
-    }, 2000); // 3-second delay
+    }, 1250); // 3-second delay
 
     return () => clearTimeout(delay);
   }, [serviceSearch]);

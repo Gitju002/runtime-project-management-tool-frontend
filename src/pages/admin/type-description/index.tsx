@@ -49,7 +49,7 @@ export default function TypeDescription() {
         params.delete("projectName");
       }
       router.push(`?${params.toString()}`);
-    }, 3000); // 3-second debounce
+    }, 1250); // 3-second debounce
 
     return () => clearTimeout(delay);
   }, [projectSearch]);

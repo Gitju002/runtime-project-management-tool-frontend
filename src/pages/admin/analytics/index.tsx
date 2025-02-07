@@ -11,53 +11,6 @@ import { transformTasks } from "@/utils/tasksFormatting";
 import { useGetUsersListQuery } from "@/store/api/user";
 import { useSearchParams } from "next/navigation";
 
-// const users = [
-//   { value: "snehashis", label: "Snehashis Gharai" },
-//   { value: "purbarun", label: "Purbarun Mondal" },
-//   { value: "priyansu", label: "Priyansu Chowdhury" },
-//   { value: "Abhijit Dinda", label: "Abhijit Dinda" },
-//   { value: "abdul", label: "Sayed Abdul" },
-// ];
-
-// const projects: TableTask[] = [
-//   {
-//     slno: 1,
-//     date: "2021-09-01",
-//     projectName: "Project 1",
-//     services: "Service 1",
-//     purpose: "Purpose 1",
-//     startDate: "2021-09-01",
-//     startTime: "10:00 AM",
-//     finishDate: "2021-09-01",
-//     finishTime: "12:00 PM",
-//     status: "Initiated",
-//   },
-//   {
-//     slno: 2,
-//     date: "2021-09-01",
-//     projectName: "Project 2",
-//     services: "Service 2",
-//     purpose: "Purpose 1",
-//     startDate: "2021-09-01",
-//     startTime: "10:00 AM",
-//     finishDate: "2021-09-01",
-//     finishTime: "12:00 PM",
-//     status: "Completed",
-//   },
-//   {
-//     slno: 3,
-//     date: "2021-09-01",
-//     projectName: "Project 2",
-//     services: "Service 3",
-//     purpose: "Purpose 3",
-//     startDate: "2021-09-01",
-//     startTime: "10:00 AM",
-//     finishDate: "2021-09-01",
-//     finishTime: "12:00 PM",
-//     status: "Ongoing",
-//   },
-// ];
-
 export default function Analytics() {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(5); // Items per page

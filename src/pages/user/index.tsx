@@ -29,30 +29,41 @@ import CustomLoader from "@/components/ui/custom-loader";
 const User = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const projectName = searchParams.get("projectName") || ""; // Reading from URL
-  const serviceName = searchParams.get("services") || ""; // Reading from URL
+  const [projectSearch, setProjectSearch] = useState(
+    searchParams.get("projectName") || ""
+  );
+  const [serviceSearch, setServiceSearch] = useState(
+    searchParams.get("services") || ""
+  );
+  const [fromDateSearch, setFromDateSearch] = useState<Date | null>(
+    searchParams.get("fromDate")
+      ? new Date(searchParams.get("fromDate")!)
+      : null
+  );
+  const [toDateSearch, setToDateSearch] = useState<Date | null>(
+    searchParams.get("toDate") ? new Date(searchParams.get("toDate")!) : null
+  );
+
   const sortBy = searchParams.get("sortBy")
     ? [searchParams.get("sortBy")!]
     : [];
   const [isOpened, setIsOpened] = useState(false);
   const currentPage = Number(searchParams.get("page")) || 1;
-  const [limit, setLimit] = useState(10); // Items per page
+  const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
-  const fromDate = searchParams.get("fromDate") || "";
-  const toDate = searchParams.get("toDate") || "";
-  // const [paginationLoading, setPaginationLoading] = useState(false);
 
+  // API Query with Search Filters
   const {
     data: tasksData,
     isLoading: tasksLoading,
-    isSuccess: tasksSuccess,
-    isError: tasksIsError,
     isFetching,
+    isError: tasksIsError,
+    isSuccess: tasksSuccess,
   } = useGetTaskByUserIDQuery({
-    toDate: toDate,
-    fromDate: fromDate,
-    projectName,
-    serviceName,
+    toDate: searchParams.get("toDate") || "",
+    fromDate: searchParams.get("fromDate") || "",
+    projectName: searchParams.get("projectName") || "",
+    serviceName: searchParams.get("services") || "",
     page: currentPage,
     limit,
     sortBy,
@@ -146,13 +157,64 @@ const User = () => {
     router.push(`?${params.toString()}`);
   };
 
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      const params = new URLSearchParams(searchParams);
+      if (projectSearch) {
+        params.set("projectName", projectSearch);
+      } else {
+        params.delete("projectName");
+      }
+      router.push(`?${params.toString()}`);
+    }, 1250);
+    return () => clearTimeout(delay);
+  }, [projectSearch]);
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      const params = new URLSearchParams(searchParams);
+      if (serviceSearch) {
+        params.set("services", serviceSearch);
+      } else {
+        params.delete("services");
+      }
+      router.push(`?${params.toString()}`);
+    }, 1250);
+    return () => clearTimeout(delay);
+  }, [serviceSearch]);
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      const params = new URLSearchParams(searchParams);
+      if (fromDateSearch) {
+        params.set("fromDate", format(new Date(fromDateSearch), "yyyy-MM-dd"));
+      } else {
+        params.delete("fromDate");
+      }
+      router.push(`?${params.toString()}`);
+    }, 1250);
+    return () => clearTimeout(delay);
+  }, [fromDateSearch]);
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      const params = new URLSearchParams(searchParams);
+      if (toDateSearch) {
+        params.set("toDate", format(new Date(toDateSearch), "yyyy-MM-dd"));
+      } else {
+        params.delete("toDate");
+      }
+      router.push(`?${params.toString()}`);
+    }, 1250);
+    return () => clearTimeout(delay);
+  }, [toDateSearch]);
   const columns = getColumns(handleSortClick); // Pass the function here
 
   const formattedTasks = transformTasks(tasksData, limit);
 
   const userName = useSelector((state: RootState) => state.userInfo.name);
 
-  console.log("username ", userName);
+  // console.log("username ", userName);
 
   return (
     <div className="container  mx-auto min-h-screen w-full py-10">
@@ -201,25 +263,25 @@ const User = () => {
           <div className="flex justify-between items-center gap-4">
             <Input
               placeholder="Filter by Project Names..."
-              onChange={handleProjectChange}
-              value={projectName}
-              className="w-full border  border-teal-shade"
+              onChange={(e) => setProjectSearch(e.target.value)}
+              value={projectSearch}
+              className="w-full border border-teal-shade"
             />
             <Input
-              placeholder="Filter by Services ..."
-              onChange={handleServiceChange}
-              value={serviceName}
-              className="w-full border  border-teal-shade"
+              placeholder="Filter by Services..."
+              onChange={(e) => setServiceSearch(e.target.value)}
+              value={serviceSearch}
+              className="w-full border border-teal-shade"
             />
             <DatePicker
               placeholder="Pick From Date"
-              value={fromDate ? new Date(fromDate) : null}
-              onChange={(date) => handleFromDateChange(date)}
+              value={fromDateSearch}
+              onChange={(date) => setFromDateSearch(date || null)}
             />
             <DatePicker
               placeholder="Pick To Date"
-              value={toDate ? new Date(toDate) : null}
-              onChange={(date) => handleDateSelection(date)}
+              value={toDateSearch}
+              onChange={(date) => setToDateSearch(date || null)}
             />
           </div>
         </div>
