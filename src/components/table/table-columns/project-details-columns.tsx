@@ -6,6 +6,7 @@ import { format } from "date-fns";
 export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: "user.name",
+    id: "Username",
     header: "Username",
   },
   {
