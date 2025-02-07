@@ -1,6 +1,8 @@
 import {
   Calendar,
   Clock,
+  Clock10Icon,
+  Clock12Icon,
   DollarSign,
   Globe,
   LayoutDashboard,
@@ -10,7 +12,6 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/table/project-details-data-table";
 import { columns } from "@/components/table/table-columns/project-details-columns";
 import { StatCard } from "@/components/ui/stat-card";
@@ -18,27 +19,18 @@ import { ProgressRing } from "@/components/ui/progress-ring";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetAllProjectsQuery } from "@/store/api/project";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 import { useGetAllProjectTypedescQuery } from "@/store/api/projectTypeDesc";
 import { useGetAllServicesQuery } from "@/store/api/service";
 import { useGetAllTaskQuery } from "@/store/api/tasks";
 import {
-  GetAllTaskResponse,
-  Project,
-  ProjectTypeDesc,
-  Service,
-  Task,
-} from "@/types/types";
+  useGetDurationAnalyticsQuery,
+  useGetDurationPerProjectQuery,
+  useGetNoOfUsersByProjectQuery,
+} from "@/store/api/analytics";
 
 export default function ProjectDetails() {
   const searchParams = useSearchParams();
   const projectName = searchParams.get("projectName") || "";
-  // const [taskData, setTaskData] = useState<Task>({} as Task);
-  // const [projectDetails, setProjectDetails] = useState<Project>({} as Project);
-  // const [projectTypeDesc, setProjectTypeDesc] = useState<ProjectTypeDesc>(
-  //   {} as ProjectTypeDesc
-  // );
-  // const [services, setServices] = useState<Service>({} as Service);
 
   const {
     data: tasksData,
@@ -74,28 +66,23 @@ export default function ProjectDetails() {
     projectName,
   });
 
-  console.log("tasksData", tasksData?.data);
-  console.log("projectData", projectData);
-  console.log("allProjectTypeDesc", allProjectTypeDesc);
-  console.log("servicesData", servicesData);
+  const {
+    data: tasksDurationData,
+    isLoading: isDurationLoading,
+    isError: durationError,
+  } = useGetDurationAnalyticsQuery({
+    projectName,
+  });
 
-  // useEffect(() => {
-  //   if (tasksData) {
-  //     setTaskData(tasksData.data?.tasks);
-  //   }
-  // }, [tasksData]);
+  const {
+    data: noOfUsersData,
+    isLoading: isUsersLoading,
+    isError: usersError,
+  } = useGetNoOfUsersByProjectQuery({
+    projectName,
+  });
 
-  // useEffect(() => {
-  //   if (projectData) {
-  //     setProjectDetails(projectData.data.projects);
-  //   }
-  // }, [projectData]);
-
-  // useEffect(() => {
-  //   if (allProjectTypeDesc) {
-  //     setProjectTypeDesc(allProjectTypeDesc.data.response);
-  //   }
-  // }, [allProjectTypeDesc]);
+  console.log(noOfUsersData);
 
   return (
     <div className="bg-gradient-to-b from-background to-muted/20">
@@ -137,7 +124,7 @@ export default function ProjectDetails() {
           />
           <StatCard
             title="Team Members"
-            value="12"
+            value={`${noOfUsersData?.data?.totalUsers || "0"}`}
             icon={<Users className="h-4 w-4" />}
             description="Active contributors"
           />
@@ -149,12 +136,39 @@ export default function ProjectDetails() {
             icon={<Calendar className="h-4 w-4" />}
             description="Estimated Duration"
           />
-          {/* <StatCard
-            title="Completion"
-            value="68%"
+          <StatCard
+            title="Project Deadline"
+            value={`${
+              tasksDurationData?.data.project.remainingDays ?? 0 > 0
+                ? tasksDurationData?.data.project.remainingDays
+                : tasksDurationData?.data.project.exceededDays
+            } Days`}
             icon={<Target className="h-4 w-4" />}
-            description="On track"
-          /> */}
+            description={
+              tasksDurationData?.data.project.remainingDays ?? 0 > 0
+                ? "Remaining"
+                : "Exceeded"
+            }
+            className={
+              tasksDurationData?.data.project.remainingDays ?? 0 > 0
+                ? "text-green-500"
+                : "text-red-500"
+            }
+          />
+          <StatCard
+            title="Project Start Date"
+            value={`${tasksDurationData?.data.project.startDate}`}
+            icon={<Clock10Icon className="h-4 w-4" />}
+            description=""
+            className="text-blue-500"
+          />
+          <StatCard
+            title="Project End Date"
+            value={`${tasksDurationData?.data.project.endDate}`}
+            icon={<Clock12Icon className="h-4 w-4" />}
+            description=""
+            className="text-red-500"
+          />
         </div>
 
         {/* Project Details Tabs */}
@@ -169,7 +183,7 @@ export default function ProjectDetails() {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               <Card className="col-span-2">
                 <CardHeader>
-                  <CardTitle>Project Type Description</CardTitle>
+                  <CardTitle>Project Type Description </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">

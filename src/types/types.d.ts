@@ -177,6 +177,28 @@ export type GetAllProjectsQueryParams = {
   sortBy?: string[];
 };
 
+export type getDurationAnalyticsResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    project: {
+      projectName?: string;
+      startDate?: string;
+      endDate?: string;
+      remainingDays?: number;
+      exceededDays?: number;
+    };
+  };
+};
+
+export type getNoOfUsersByProjectResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    totalUsers: number;
+  };
+};
+
 export type GetAllTaskResponse = {
   success: boolean;
   message: string;

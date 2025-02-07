@@ -1,5 +1,7 @@
 import {
   GetAllProjectsQueryParams,
+  getDurationAnalyticsResponse,
+  getNoOfUsersByProjectResponse,
   TasksDuration,
   TasksPerProject,
   TaskStatusResponse,
@@ -78,6 +80,48 @@ export const analyticsApi = createApi({
         return apiError;
       },
     }),
+    getDurationAnalytics: builder.query<
+      getDurationAnalyticsResponse,
+      Partial<GetAllProjectsQueryParams>
+    >({
+      query: ({ projectName }) => ({
+        url: "analytics/project-duration",
+        params: {
+          projectName,
+        },
+      }),
+      providesTags: ["Analytics"],
+      transformResponse: (response) => {
+        const apiResponse = response as getDurationAnalyticsResponse;
+        // toast.success("Duration per project fetched successfully");
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as getDurationAnalyticsResponse;
+        // toast.error("Error fetching duration per project");
+        return apiError;
+      },
+    }),
+    getNoOfUsersByProject: builder.query<
+      getNoOfUsersByProjectResponse,
+      Partial<GetAllProjectsQueryParams>
+    >({
+      query: ({ projectName }) => ({
+        url: "analytics/no-of-user-per-project",
+        params: { projectName },
+      }),
+      providesTags: ["Analytics"],
+      transformResponse: (response) => {
+        const apiResponse = response as getNoOfUsersByProjectResponse;
+        // toast.success("Tasks per status fetched successfully");
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as getNoOfUsersByProjectResponse;
+        // toast.error("Error fetching tasks per status");
+        return apiError;
+      },
+    }),
   }),
 });
 
@@ -85,4 +129,6 @@ export const {
   useGetTasksPerStatusQuery,
   useGetTasksPerProjectQuery,
   useGetDurationPerProjectQuery,
+  useGetDurationAnalyticsQuery,
+  useGetNoOfUsersByProjectQuery,
 } = analyticsApi;
