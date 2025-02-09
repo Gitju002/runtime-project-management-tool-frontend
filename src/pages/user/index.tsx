@@ -25,6 +25,8 @@ import { useRouter } from "next/router";
 import { useSearchParams } from "next/navigation";
 import { DatePicker } from "@/components/ui/date-picker";
 import CustomLoader from "@/components/ui/custom-loader";
+import { DataTableSkeleton } from "@/components/skeleton/data-table-skeleton";
+import { AnalyticsCardsSkeleton } from "@/components/skeleton/analytics-card-skeleton";
 
 const User = () => {
   const router = useRouter();
@@ -166,7 +168,7 @@ const User = () => {
         params.delete("projectName");
       }
       router.push(`?${params.toString()}`);
-    }, 1250);
+    }, 500);
     return () => clearTimeout(delay);
   }, [projectSearch]);
 
@@ -244,9 +246,15 @@ const User = () => {
         </Dialog>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2 gap-2 ">
-        <TaskCompletedComponent userName={userName} />
-        <PieChartComponent userName={userName} />
-        <BarChartComponent userName={userName} />
+        {tasksLoading || isFetching ? (
+          <AnalyticsCardsSkeleton />
+        ) : (
+          <>
+            <TaskCompletedComponent userName={userName} />
+            <PieChartComponent userName={userName} />
+            <BarChartComponent userName={userName} />
+          </>
+        )}
       </div>
       <div className="grid grid-cols-1 gap-2">
         <div className="flex justify-between items-center mb-6">
@@ -285,34 +293,19 @@ const User = () => {
             />
           </div>
         </div>
-        {tasksLoading || isFetching ? (
-          <div className="flex justify-center items-center h-96">
-            <CustomLoader width={"w-16 md:w-20"} height={"h-16 md:h-20"} />
-          </div>
-        ) : tasksIsError ? (
-          <div className="flex flex-col items-center justify-center h-96">
-            <img
-              src="/images/missing.png"
-              alt="No projects found"
-              className="w-36 h-36 mb-4"
-            />
-            <p className="text-lg font-semibold text-gray-600">
-              No tasks found.
-            </p>
-            <p className="text-sm text-gray-500">
-              Please verify the search criteria and try again.
-            </p>
-          </div>
-        ) : tasksSuccess ? (
-          <>
-            <DataTable columns={columns} data={formattedTasks} />
-            <CustomPagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
-          </>
-        ) : null}
+
+        <>
+          <DataTable
+            isLoading={tasksLoading || isFetching}
+            columns={columns}
+            data={tasksIsError ? [] : formattedTasks}
+          />
+          <CustomPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
       </div>
     </div>
   );
