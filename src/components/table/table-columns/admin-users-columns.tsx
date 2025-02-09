@@ -1,24 +1,34 @@
-"use client";
-
 import type { ColumnDef } from "@tanstack/react-table";
-import { ExternalUser, User } from "@/types/types";
-import { Button } from "@/components/ui/button";
-
+import { ExternalUser } from "@/types/types";
 import { useRouter } from "next/router";
 import { useSearchParams } from "next/navigation";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip"; // Import ShadCN Tooltip components
 
 export const UserAnalytics = ({ userName }: { userName: string }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+
   const handleClick = () => {
     const params = new URLSearchParams(searchParams);
     params.set("userName", userName);
     router.push(`/admin/analytics?${params.toString()}`);
   };
+
   return (
-    <div className="cursor-pointer" onClick={handleClick}>
-      {userName}
-    </div>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div className="cursor-pointer hover:underline" onClick={handleClick}>
+          {userName}
+        </div>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Click to view analytics</p>
+      </TooltipContent>
+    </Tooltip>
   );
 };
 

@@ -7,6 +7,11 @@ import { Button } from "@/components/ui/button";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 const ExpandedComponent = ({ data }: { data: string }) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
@@ -33,16 +38,25 @@ const ExpandedComponent = ({ data }: { data: string }) => {
 export const ProjectDetails = ({ projectName }: { projectName: string }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+
   const handleClick = () => {
     const params = new URLSearchParams(searchParams);
     params.delete("page");
     params.set("projectName", projectName);
     router.push(`/admin/projects/project-details?${params.toString()}`);
   };
+
   return (
-    <div className="cursor-pointer" onClick={handleClick}>
-      {projectName}
-    </div>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div className="cursor-pointer  hover:underline" onClick={handleClick}>
+          {projectName}
+        </div>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Click to view Project Details</p>
+      </TooltipContent>
+    </Tooltip>
   );
 };
 

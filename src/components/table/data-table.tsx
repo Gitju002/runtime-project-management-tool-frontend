@@ -131,7 +131,19 @@ export function DataTable<TData, TValue>({
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    No results.
+                    <div className="flex flex-col items-center justify-center h-96">
+                      <img
+                        src="/images/missing.png"
+                        alt="No projects found"
+                        className="w-36 h-36 mb-4"
+                      />
+                      <p className="text-lg font-semibold text-gray-600">
+                        No projects found.
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        Please verify the search criteria and try again.
+                      </p>
+                    </div>
                   </TableCell>
                 </TableRow>
               )}

@@ -16,7 +16,6 @@ import ProjectForm from "@/pages/admin/projects/_components/project-form";
 import { useGetAllProjectsQuery } from "@/store/api/project";
 import { CustomPagination } from "@/components/ui/custom-pagination";
 import { Input } from "@/components/ui/input";
-import CustomLoader from "@/components/ui/custom-loader";
 import { DatePicker } from "@/components/ui/date-picker";
 import { format } from "date-fns";
 
@@ -38,7 +37,7 @@ export default function Projects() {
     data: projectData,
     isLoading,
     isFetching,
-    error,
+    isError,
   } = useGetAllProjectsQuery({
     projectName: searchParams.get("projectName") || "",
     fromDate: searchParams.get("fromDate") || "",
@@ -160,36 +159,18 @@ export default function Projects() {
           />
         </div>
 
-        {isLoading || isFetching ? (
-          <div className="flex justify-center items-center h-96">
-            <CustomLoader width={"w-16 md:w-20"} height={"h-16 md:h-20"} />
-          </div>
-        ) : error ? (
-          <div className="flex flex-col items-center justify-center h-96">
-            <img
-              src="/images/missing.png"
-              alt="No projects found"
-              className="w-36 h-36 mb-4"
-            />
-            <p className="text-lg font-semibold text-gray-600">
-              No projects found.
-            </p>
-            <p className="text-sm text-gray-500">
-              Please verify the search criteria and try again.
-            </p>
-          </div>
-        ) : projectData?.data?.projects?.length ? (
-          <>
-            <DataTable columns={columns} data={projectData?.data.projects} />
-            <CustomPagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
-          </>
-        ) : (
-          <div>No data found</div>
-        )}
+        <>
+          <DataTable
+            columns={columns}
+            isLoading={isLoading || isFetching}
+            data={isError ? [] : projectData?.data?.projects || []}
+          />
+          <CustomPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
       </div>
     </div>
   );

@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { DataTable } from "@/components/table/data-table";
 import { columns } from "../../../components/table/table-columns/admin-users-columns";
 import { useGetAllUsersQuery } from "@/store/api/user";
-import { motion } from "framer-motion";
 import { CustomPagination } from "@/components/ui/custom-pagination";
 import { Input } from "@/components/ui/input";
 
@@ -21,7 +20,7 @@ export default function Users() {
     data: userData,
     isLoading,
     isFetching,
-    error,
+    isError,
   } = useGetAllUsersQuery({
     userName: searchParams.get("userName") || "",
     page: currentPage,
@@ -70,44 +69,18 @@ export default function Users() {
           />
         </div>
       </div>
-
-      {isLoading || isFetching ? (
-        <div className="flex justify-center items-center h-96">
-          <motion.div
-            animate={{ opacity: [1, 0.5, 1], rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity }}
-          >
-            <img
-              src="/images/hourglass.png"
-              alt="loading..."
-              className="w-14 h-14 md:w-20 md:h-20"
-            />
-          </motion.div>
-        </div>
-      ) : error ? (
-        <div className="flex flex-col items-center justify-center h-96">
-          <img
-            src="/images/missing.png"
-            alt="No users found"
-            className="w-36 h-36 mb-4"
-          />
-          <p className="text-lg font-semibold text-gray-600">No users found.</p>
-          <p className="text-sm text-gray-500">
-            Please check the search criteria and try again.
-          </p>
-        </div>
-      ) : userData?.data?.users?.length ? (
-        <>
-          <DataTable columns={columns} data={userData?.data?.users || []} />
-          <CustomPagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-        </>
-      ) : (
-        <div>No data found</div>
-      )}
+      <>
+        <DataTable
+          columns={columns}
+          isLoading={isLoading || isFetching}
+          data={isError ? [] : userData?.data?.users || []}
+        />
+        <CustomPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </>
     </div>
   );
 }

@@ -10,6 +10,7 @@ import { useGetTaskByUserIDQuery } from "@/store/api/tasks";
 import { transformTasks } from "@/utils/tasksFormatting";
 import { useGetUsersListQuery } from "@/store/api/user";
 import { useSearchParams } from "next/navigation";
+import { AnalyticsCardsSkeleton } from "@/components/skeleton/analytics-card-skeleton";
 
 export default function Analytics() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,6 +35,7 @@ export default function Analytics() {
     isLoading: tasksLoading,
     isSuccess: tasksSuccess,
     isError: tasksIsError,
+    isFetching,
   } = useGetTaskByUserIDQuery({
     page: currentPage,
     limit,
@@ -85,12 +87,16 @@ export default function Analytics() {
             />
           </div> */}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-          <TaskCompletedComponent userName={selectedUser} />
-          <PieChartComponent userName={selectedUser} />
-          <BarChartComponent userName={selectedUser} />
-          {/* <div className="col-span-2">
-          </div> */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2 gap-2 ">
+          {tasksLoading || isFetching ? (
+            <AnalyticsCardsSkeleton />
+          ) : (
+            <>
+              <TaskCompletedComponent userName={selectedUser} />
+              <PieChartComponent userName={selectedUser} />
+              <BarChartComponent userName={selectedUser} />
+            </>
+          )}
         </div>
         <h1 className="text-sm md:text-base lg:text-xl font-bold">
           Daily Update Task Table of{" "}
@@ -98,7 +104,11 @@ export default function Analytics() {
             {users.find((user) => user.value === selectedUser)?.label}
           </span>
         </h1>
-        <DataTable columns={columns} data={formattedTasks} />
+        <DataTable
+          columns={columns}
+          isLoading={tasksLoading || isFetching}
+          data={formattedTasks}
+        />
       </div>
     </div>
   );

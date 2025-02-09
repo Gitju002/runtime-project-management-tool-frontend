@@ -24,17 +24,17 @@ export function DataTableSkeleton() {
             <TableRow>
               {Array.from({ length: 10 }).map((_, index) => (
                 <TableHead key={index}>
-                  <Skeleton className="h-4 w-[100px]" />
+                  <Skeleton className="h-6 w-[100px]" />
                 </TableHead>
               ))}
             </TableRow>
           </TableHeader>
           <TableBody>
-            {Array.from({ length: 5 }).map((_, rowIndex) => (
+            {Array.from({ length: 10 }).map((_, rowIndex) => (
               <TableRow key={rowIndex} className="text-nowrap">
                 {Array.from({ length: 10 }).map((_, cellIndex) => (
                   <TableCell key={cellIndex}>
-                    <Skeleton className="h-4 w-[100px]" />
+                    <Skeleton className="h-6 w-[100px]" />
                   </TableCell>
                 ))}
               </TableRow>

@@ -16,7 +16,6 @@ import { CustomPagination } from "@/components/ui/custom-pagination";
 import { Input } from "@/components/ui/input";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
-import CustomLoader from "@/components/ui/custom-loader";
 
 export type Service = {
   id: string;
@@ -45,8 +44,9 @@ export default function Services() {
 
   const {
     data: servicesData,
+    isFetching,
     isLoading,
-    error,
+    isError,
   } = useGetAllServicesQuery({
     projectName,
     serviceName,
@@ -139,51 +139,18 @@ export default function Services() {
             value={serviceSearch}
           />
         </div>
-
-        {
-          // Loading
-          isLoading || paginationLoading ? (
-            <div className="flex justify-center items-center h-96">
-              <motion.div
-                animate={{ opacity: [1, 0.5, 1], rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity }}
-              >
-                <img
-                  src="/images/hourglass.png"
-                  alt="loading..."
-                  className="w-14 h-14 md:w-20 md:h-20"
-                />
-              </motion.div>
-            </div>
-          ) : // Error
-          error ? (
-            <div className="flex flex-col items-center justify-center h-96">
-              <img
-                src="/images/missing.png"
-                alt="No projects found"
-                className="w-36 h-36 mb-4"
-              />
-              <p className="text-lg font-semibold text-gray-600">
-                No projects found.
-              </p>
-              <p className="text-sm text-gray-500">
-                Please verify the search criteria and try again.
-              </p>
-            </div>
-          ) : // Success
-          servicesData?.data?.services?.length ? (
-            <>
-              <DataTable columns={columns} data={formattedServices || []} />
-              <CustomPagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
-            </>
-          ) : (
-            <div>No data found</div>
-          )
-        }
+        <>
+          <DataTable
+            columns={columns}
+            isLoading={isLoading || isFetching || paginationLoading}
+            data={isError ? [] : formattedServices || []}
+          />
+          <CustomPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
       </div>
     </div>
   );
