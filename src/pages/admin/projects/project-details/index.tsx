@@ -121,12 +121,14 @@ export default function ProjectDetails() {
             value={`$${projectData?.data?.projects[0].cost || "00,000"}`}
             icon={<DollarSign className="h-4 w-4" />}
             description="Estimated budget of project"
+            isLoading={isProjectLoading}
           />
           <StatCard
             title="Team Members"
             value={`${noOfUsersData?.data?.totalUsers || "0"}`}
             icon={<Users className="h-4 w-4" />}
             description="Active contributors"
+            isLoading={isProjectLoading}
           />
           <StatCard
             title="Project Duration"
@@ -135,6 +137,7 @@ export default function ProjectDetails() {
             } Days`}
             icon={<Calendar className="h-4 w-4" />}
             description="Estimated Duration"
+            isLoading={isProjectLoading}
           />
           <StatCard
             title="Project Deadline"
@@ -154,6 +157,7 @@ export default function ProjectDetails() {
                 ? "text-green-500"
                 : "text-red-500"
             }
+            isLoading={isProjectLoading}
           />
           <StatCard
             title="Project Start Date"
@@ -161,6 +165,7 @@ export default function ProjectDetails() {
             icon={<Clock10Icon className="h-4 w-4" />}
             description=""
             className="text-blue-500"
+            isLoading={isProjectLoading}
           />
           <StatCard
             title="Project End Date"
@@ -168,6 +173,7 @@ export default function ProjectDetails() {
             icon={<Clock12Icon className="h-4 w-4" />}
             description=""
             className="text-red-500"
+            isLoading={isProjectLoading}
           />
         </div>
 
