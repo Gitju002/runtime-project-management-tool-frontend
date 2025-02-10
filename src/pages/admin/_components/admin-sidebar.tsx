@@ -85,7 +85,6 @@ export default function AdminSidebar() {
     isLoading: userLoading,
     error: userError,
   } = useGetUserQuery();
-  console.log(userData);
   const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
   useEffect(() => {

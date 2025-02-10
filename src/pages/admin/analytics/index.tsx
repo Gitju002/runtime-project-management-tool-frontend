@@ -17,18 +17,20 @@ export default function Analytics() {
   const [limit, setLimit] = useState(5); // Items per page
   const [totalPages, setTotalPages] = useState(1);
   const [users, setUsers] = useState<{ value: string; label: string }[]>([]);
-  const [selectedUser, setSelectedUser] = useState("");
+  const [selectedUser, setSelectedUser] = useState<string>();
   const searchParams = useSearchParams();
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
     const userName = params.get("userName");
-    setSelectedUser(userName || "");
-  });
+    if (userName) {
+      setSelectedUser(userName);
+    }
+  }, [searchParams]);
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+  // const handlePageChange = (page: number) => {
+  //   setCurrentPage(page);
+  // };
 
   const {
     data: tasksData,
@@ -49,9 +51,9 @@ export default function Analytics() {
     isError: usersIsError,
   } = useGetUsersListQuery();
 
-  const handleNameChange = (name: string) => {
-    setSelectedUser(name);
-  };
+  // const handleNameChange = (name: string) => {
+  //   setSelectedUser(name);
+  // };
 
   useEffect(() => {
     if (tasksData) {
@@ -88,7 +90,7 @@ export default function Analytics() {
           </div> */}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2 gap-2 ">
-          {tasksLoading || isFetching ? (
+          {tasksLoading || isFetching || !selectedUser ? (
             <AnalyticsCardsSkeleton />
           ) : (
             <>

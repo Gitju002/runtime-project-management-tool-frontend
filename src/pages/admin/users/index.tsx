@@ -54,7 +54,7 @@ export default function Users() {
       setTotalPages(userData?.data?.paginationData?.totalPages);
     }
   }, [userData]);
-
+  // console.log(userData?.data?.users);
   return (
     <div className="container mx-auto w-full py-6">
       <div className="grid grid-cols-1 gap-2">
