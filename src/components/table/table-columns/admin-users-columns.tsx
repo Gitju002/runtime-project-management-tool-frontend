@@ -7,6 +7,7 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui/tooltip"; // Import ShadCN Tooltip components
+import Image from "next/image";
 
 export const UserAnalytics = ({ userName }: { userName: string }) => {
   const router = useRouter();
@@ -33,6 +34,19 @@ export const UserAnalytics = ({ userName }: { userName: string }) => {
 };
 
 export const columns: ColumnDef<ExternalUser>[] = [
+  {
+    accessorKey: "profilepic",
+    header: "Profile Pic",
+    cell: ({ row }) => (
+      <Image
+        src={row.original.profilepic}
+        alt={row.original.name}
+        width={40}
+        height={40}
+        className="rounded-full object-cover w-10 h-10"
+      />
+    ),
+  },
   {
     accessorKey: "name",
     header: "User Name",
