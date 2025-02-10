@@ -93,6 +93,8 @@ export default function AdminSidebar() {
     }, 2000);
   }, []);
 
+  console.log(userData);
+
   const handleLogout = () => {
     logout();
     dispatch(clearUserInfo());

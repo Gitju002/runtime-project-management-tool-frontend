@@ -92,6 +92,7 @@ export type Task = {
 export type User = {
   _id: string;
   externalId: number;
+  date_of_joining: string;
   roleId: number;
   roleName: string;
   officeId: number;
