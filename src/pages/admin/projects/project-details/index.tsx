@@ -14,7 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DataTable } from "@/components/table/project-details-data-table";
 import { columns } from "@/components/table/table-columns/project-details-columns";
-import { StatCard } from "@/components/ui/stat-card";
+import { StatCard } from "@/components/ui/project-details-stat-card";
 import { ProgressRing } from "@/components/ui/progress-ring";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetAllProjectsQuery } from "@/store/api/project";
