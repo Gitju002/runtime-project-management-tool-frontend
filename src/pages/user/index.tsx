@@ -104,61 +104,6 @@ const User = () => {
     [searchParams, router]
   );
 
-  const handleProjectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const params = new URLSearchParams(searchParams);
-
-    if (value) {
-      params.delete("page");
-      params.delete("fromDate");
-      params.delete("toDate");
-      params.set("projectName", value);
-    } else {
-      params.delete("projectName");
-    }
-
-    router.push(`?${params.toString()}`);
-  };
-
-  const handleFromDateChange = (date: Date | undefined) => {
-    let params = new URLSearchParams(searchParams);
-    if (!date) {
-      params.delete("fromDate");
-      router.push(`?${params.toString()}`);
-      return;
-    }
-    // add 1 day to the selected date
-    const formattedDate = format(new Date(date), "yyyy-MM-dd");
-    params.set("fromDate", formattedDate);
-    router.push(`?${params.toString()}`);
-  };
-
-  const handleDateSelection = (date: Date | undefined) => {
-    let params = new URLSearchParams(searchParams);
-    if (!date) {
-      params.delete("toDate");
-      router.push(`?${params.toString()}`);
-      return;
-    }
-    const formattedDate = format(new Date(date), "yyyy-MM-dd");
-    params.set("toDate", formattedDate);
-    router.push(`?${params.toString()}`);
-  };
-
-  const handleServiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const params = new URLSearchParams(searchParams);
-
-    if (value) {
-      params.delete("page");
-      params.set("services", value);
-    } else {
-      params.delete("services");
-    }
-
-    router.push(`?${params.toString()}`);
-  };
-
   useEffect(() => {
     const delay = setTimeout(() => {
       const params = new URLSearchParams(searchParams);
