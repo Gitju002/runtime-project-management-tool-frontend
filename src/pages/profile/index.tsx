@@ -108,7 +108,7 @@ export default function ProfilePage() {
             <ProfileInfo
               icon={MapPin}
               label="Office"
-              value={userData?.data?.officeName ?? "N/A"}
+              value={userData?.data?.officeName || "N/A"}
               loading={loading}
               bgColor="bg-yellow-100"
               iconColor="text-yellow-600"
@@ -127,7 +127,7 @@ export default function ProfilePage() {
             <ProfileInfo
               icon={Briefcase}
               label="Department"
-              value={userData?.data?.departmentName ?? null}
+              value={userData?.data?.departmentName || "N/A"}
               loading={loading}
               bgColor="bg-green-100"
               iconColor="text-green-600"
@@ -135,7 +135,7 @@ export default function ProfilePage() {
             <ProfileInfo
               icon={Briefcase}
               label="Position"
-              value={userData?.data?.designation ?? null}
+              value={userData?.data?.designation || "N/A"}
               loading={loading}
               bgColor="bg-orange-100"
               iconColor="text-orange-600"
@@ -143,7 +143,7 @@ export default function ProfilePage() {
             <ProfileInfo
               icon={Calendar}
               label="Join Date"
-              value={userData?.data?.date_of_joining ?? null}
+              value={userData?.data?.date_of_joining || "N/A"}
               loading={loading}
               bgColor="bg-teal-100"
               iconColor="text-teal-600"
