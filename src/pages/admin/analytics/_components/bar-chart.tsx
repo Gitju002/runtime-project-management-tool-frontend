@@ -82,11 +82,10 @@ export default function BarChartComponent({ userName }: { userName: string }) {
         <div className="flex gap-2 font-medium leading-none">
           The most time-consuming project is{" "}
           <span className="text-red-500 capitalize">
-            {
+            {chartData.length > 0 &&
               chartData.reduce((acc, curr) =>
                 curr.duration > acc.duration ? curr : acc
-              ).projectName
-            }
+              ).projectName}
           </span>
           <TrendingUp className="h-4 w-4 text-red-500" />
         </div>
