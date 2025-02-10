@@ -16,7 +16,7 @@ import { loginFormSchema } from "@/schema";
 import { ArrowRight } from "lucide-react";
 import { useLoginMutation } from "@/store/api/auth";
 import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setCredentials } from "@/store/features/userInfo";
 import { Loader2 } from "lucide-react";
 export default function LoginForm() {

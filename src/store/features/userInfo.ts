@@ -25,7 +25,9 @@ const userInfoSlice = createSlice({
       state.name = action.payload.name;
       state.token = action.payload.token;
       state.role = action.payload.role;
-      setCookie("auth_token", action.payload.token);
+      setCookie("auth_token", action.payload.token, {
+        maxAge: 24 * 60 * 60,
+      });
     },
     clearUserInfo(state) {
       state.token = null;
