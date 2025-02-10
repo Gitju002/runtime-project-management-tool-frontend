@@ -105,7 +105,7 @@ export type User = {
   dob: string;
   gender: number;
   mobile: number;
-  profilePic: string;
+  profilepic: string;
   createdAt: string;
   updatedAt: string;
   __v: number;

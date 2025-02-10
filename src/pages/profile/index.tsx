@@ -9,6 +9,7 @@ import { Mail, Phone, MapPin, Briefcase, Calendar, Award } from "lucide-react";
 import { useGetUserQuery } from "@/store/api/user";
 import { useLogoutMutation } from "@/store/api/auth";
 import { useDispatch } from "react-redux";
+import { log } from "console";
 
 export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
@@ -29,6 +30,8 @@ export default function ProfilePage() {
     }, 2000);
   }, []);
 
+  console.log("userData", userData?.data.profilepic);
+
   return (
     <div className="container mx-auto w-full py-6 space-y-4">
       {/* Hero Section */}
@@ -42,7 +45,7 @@ export default function ProfilePage() {
               <Avatar className="w-48 h-48 border-4 bg-white border-white/50">
                 <AvatarImage
                   className=" object-contain"
-                  src={userData?.data?.profilePic ?? "/images/default-user.png"}
+                  src={userData?.data?.profilepic ?? "/images/default-user.png"}
                   alt={userData?.data?.name}
                 />
                 <AvatarFallback>{userData?.data?.name}</AvatarFallback>
@@ -60,7 +63,7 @@ export default function ProfilePage() {
                 {loading ? (
                   <Skeleton className="h-8 w-48" />
                 ) : (
-                  userData?.data?.designation
+                  userData?.data?.roleName || "N/A"
                 )}
               </p>
               <Button
@@ -124,7 +127,7 @@ export default function ProfilePage() {
             <ProfileInfo
               icon={Briefcase}
               label="Department"
-              value={userData?.data?.designation ?? null}
+              value={userData?.data?.departmentName ?? null}
               loading={loading}
               bgColor="bg-green-100"
               iconColor="text-green-600"

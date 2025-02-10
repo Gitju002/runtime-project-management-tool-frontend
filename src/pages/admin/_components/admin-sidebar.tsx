@@ -101,6 +101,9 @@ export default function AdminSidebar() {
     router.push("/login");
   };
 
+  const handleGetProfile = () => {
+    router.push("/profile");
+  };
   return (
     <Sidebar variant="floating" collapsible="icon">
       <SidebarContent>
@@ -147,7 +150,7 @@ export default function AdminSidebar() {
                 className="w-[--radix-popper-anchor-width]"
               >
                 <DropdownMenuItem>
-                  <span>Profile</span>
+                  <span onClick={handleGetProfile}>Profile</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout}>
                   <span>Sign out</span>

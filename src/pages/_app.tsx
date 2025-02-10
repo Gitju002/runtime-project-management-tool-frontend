@@ -13,7 +13,7 @@ import UserLogout from "@/components/ui/user-logout";
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const hideSidebarRoutes = ["/user", "/login"];
-  const hideLogoutRoutes = ["/login", "/admin"];
+  const hideLogoutRoutes = ["/login", "/admin", "/profile"];
   const hideThemeToggleRoutes = ["/login"];
   const isAdminRoute = /^\/admin(\/|$)/.test(router.pathname);
   const showSidebar = !hideSidebarRoutes.includes(router.pathname);
