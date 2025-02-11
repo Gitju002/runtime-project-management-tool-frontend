@@ -17,7 +17,8 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useGetTasksPerStatusQuery } from "@/store/api/analytics";
-import { TaskStatus } from "@/types/types";
+import { GetAllTaskResponse, TaskStatus } from "@/types/types";
+import { AnalyticsCardsSkeleton } from "@/components/skeleton/analytics-card-skeleton";
 
 const chart_Data: TaskStatus[] = [
   { status: "Completed", count: 2, fill: "var(--color-Completed)" },
@@ -42,16 +43,19 @@ const chartConfig = {
 
 export default function TaskCompletedComponent({
   userName,
+  taskdata,
 }: {
   userName: string;
+  taskdata: GetAllTaskResponse;
 }) {
   const [chartData, setChartData] = React.useState<TaskStatus[]>(chart_Data);
   const [totalvalue, setTotalValue] = React.useState(50);
   const {
     data: taskAnalyticsData,
-    isError,
-    isLoading,
     isSuccess,
+    isLoading,
+    isFetching,
+    refetch,
   } = useGetTasksPerStatusQuery({
     userName,
   });
@@ -68,7 +72,13 @@ export default function TaskCompletedComponent({
     }
   }, [taskAnalyticsData]);
 
-  return (
+  React.useEffect(() => {
+    refetch();
+  }, [taskdata]);
+
+  return isLoading || isFetching ? (
+    <AnalyticsCardsSkeleton />
+  ) : (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>Task Completion Stats </CardTitle>
@@ -136,17 +146,20 @@ export default function TaskCompletedComponent({
             <div className="flex items-center gap-2 font-medium leading-none">
               <span>
                 <span style={{ color: chartConfig.Initiated.color }}>
-                  {chartData.find((data) => data.status === "Initiated")?.count}{" "}
+                  {chartData.find((data) => data.status === "Initiated")
+                    ?.count || 0}{" "}
                   Initiated
                 </span>
                 ,{" "}
                 <span style={{ color: chartConfig.Ongoing.color }}>
-                  {chartData.find((data) => data.status === "Ongoing")?.count}{" "}
+                  {chartData.find((data) => data.status === "Ongoing")?.count ||
+                    0}{" "}
                   Ongoing
                 </span>{" "}
                 and{" "}
                 <span style={{ color: chartConfig.Completed.color }}>
-                  {chartData.find((data) => data.status === "Completed")?.count}{" "}
+                  {chartData.find((data) => data.status === "Completed")
+                    ?.count || 0}{" "}
                   Completed tasks
                 </span>
               </span>

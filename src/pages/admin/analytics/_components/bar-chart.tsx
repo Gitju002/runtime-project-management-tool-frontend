@@ -17,14 +17,8 @@ import {
 } from "@/components/ui/chart";
 import { useGetDurationPerProjectQuery } from "@/store/api/analytics";
 import { useEffect, useState } from "react";
-const chart_Data = [
-  { projectName: "cosmos", duration: 10 },
-  { projectName: "jaro", duration: 20 },
-  { projectName: "invespy", duration: 15 },
-  { projectName: "academy", duration: 7 },
-  { projectName: "ai", duration: 8 },
-  { projectName: "others", duration: 10 },
-];
+import { GetAllTaskResponse } from "@/types/types";
+import { AnalyticsCardsSkeleton } from "@/components/skeleton/analytics-card-skeleton";
 
 const chartConfig = {
   duration: {
@@ -33,18 +27,34 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export default function BarChartComponent({ userName }: { userName: string }) {
-  const [chartData, setChartData] = useState(chart_Data);
-  const { data, isLoading, isSuccess, isError } = useGetDurationPerProjectQuery(
-    { userName }
-  );
+export default function BarChartComponent({
+  userName,
+  taskdata,
+}: {
+  userName: string;
+  taskdata: GetAllTaskResponse;
+}) {
+  const [chartData, setChartData] = useState<
+    {
+      projectName: string;
+      duration: number;
+    }[]
+  >([]);
+  const { data, isLoading, isSuccess, isError, refetch, isFetching } =
+    useGetDurationPerProjectQuery({ userName });
 
   useEffect(() => {
     if (data) {
       setChartData(data.data.tasks);
     }
   }, [data]);
-  return (
+
+  useEffect(() => {
+    refetch();
+  }, [taskdata]);
+  return isLoading || isFetching ? (
+    <AnalyticsCardsSkeleton />
+  ) : (
     <Card>
       <CardHeader className="flex items-center">
         <CardTitle>Project Duration Analysis</CardTitle>
