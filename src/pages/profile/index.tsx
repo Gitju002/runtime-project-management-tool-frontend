@@ -100,7 +100,7 @@ export default function ProfilePage() {
             <ProfileInfo
               icon={Mail}
               label="Email"
-              value="john.doe@example.com"
+              value={userData?.data.email || "N/A"}
               loading={loading}
               bgColor="bg-red-100"
               iconColor="text-red-600"

@@ -98,7 +98,7 @@ export default function ProjectDetails() {
             ) : (
               <>
                 <h1 className="text-4xl font-bold tracking-tight">
-                  <span className="text-lime-shade">
+                  <span className="text-teal-shade dark:text-lime-shade">
                     {projectName || "Project Name"}
                   </span>
                 </h1>

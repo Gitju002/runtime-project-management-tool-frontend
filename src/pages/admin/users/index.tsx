@@ -103,8 +103,7 @@ export default function Users() {
                 className="flex flex-col justify-between overflow-hidden transition-all hover:shadow-xl dark:hover:shadow-blue-800/20 hover:scale-105 "
               >
                 <div>
-                  {" "}
-                  <CardHeader className="border-b bg-gradient-to-br from-slate-50 via-gray-200/40 to-gray-300 dark:from-blue-700/40 dark:via-slate-900/80 dark:to-blue-950 py-6">
+                  <CardHeader className="border-b bg-gradient-to-br from-teal-shade/50 via-teal-shade/20 to-teal-shade/10 dark:from-teal-shade/60 dark:via-slate-900/80 dark:to-teal-shade/40 py-6">
                     <div className="flex items-center gap-4">
                       <Image
                         height={64}
@@ -114,7 +113,9 @@ export default function Users() {
                         className="aspect-square rounded-full border-4 border-white object-cover shadow-md"
                       />
                       <div>
-                        <CardTitle className="text-xl ">{user.name}</CardTitle>
+                        <CardTitle className="text-xl dark:text-teal-100 text-teal-900 ">
+                          {user.name}
+                        </CardTitle>
                         <Badge variant="secondary" className="mt-1  shadow-md">
                           {user.role_name || "N/A"}
                         </Badge>
