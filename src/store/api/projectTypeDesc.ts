@@ -19,9 +19,9 @@ export const project_TD_Api = createApi({
       GetAllTypeDescResponse,
       GetAllProjectsQueryParams
     >({
-      query: ({ projectName, limit, page } = {}) => ({
+      query: ({ projectName, location, limit, page } = {}) => ({
         url: "projectTypeDesc/all",
-        params: { projectName, limit, page },
+        params: { projectName, location, limit, page },
       }),
       transformResponse: (response) => {
         const apiResponse = response as GetAllTypeDescResponse;

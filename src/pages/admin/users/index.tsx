@@ -87,7 +87,7 @@ export default function Users() {
             placeholder="Search Users..."
             onChange={(e) => setUserSearch(e.target.value)}
             value={userSearch}
-            className="w-full"
+            className="w-full dark:bg-slate-800"
           />
         </div>
       </div>

@@ -23,6 +23,7 @@ export default function TypeDescription() {
   const [open, setOpen] = useState(false);
 
   const [projectSearch, setProjectSearch] = useState(""); // Debounced search state
+  const [locationSearch, setLocationSearch] = useState(""); // Debounced search state
   const currentPage = Number(searchParams.get("page")) || 1;
   const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
@@ -34,6 +35,7 @@ export default function TypeDescription() {
     isError,
   } = useGetAllProjectTypedescQuery({
     projectName: searchParams.get("projectName") || "",
+    location: searchParams.get("location") || "",
     page: currentPage,
     limit,
   });
@@ -49,10 +51,25 @@ export default function TypeDescription() {
         params.delete("projectName");
       }
       router.push(`?${params.toString()}`);
-    }, 1250); // 3-second debounce
+    }, 500); // 3-second debounce
 
     return () => clearTimeout(delay);
   }, [projectSearch]);
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      const params = new URLSearchParams(searchParams);
+      if (locationSearch) {
+        params.delete("page"); // Reset page when searching
+        params.set("location", locationSearch);
+      } else {
+        params.delete("location");
+      }
+      router.push(`?${params.toString()}`);
+    }, 500); // 3-second debounce
+
+    return () => clearTimeout(delay);
+  }, [locationSearch]);
 
   const handlePageChange = (page: number) => {
     const params = new URLSearchParams(searchParams);
@@ -95,11 +112,18 @@ export default function TypeDescription() {
             </DialogContent>
           </Dialog>
         </div>
-        <div>
+        <div className=" flex justify-between gap-6 items-center mb-6">
           <Input
             placeholder="Search by Project Name..."
             onChange={(e) => setProjectSearch(e.target.value)}
             value={projectSearch}
+            className="dark:bg-slate-800"
+          />
+          <Input
+            placeholder="Search by Location..."
+            onChange={(e) => setLocationSearch(e.target.value)}
+            value={locationSearch}
+            className="dark:bg-slate-800"
           />
         </div>
         <>

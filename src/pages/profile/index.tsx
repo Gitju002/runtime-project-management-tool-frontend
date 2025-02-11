@@ -10,6 +10,7 @@ import { useGetUserQuery } from "@/store/api/user";
 import { useLogoutMutation } from "@/store/api/auth";
 import { useDispatch } from "react-redux";
 import { log } from "console";
+import Image from "next/image";
 
 export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
@@ -35,14 +36,25 @@ export default function ProfilePage() {
   return (
     <div className="container mx-auto w-full py-6 space-y-4">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-tr from-blue-500 to-blue-700 text-white rounded-3xl overflow-hidden">
+      <div className="relative transition-all duration-200 border border-[#12c6e2]  bg-transparent text-white rounded-3xl profile-bg overflow-hidden">
+        <div className="absolute  bottom-2 right-4">
+          <Image
+            sizes="100vw"
+            height={0}
+            width={0}
+            src="/images/logo-bg.svg"
+            alt=""
+            className="object-cover w-32 lg:w-60 object-center mix-blend-overlay"
+          />
+        </div>
         <div className="absolute inset-0 bg-black opacity-20"></div>
+
         <div className="relative z-10 px-8 py-16 sm:px-16 sm:py-24">
           <div className="flex flex-col sm:flex-row items-center gap-8">
             {loading ? (
               <Skeleton className="w-48 h-48 rounded-full" />
             ) : (
-              <Avatar className="w-48 h-48 border-4 bg-white border-white/50">
+              <Avatar className="w-48 h-48 border-4 shadow-xl bg-white border-white/50">
                 <AvatarImage
                   className=" object-contain"
                   src={userData?.data?.profilepic ?? "/images/default-user.png"}
@@ -52,20 +64,20 @@ export default function ProfilePage() {
               </Avatar>
             )}
             <div className="text-center sm:text-left">
-              <h1 className="text-4xl sm:text-5xl font-bold mb-2">
+              <h1 className="text-4xl text-lime-shade drop-shadow-md sm:text-5xl font-bold mb-2">
                 {loading ? (
                   <Skeleton className="h-12 w-64" />
                 ) : (
                   userData?.data?.name
                 )}
               </h1>
-              <p className="text-xl sm:text-2xl opacity-90 mb-4">
+              <div className="text-xl font-semibold sm:text-2xl opacity-90 mb-4">
                 {loading ? (
                   <Skeleton className="h-8 w-48" />
                 ) : (
-                  userData?.data?.roleName || "N/A"
+                  <p>{userData?.data?.designation || "N/A"}</p>
                 )}
-              </p>
+              </div>
               <Button
                 variant="outline"
                 className="bg-white/10 hover:bg-white/20 text-white border-white/20"

@@ -146,6 +146,7 @@ export default function Projects() {
             placeholder="Filter by Project Names..."
             onChange={(e) => setProjectSearch(e.target.value)}
             value={projectSearch}
+            className="dark:bg-slate-800"
           />
           <DatePicker
             placeholder="Pick From Date"

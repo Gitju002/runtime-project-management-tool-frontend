@@ -226,13 +226,13 @@ const User = () => {
               placeholder="Filter by Project Names..."
               onChange={(e) => setProjectSearch(e.target.value)}
               value={projectSearch}
-              className="w-full border border-teal-shade"
+              className="w-full border border-teal-shade dark:bg-slate-800"
             />
             <Input
               placeholder="Filter by Services..."
               onChange={(e) => setServiceSearch(e.target.value)}
               value={serviceSearch}
-              className="w-full border border-teal-shade"
+              className="w-full border border-teal-shade dark:bg-slate-800"
             />
             <DatePicker
               placeholder="Pick From Date"

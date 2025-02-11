@@ -291,6 +291,13 @@ body {
   @apply dark:bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950;
 }
 
+.profile-bg {
+  background: url("/images/profile-bg-2.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 .user-card-bg {
   /* @apply dark:bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950; */
 

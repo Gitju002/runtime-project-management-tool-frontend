@@ -174,6 +174,7 @@ export type GetAllProjectsQueryParams = {
   fromDate?: string;
   projectName?: string;
   serviceName?: string;
+  location?: string;
   userName?: string;
   limit?: number;
   page?: number;
