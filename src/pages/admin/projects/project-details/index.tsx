@@ -14,7 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DataTable } from "@/components/table/project-details-data-table";
 import { columns } from "@/components/table/table-columns/project-details-columns";
-import { StatCard } from "@/components/ui/stat-card";
+import { StatCard } from "@/components/ui/project-details-stat-card";
 import { ProgressRing } from "@/components/ui/progress-ring";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetAllProjectsQuery } from "@/store/api/project";
@@ -27,6 +27,9 @@ import {
   useGetDurationPerProjectQuery,
   useGetNoOfUsersByProjectQuery,
 } from "@/store/api/analytics";
+import { OverviewTabSkeleton } from "@/components/skeleton/project-details-overview-skeleton";
+import { ServicesTabSkeleton } from "@/components/skeleton/project-details-services-skeleton";
+import { TitleDescriptionSkeleton } from "@/components/skeleton/project-details-title-desc-skeleton";
 
 export default function ProjectDetails() {
   const searchParams = useSearchParams();
@@ -90,15 +93,21 @@ export default function ProjectDetails() {
         {/* Project Header */}
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="space-y-4">
-            <h1 className="text-4xl font-bold tracking-tight">
-              <span className="text-lime-shade  ">
-                {projectName || "Project Name"}
-              </span>
-            </h1>
-            <p className="text-muted-foreground">
-              {projectData?.data?.projects[0].projectDescription ||
-                "Project Description"}
-            </p>
+            {isProjectLoading ? (
+              <TitleDescriptionSkeleton />
+            ) : (
+              <>
+                <h1 className="text-4xl font-bold tracking-tight">
+                  <span className="text-lime-shade">
+                    {projectName || "Project Name"}
+                  </span>
+                </h1>
+                <p className="text-muted-foreground">
+                  {projectData?.data?.projects[0].projectDescription ||
+                    "Project Description"}
+                </p>
+              </>
+            )}
           </div>
           <div className="flex items-center gap-4">
             <Badge variant="outline" className="text-sm">
@@ -121,12 +130,14 @@ export default function ProjectDetails() {
             value={`$${projectData?.data?.projects[0].cost || "00,000"}`}
             icon={<DollarSign className="h-4 w-4" />}
             description="Estimated budget of project"
+            isLoading={isProjectLoading}
           />
           <StatCard
             title="Team Members"
             value={`${noOfUsersData?.data?.totalUsers || "0"}`}
             icon={<Users className="h-4 w-4" />}
             description="Active contributors"
+            isLoading={isProjectLoading}
           />
           <StatCard
             title="Project Duration"
@@ -135,6 +146,7 @@ export default function ProjectDetails() {
             } Days`}
             icon={<Calendar className="h-4 w-4" />}
             description="Estimated Duration"
+            isLoading={isProjectLoading}
           />
           <StatCard
             title="Project Deadline"
@@ -154,6 +166,7 @@ export default function ProjectDetails() {
                 ? "text-green-500"
                 : "text-red-500"
             }
+            isLoading={isProjectLoading}
           />
           <StatCard
             title="Project Start Date"
@@ -161,6 +174,7 @@ export default function ProjectDetails() {
             icon={<Clock10Icon className="h-4 w-4" />}
             description=""
             className="text-blue-500"
+            isLoading={isProjectLoading}
           />
           <StatCard
             title="Project End Date"
@@ -168,6 +182,7 @@ export default function ProjectDetails() {
             icon={<Clock12Icon className="h-4 w-4" />}
             description=""
             className="text-red-500"
+            isLoading={isProjectLoading}
           />
         </div>
 
@@ -180,86 +195,93 @@ export default function ProjectDetails() {
           </TabsList>
 
           <TabsContent value="overview" className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <Card className="col-span-2">
-                <CardHeader>
-                  <CardTitle>Project Type Description </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    {
-                      allProjectTypeDesc?.data?.response[0]
-                        .projectTypeDescription
-                    }
-                  </p>
-                  <div className="mt-4 grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <p className="text-sm font-medium">Client</p>
-                      <div className="flex items-center gap-2">
-                        <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Users className="h-4 w-4 text-primary" />
-                        </div>
-                        <div>
-                          <p className="font-medium">
-                            {projectData?.data?.projects[0].clientName}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            {projectData?.data?.projects[0].clientEmail}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-sm font-medium">Location</p>
-                      <div className="flex items-center gap-2">
-                        <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Globe className="h-4 w-4 text-primary" />
-                        </div>
-                        <div>
-                          <p className="font-medium">
-                            {allProjectTypeDesc?.data?.response[0].location}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Project Progress</CardTitle>
-                </CardHeader>
-                <CardContent className="flex flex-col items-center justify-center space-y-4">
-                  <ProgressRing progress={68} size={120} className="my-4" />
-                  <div className="text-center">
-                    <p className="text-2xl font-bold">68%</p>
-                    <p className="text-sm text-muted-foreground">
-                      Overall Completion
+            {isProjectLoading || isTypeDescLoading ? (
+              <OverviewTabSkeleton />
+            ) : (
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <Card className="col-span-2">
+                  <CardHeader>
+                    <CardTitle>Project Type Description </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground">
+                      {
+                        allProjectTypeDesc?.data?.response[0]
+                          .projectTypeDescription
+                      }
                     </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+                    <div className="mt-4 grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <p className="text-sm font-medium">Client</p>
+                        <div className="flex items-center gap-2">
+                          <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                            <Users className="h-4 w-4 text-primary" />
+                          </div>
+                          <div>
+                            <p className="font-medium">
+                              {projectData?.data?.projects[0].clientName}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {projectData?.data?.projects[0].clientEmail}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-sm font-medium">Location</p>
+                        <div className="flex items-center gap-2">
+                          <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                            <Globe className="h-4 w-4 text-primary" />
+                          </div>
+                          <div>
+                            <p className="font-medium">
+                              {allProjectTypeDesc?.data?.response[0].location}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Project Progress</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex flex-col items-center justify-center space-y-4">
+                    <ProgressRing progress={68} size={120} className="my-4" />
+                    <div className="text-center">
+                      <p className="text-2xl font-bold">68%</p>
+                      <p className="text-sm text-muted-foreground">
+                        Overall Completion
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="services" className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              {servicesData?.data?.services?.map((service, index) => (
-                <Card key={index} className="overflow-hidden">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      {service.serviceName}
-                    </CardTitle>
-                    <div className="rounded-full bg-primary/10 p-2">
-                      <LayoutDashboard className="h-4 w-4" />
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-xs text-muted-foreground">
-                      {service.serviceDescription}
-                    </p>
-                    {/* <div className="mt-4">
+            {isServicesLoading ? (
+              <ServicesTabSkeleton />
+            ) : (
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                {servicesData?.data?.services?.map((service, index) => (
+                  <Card key={index} className="overflow-hidden">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">
+                        {service.serviceName}
+                      </CardTitle>
+                      <div className="rounded-full bg-primary/10 p-2">
+                        <LayoutDashboard className="h-4 w-4" />
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-xs text-muted-foreground">
+                        {service.serviceDescription}
+                      </p>
+                      {/* <div className="mt-4">
                       <div className="flex items-center justify-between text-sm mb-2">
                         <span>Progress</span>
                         <span className="font-medium">{service.progress}%</span>
@@ -271,10 +293,11 @@ export default function ProjectDetails() {
                         />
                       </div>
                     </div> */}
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="tasks">
@@ -283,7 +306,11 @@ export default function ProjectDetails() {
                 <CardTitle>Task List</CardTitle>
               </CardHeader>
               <CardContent>
-                <DataTable columns={columns} data={tasksData?.data || []} />
+                <DataTable
+                  isLoading={isLoading || isFetching}
+                  columns={columns}
+                  data={isError ? [] : tasksData?.data || []}
+                />
               </CardContent>
             </Card>
           </TabsContent>

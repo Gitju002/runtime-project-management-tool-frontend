@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { StatCardSkeleton } from "../skeleton/project-details-stat-card-skeleton";
 
 interface StatCardProps {
   title: string;
@@ -7,6 +8,7 @@ interface StatCardProps {
   icon: React.ReactNode;
   description?: string;
   className?: string;
+  isLoading: boolean;
 }
 
 export function StatCard({
@@ -15,8 +17,11 @@ export function StatCard({
   icon,
   description,
   className,
+  isLoading,
 }: StatCardProps) {
-  return (
+  return isLoading ? (
+    <StatCardSkeleton />
+  ) : (
     <Card
       className={cn(
         "overflow-hidden transition-all hover:shadow-teal-shade/30 hover:shadow-lg",

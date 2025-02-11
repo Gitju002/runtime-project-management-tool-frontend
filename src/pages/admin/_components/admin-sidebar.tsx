@@ -93,12 +93,17 @@ export default function AdminSidebar() {
     }, 2000);
   }, []);
 
+  console.log(userData);
+
   const handleLogout = () => {
     logout();
     dispatch(clearUserInfo());
     router.push("/login");
   };
 
+  const handleGetProfile = () => {
+    router.push("/profile");
+  };
   return (
     <Sidebar variant="floating" collapsible="icon">
       <SidebarContent>
@@ -144,8 +149,11 @@ export default function AdminSidebar() {
                 side="top"
                 className="w-[--radix-popper-anchor-width]"
               >
-                <DropdownMenuItem>
-                  <span>Profile</span>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={handleGetProfile}
+                >
+                  Profile
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout}>
                   <span>Sign out</span>

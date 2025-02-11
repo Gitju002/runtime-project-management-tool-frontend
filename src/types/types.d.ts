@@ -92,6 +92,7 @@ export type Task = {
 export type User = {
   _id: string;
   externalId: number;
+  date_of_joining: string;
   roleId: number;
   roleName: string;
   officeId: number;
@@ -104,7 +105,7 @@ export type User = {
   dob: string;
   gender: number;
   mobile: number;
-  profilePic: string;
+  profilepic: string;
   createdAt: string;
   updatedAt: string;
   __v: number;

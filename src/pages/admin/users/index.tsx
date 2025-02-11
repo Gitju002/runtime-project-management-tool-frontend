@@ -1,26 +1,26 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
-import { DataTable } from "@/components/table/data-table";
-import { columns } from "../../../components/table/table-columns/admin-users-columns";
+
 import { useGetAllUsersQuery } from "@/store/api/user";
 import { CustomPagination } from "@/components/ui/custom-pagination";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui/tooltip";
 import Image from "next/image";
+import {
+  AreaChartIcon,
+  BriefcaseIcon,
+  BuildingIcon,
+  PhoneIcon,
+} from "lucide-react";
+import { UserCardSkeleton } from "@/components/skeleton/admin-users-card-skeleton";
 import { Button } from "@/components/ui/button";
-import { ChartArea } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 export default function Users() {
   const router = useRouter();
@@ -65,7 +65,7 @@ export default function Users() {
         params.delete("userName");
       }
       router.push(`?${params.toString()}`);
-    }, 1250); // 2-second debounce
+    }, 500);
 
     return () => clearTimeout(delay);
   }, [userSearch]);
@@ -77,87 +77,101 @@ export default function Users() {
   }, [userData]);
   // console.log(userData?.data?.users);
   return (
-    <div className="container mx-auto w-full py-6">
-      <div className="grid grid-cols-1 gap-2">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">User Management</h1>
-        </div>
-        <div>
+    <div className="container w-full mx-auto py-8">
+      <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+          User Management
+        </h1>
+        <div className="mt-4 md:w-1/2 sm:mt-0">
           <Input
             placeholder="Search Users..."
             onChange={(e) => setUserSearch(e.target.value)}
             value={userSearch}
+            className="w-full"
           />
         </div>
       </div>
-      <>
-        {/* <DataTable
-          columns={columns}
-          isLoading={isLoading || isFetching}
-          data={isError ? [] : userData?.data?.users || []}
-        /> */}
-        <div className="my-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {userData?.data?.users.map((user) => (
-            <Card key={user.id} className="border-2 border-lime-shade/30">
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <Image
-                      height={40}
-                      width={40}
-                      src={user.profilepic}
-                      alt={user.name}
-                      className="rounded-full h-16 w-16 obcject-cover ring-2 ring-teal-shade"
-                    />
-                    <h3 className="text-lg font-bold">{user.name}</h3>
-                  </div>
 
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div
-                        className="cursor-pointer hover:underline "
-                        onClick={() => handleClick(user.name)}
-                      >
-                        <ChartArea className="size-8 stroke-1 stroke-teal-shade" />
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {isLoading || isFetching
+          ? Array.from({ length: limit }).map((_, index) => (
+              <UserCardSkeleton key={index} />
+            ))
+          : userData?.data.users.map((user) => (
+              <Card
+                key={user.id}
+                className="flex flex-col justify-between overflow-hidden transition-all hover:shadow-xl dark:hover:shadow-blue-800/20 hover:scale-105 "
+              >
+                <div>
+                  {" "}
+                  <CardHeader className="border-b bg-gradient-to-br from-slate-50 via-gray-200/40 to-gray-300 dark:from-blue-700/40 dark:via-slate-900/80 dark:to-blue-950 py-6">
+                    <div className="flex items-center gap-4">
+                      <Image
+                        height={64}
+                        width={64}
+                        src={user.profilepic || "/images/default-user.png"}
+                        alt={user.name}
+                        className="aspect-square rounded-full border-4 border-white object-cover shadow-md"
+                      />
+                      <div>
+                        <CardTitle className="text-xl ">{user.name}</CardTitle>
+                        <Badge variant="secondary" className="mt-1  shadow-md">
+                          {user.role_name || "N/A"}
+                        </Badge>
                       </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Click to view analytics</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="space-y-4">
-                  <section className="grid grid-cols-2 gap-2">
-                    <div>
-                      <p className="text-sm font-bold">Departnent:</p>
-                      <p>{user.department_name}</p>
                     </div>
-                    <div>
-                      <p className="text-sm font-bold">Mobile:</p>
-                      <p>{user.mobile || "N/A"}</p>
+                  </CardHeader>
+                  <CardContent className="grid gap-6 p-6">
+                    <div className="flex items-center gap-4">
+                      <BuildingIcon className="h-10 w-10 rounded-full bg-blue-100 p-2 text-blue-600" />
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Department
+                        </p>
+                        <p className="font-semibold">{user.department_name}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm font-bold">Office:</p>
-                      <p>{user.office_name}</p>
+                    <div className="flex items-center gap-4">
+                      <PhoneIcon className="h-10 w-10 rounded-full bg-green-100 p-2 text-green-600" />
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Mobile
+                        </p>
+                        <p className="font-semibold">{user.mobile || "N/A"}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm font-bold">Role:</p>
-                      <p>{user.role_name || "N/A"}</p>
+                    <div className="flex items-center gap-4">
+                      <BriefcaseIcon className="h-10 w-10 rounded-full bg-yellow-100 p-2 text-yellow-600" />
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Office
+                        </p>
+                        <p className="font-semibold">{user.office_name}</p>
+                      </div>
                     </div>
-                  </section>
-                </CardDescription>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                  </CardContent>
+                </div>
+                <div className="p-2">
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => handleClick(user.name)}
+                  >
+                    <AreaChartIcon className="mr-2 h-4 w-4" />
+                    View Analytics
+                  </Button>
+                </div>
+              </Card>
+            ))}
+      </div>
+
+      <div className="mt-8">
         <CustomPagination
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={handlePageChange}
         />
-      </>
+      </div>
     </div>
   );
 }
