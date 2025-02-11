@@ -89,17 +89,30 @@ export default function Analytics() {
             />
           </div> */}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2 gap-2 ">
-          {tasksLoading || isFetching || !selectedUser ? (
-            <AnalyticsCardsSkeleton />
-          ) : (
-            <>
-              <TaskCompletedComponent userName={selectedUser} />
-              <PieChartComponent userName={selectedUser} />
-              <BarChartComponent userName={selectedUser} />
-            </>
-          )}
-        </div>
+        {tasksData && selectedUser ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2 gap-2 ">
+            <TaskCompletedComponent
+              userName={selectedUser}
+              taskdata={tasksData}
+            />
+            <PieChartComponent userName={selectedUser} taskdata={tasksData} />
+            <BarChartComponent userName={selectedUser} taskdata={tasksData} />
+          </div>
+        ) : (
+          <div className="flex flex-col items-center border rounded-md justify-center h-96">
+            <img
+              src="/images/no-analytics.png"
+              alt="No projects found"
+              className="w-36 h-36 mb-4"
+            />
+            <p className="text-lg font-semibold text-gray-600">
+              No Data found.
+            </p>
+            <p className="text-sm text-gray-500">
+              Please add a task to view Analytics.
+            </p>
+          </div>
+        )}
         <h1 className="text-sm md:text-base lg:text-xl font-bold">
           Daily Update Task Table of{" "}
           <span className="dark:text-lime-shade capitalize">

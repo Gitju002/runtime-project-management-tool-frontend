@@ -18,19 +18,29 @@ import {
 } from "@/components/ui/chart";
 import { useGetTasksPerProjectQuery } from "@/store/api/analytics";
 import { useEffect, useState } from "react";
+import { GetAllTaskResponse } from "@/types/types";
+import { AnalyticsCardsSkeleton } from "@/components/skeleton/analytics-card-skeleton";
 
-export default function PieChartComponent({ userName }: { userName: string }) {
+export default function PieChartComponent({
+  userName,
+  taskdata,
+}: {
+  userName: string;
+  taskdata: GetAllTaskResponse;
+}) {
   const [chartData, setChartData] = useState<
     { projectName: string; totalTasks: number; fill: string }[]
   >([]);
-  const [totalvalue, setTotalValue] = useState(54);
+  // const [totalvalue, setTotalValue] = useState(54);
   const [chartConfig, setChartConfig] = useState<ChartConfig>({});
 
   const {
     data: TasksPerProjectdata,
     isLoading,
+    isFetching,
     isSuccess,
     isError,
+    refetch,
   } = useGetTasksPerProjectQuery({
     userName,
   });
@@ -62,7 +72,13 @@ export default function PieChartComponent({ userName }: { userName: string }) {
     }
   }, [TasksPerProjectdata]);
 
-  return (
+  useEffect(() => {
+    refetch();
+  }, [taskdata]);
+
+  return isLoading || isFetching ? (
+    <AnalyticsCardsSkeleton />
+  ) : (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>Project Task Distribution</CardTitle>

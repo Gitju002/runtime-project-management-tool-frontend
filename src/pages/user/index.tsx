@@ -190,17 +190,25 @@ const User = () => {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2 gap-2 ">
-        {tasksLoading || isFetching ? (
-          <AnalyticsCardsSkeleton />
-        ) : (
-          <>
-            <TaskCompletedComponent userName={userName} />
-            <PieChartComponent userName={userName} />
-            <BarChartComponent userName={userName} />
-          </>
-        )}
-      </div>
+      {tasksData ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2 gap-2 ">
+          <TaskCompletedComponent userName={userName} taskdata={tasksData} />
+          <PieChartComponent userName={userName} taskdata={tasksData} />
+          <BarChartComponent userName={userName} taskdata={tasksData} />
+        </div>
+      ) : (
+        <div className="flex flex-col items-center border rounded-md justify-center h-96">
+          <img
+            src="/images/no-analytics.png"
+            alt="No projects found"
+            className="w-36 h-36 mb-4"
+          />
+          <p className="text-lg font-semibold text-gray-600">No Data found.</p>
+          <p className="text-sm text-gray-500">
+            Please add a task to view Analytics.
+          </p>
+        </div>
+      )}
       <div className="grid grid-cols-1 gap-2">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-semibold">
