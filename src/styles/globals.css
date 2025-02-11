@@ -291,8 +291,12 @@ body {
   @apply dark:bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950;
 }
 
-.profile-bg {
-  @apply dark:bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950;
+.user-card-bg {
+  /* @apply dark:bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950; */
+
+  background: url("/images/logo-bg.png");
+  object-fit: cover;
+  background-repeat: no-repeat;
 }
 
 /* Scrollbar Styling */

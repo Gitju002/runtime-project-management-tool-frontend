@@ -149,8 +149,11 @@ export default function AdminSidebar() {
                 side="top"
                 className="w-[--radix-popper-anchor-width]"
               >
-                <DropdownMenuItem>
-                  <span onClick={handleGetProfile}>Profile</span>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={handleGetProfile}
+                >
+                  Profile
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout}>
                   <span>Sign out</span>
