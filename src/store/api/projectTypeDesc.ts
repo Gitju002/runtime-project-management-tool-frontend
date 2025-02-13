@@ -30,7 +30,7 @@ export const project_TD_Api = createApi({
       },
       transformErrorResponse: (error) => {
         const apiError = error.data as GetAllTypeDescResponse;
-        toast.error(apiError.message);
+        // toast.error(apiError.message);
         return error;
       },
       providesTags: ["ProjectType"],

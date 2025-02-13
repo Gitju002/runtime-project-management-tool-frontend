@@ -42,7 +42,7 @@ export const projectApi = createApi({
       },
       transformErrorResponse: (error) => {
         const apiError = error.data as GetAllProjectResponse;
-        toast.error(apiError.message);
+        // toast.error(apiError.message);
         return error;
       },
       providesTags: ["Project"],

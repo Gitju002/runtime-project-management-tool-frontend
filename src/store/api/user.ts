@@ -29,7 +29,7 @@ export const userApi = createApi({
       },
       transformErrorResponse: (error) => {
         const apiError = error.data as GetAllUserResponse;
-        toast.error(apiError.message);
+        // toast.error(apiError.message);
         return error;
       },
     }),
@@ -45,7 +45,7 @@ export const userApi = createApi({
       },
       transformErrorResponse: (error) => {
         const apiError = error.data as GetAllUsersListResponse;
-        toast.error(apiError.message);
+        // toast.error(apiError.message);
         return error;
       },
     }),

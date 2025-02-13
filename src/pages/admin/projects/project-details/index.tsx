@@ -137,7 +137,7 @@ export default function ProjectDetails() {
             value={`${noOfUsersData?.data?.totalUsers || "0"}`}
             icon={<Users className="h-4 w-4" />}
             description="Active contributors"
-            isLoading={isProjectLoading}
+            isLoading={isUsersLoading}
           />
           <StatCard
             title="Project Duration"
@@ -166,7 +166,7 @@ export default function ProjectDetails() {
                 ? "text-green-500"
                 : "text-red-500"
             }
-            isLoading={isProjectLoading}
+            isLoading={isDurationLoading}
           />
           <StatCard
             title="Project Start Date"
@@ -174,7 +174,7 @@ export default function ProjectDetails() {
             icon={<Clock10Icon className="h-4 w-4" />}
             description=""
             className="text-blue-500"
-            isLoading={isProjectLoading}
+            isLoading={isDurationLoading}
           />
           <StatCard
             title="Project End Date"
@@ -182,7 +182,7 @@ export default function ProjectDetails() {
             icon={<Clock12Icon className="h-4 w-4" />}
             description=""
             className="text-red-500"
-            isLoading={isProjectLoading}
+            isLoading={isDurationLoading}
           />
         </div>
 

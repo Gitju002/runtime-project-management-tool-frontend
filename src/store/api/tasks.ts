@@ -69,7 +69,7 @@ export const taskApi = createApi({
       },
       transformErrorResponse: (error) => {
         const apiError = error.data as GetAllTaskResponse;
-        toast.error(apiError.message);
+        // toast.error(apiError.message);
         return error;
       },
     }),

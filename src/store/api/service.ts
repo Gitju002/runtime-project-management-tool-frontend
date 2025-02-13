@@ -23,7 +23,7 @@ export const serviceApi = createApi({
       }),
       transformErrorResponse: (error) => {
         const apiError = error.data as ServiceResponse;
-        toast.error(apiError.message);
+        // toast.error(apiError.message);
         return error;
       },
       providesTags: ["Service"],
@@ -38,12 +38,12 @@ export const serviceApi = createApi({
       }),
       transformResponse: (response) => {
         const apiResponse = response as GetAllServiceResponse;
-        toast.success(apiResponse.message);
+        // toast.success(apiResponse.message);
         return apiResponse;
       },
       transformErrorResponse: (error) => {
         const apiError = error.data as GetAllServiceResponse;
-        toast.error(apiError.message);
+        // toast.error(apiError.message);
         return error;
       },
       providesTags: ["Service"],
@@ -67,7 +67,7 @@ export const serviceApi = createApi({
       },
       transformErrorResponse: (error) => {
         const apiError = error.data as ServiceResponse;
-        toast.error(apiError.message);
+        // toast.error(apiError.message);
         return error;
       },
     }),
