@@ -3,7 +3,13 @@ import { GetAllTaskResponse, TableTask, Task } from "@/types/types";
 const formatDate = (isoString: string | null): string => {
   if (!isoString) return "Pending";
   const date = new Date(isoString);
-  return date.toISOString().split("T")[0]; // Extract YYYY-MM-DD
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    timeZone: "Asia/Kolkata",
+  };
+  return new Intl.DateTimeFormat("en-GB", options).format(date);
 };
 
 const formatTime = (isoString: string | null): string => {
