@@ -46,7 +46,7 @@ const TaskForm = ({
       startTime: formatISOTime(new Date()),
       finishDate: new Date().toISOString(),
       finishTime: formatISOTime(new Date()),
-      status: "Initiated",
+      status: "Ongoing",
     },
   });
 
@@ -245,11 +245,6 @@ const TaskForm = ({
                     <SelectTrigger
                       className={`
                       ${
-                        field.value === "Initiated"
-                          ? "!text-blue-600 font-semibold bg-background"
-                          : ""
-                      }
-                      ${
                         field.value === "Ongoing"
                           ? "!text-yellow-600 font-semibold bg-background"
                           : ""
@@ -265,12 +260,12 @@ const TaskForm = ({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem
+                    {/* <SelectItem
                       value="Initiated"
                       className="!text-blue-600 font-semibold"
                     >
                       Initiated
-                    </SelectItem>
+                    </SelectItem> */}
                     <SelectItem
                       value="Ongoing"
                       className="!text-yellow-600 font-semibold"
