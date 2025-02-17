@@ -221,7 +221,7 @@ const User = () => {
         </div>
 
         <div className="flex gap-4 justify-between items-center w-full">
-          <div className="flex justify-between items-center gap-4">
+          <div className="flex flex-wrap md:flex-nowrap justify-between items-center gap-4">
             <Input
               placeholder="Filter by Project Names..."
               onChange={(e) => setProjectSearch(e.target.value)}
