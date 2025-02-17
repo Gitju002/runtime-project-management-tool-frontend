@@ -123,7 +123,7 @@ export default function Projects() {
 
   return (
     <div className="container mx-auto w-full py-6">
-      <div className="grid grid-cols-1 gap-2">
+      <div id="project_page" className="grid grid-cols-1 gap-2">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Existing Projects</h1>
           <Dialog open={open} onOpenChange={setOpen}>

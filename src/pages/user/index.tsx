@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import TaskForm from "./_components/task-form";
-import { Logs, PieChartIcon, PlusCircleIcon } from "lucide-react";
+import { Car, Logs, PieChartIcon, PlusCircleIcon } from "lucide-react";
 import { format } from "date-fns";
 import { useGetTaskByUserIDQuery } from "@/store/api/tasks";
 import { transformTasks } from "@/utils/tasksFormatting";
@@ -24,9 +24,7 @@ import { RootState } from "@/store/store";
 import { useRouter } from "next/router";
 import { useSearchParams } from "next/navigation";
 import { DatePicker } from "@/components/ui/date-picker";
-import CustomLoader from "@/components/ui/custom-loader";
-import { DataTableSkeleton } from "@/components/skeleton/data-table-skeleton";
-import { AnalyticsCardsSkeleton } from "@/components/skeleton/analytics-card-skeleton";
+import { userTaskTour } from "@/driver";
 
 const User = () => {
   const router = useRouter();
@@ -70,6 +68,8 @@ const User = () => {
     limit,
     sortBy,
   });
+
+  const [disableBtn, setDisableBtn] = useState<boolean>(false);
 
   //console.log("Tasks Data", tasksData);
   useEffect(() => {
@@ -173,25 +173,45 @@ const User = () => {
             className="inline text-teal-shade dark:text-lime-shade"
           />{" "}
         </h1>
-        <Dialog open={isOpened} onOpenChange={setIsOpened}>
-          <DialogTrigger asChild>
-            <motion.div whileHover={{ scale: 1.05 }}>
-              <Button className="transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35">
-                Add Task <PlusCircleIcon />
-              </Button>
-            </motion.div>
-          </DialogTrigger>
-          <DialogContent className="form-bg dark:hover:shadow-2xl dark:hover:shadow-teal-shade/60 transition-all duration-200">
-            <DialogTitle className="text-center text-sm border border-gray-200 rounded-md p-2 mt-4">
-              Add Task(s) for{" "}
-              <span className="text-blue-500">{format(new Date(), "PP")}</span>
-            </DialogTitle>
-            <TaskForm setIsOpen={setIsOpened} />
-          </DialogContent>
-        </Dialog>
+        <div className="flex gap-4 items-center">
+          {" "}
+          <motion.div whileHover={{ scale: 1.05 }}>
+            <Button
+              onClick={() => userTaskTour(setDisableBtn)}
+              className="transition-all duration-200 border border-teal-shade dark:border-lime-shade bg-transparent text-teal-shade dark:text-lime-shade  hover:shadow-lg hover:bg-transparent dark:hover:shadow-lime-shade/35 hover:shadow-teal-shade/35"
+            >
+              Start Tour <Car />
+            </Button>
+          </motion.div>
+          <Dialog open={isOpened} onOpenChange={setIsOpened}>
+            <DialogTrigger asChild>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Button
+                  id="step_1_addTask"
+                  disabled={disableBtn}
+                  className="transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35"
+                >
+                  Add Task <PlusCircleIcon />
+                </Button>
+              </motion.div>
+            </DialogTrigger>
+            <DialogContent className="form-bg dark:hover:shadow-2xl dark:hover:shadow-teal-shade/60 transition-all duration-200">
+              <DialogTitle className="text-center text-sm border border-gray-200 rounded-md p-2 mt-4">
+                Add Task(s) for{" "}
+                <span className="text-blue-500">
+                  {format(new Date(), "PP")}
+                </span>
+              </DialogTitle>
+              <TaskForm setIsOpen={setIsOpened} />
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
       {tasksData ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2 gap-2 ">
+        <div
+          id="step_2_analytics"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2 gap-2 "
+        >
           <TaskCompletedComponent userName={userName} taskdata={tasksData} />
           <PieChartComponent userName={userName} taskdata={tasksData} />
           <BarChartComponent userName={userName} taskdata={tasksData} />
@@ -211,7 +231,7 @@ const User = () => {
       )}
       <div className="grid grid-cols-1 gap-2">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-semibold">
+          <h1 id="step_3_userLogs" className="text-2xl font-semibold">
             User Task Logs{" "}
             <Logs
               size={20}
@@ -248,11 +268,13 @@ const User = () => {
         </div>
 
         <>
-          <DataTable
-            isLoading={tasksLoading || isFetching}
-            columns={columns}
-            data={tasksIsError ? [] : formattedTasks}
-          />
+          <div id="step_4_taskTable">
+            <DataTable
+              isLoading={tasksLoading || isFetching}
+              columns={columns}
+              data={tasksIsError ? [] : formattedTasks}
+            />
+          </div>
           <CustomPagination
             currentPage={currentPage}
             totalPages={totalPages}
