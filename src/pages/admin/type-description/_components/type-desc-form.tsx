@@ -17,6 +17,7 @@ import { useState } from "react";
 import { useGetProjectListQuery } from "@/store/api/project";
 import { useCreateProjectTypeDescMutation } from "@/store/api/projectTypeDesc";
 import { Loader2 } from "lucide-react";
+import { resumeTypeDescTour } from "@/driver";
 
 const projectTypeSchema = z.object({
   projectName: z.string().min(2, {
@@ -66,6 +67,7 @@ export default function ProjectTypeForm({
     if (response?.data?.success) {
       form.reset();
       onSuccess();
+      resumeTypeDescTour();
     }
   }
 

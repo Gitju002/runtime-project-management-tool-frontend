@@ -19,6 +19,7 @@ import {
 } from "@/store/api/project";
 import { useCreateServiceMutation } from "@/store/api/service";
 import { Loader2 } from "lucide-react";
+import { resumeServicesTour } from "@/driver";
 
 const serviceSchema = z.object({
   project: z.string().min(2, {
@@ -62,6 +63,7 @@ export default function ServiceForm({ onSuccess }: { onSuccess: () => void }) {
     if (response.data?.success) {
       form.reset();
       onSuccess();
+      resumeServicesTour();
     }
   }
 

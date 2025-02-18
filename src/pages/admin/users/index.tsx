@@ -21,9 +21,14 @@ import {
 import { UserCardSkeleton } from "@/components/skeleton/admin-users-card-skeleton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { startTour } from "@/driver";
 
 export default function Users() {
   const router = useRouter();
+
+  useEffect(() => {
+    startTour(router);
+  }, []);
   const searchParams = useSearchParams();
 
   const [userSearch, setUserSearch] = useState(""); // Debounced search state

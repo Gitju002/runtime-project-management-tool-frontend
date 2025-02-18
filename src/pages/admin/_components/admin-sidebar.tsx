@@ -4,7 +4,6 @@ import {
   FolderKanban,
   Briefcase,
   Users,
-  BarChart2,
   ChevronUp,
   UserCircle2,
 } from "lucide-react";
@@ -20,7 +19,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSkeleton,
 } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
@@ -35,46 +33,6 @@ import { useDispatch } from "react-redux";
 import { clearUserInfo } from "@/store/features/userInfo";
 import { useGetUserQuery } from "@/store/api/user";
 
-const items = [
-  {
-    icon: Home,
-    title: "Home",
-    label: "Dashboard",
-    href: "/admin",
-  },
-  {
-    icon: FolderKanban,
-    title: "Projects",
-    label: "Projects",
-    href: "/admin/projects",
-  },
-  {
-    icon: Briefcase,
-    title: "Services",
-    label: "Services",
-    href: "/admin/services",
-  },
-  {
-    icon: BookType,
-    title: "Type Description",
-    label: "Type Description",
-    href: "/admin/type-description",
-  },
-
-  {
-    icon: Users,
-    title: "Users",
-    label: "Users",
-    href: "/admin/users",
-  },
-  // {
-  //   icon: BarChart2,
-  //   title: "Analytics",
-  //   label: "Analytics",
-  //   href: "/admin/analytics",
-  // },
-];
-
 export default function AdminSidebar() {
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
@@ -87,13 +45,12 @@ export default function AdminSidebar() {
   } = useGetUserQuery();
   const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
+
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
     }, 2000);
   }, []);
-
-  console.log(userData);
 
   const handleLogout = () => {
     logout();
@@ -104,32 +61,74 @@ export default function AdminSidebar() {
   const handleGetProfile = () => {
     router.push("/profile");
   };
+
   return (
     <Sidebar variant="floating" collapsible="icon">
       <SidebarContent>
         <SidebarGroup className="space-y-28">
           <SidebarGroupLabel className="text-sm md:text-base transition-all duration-300">
-            Dashbaord Navigation
+            Dashboard Navigation
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu className="flex gap-y-4 ">
-              {loading
-                ? items.map((item) => <SidebarMenuSkeleton key={item.title} />)
-                : items.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton
-                        asChild
-                        isActive={pathname === item.href}
-                      >
-                        <Link href={item.href ?? "/admin"}>
-                          <item.icon className="!size-5 text-teal-shade dark:text-lime-shade" />
-                          <span className="text-sm md:text-base">
-                            {item.title}
-                          </span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
+            <SidebarMenu className="flex gap-y-4">
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname === "/admin"}>
+                  <Link id="sidebar_home" href="/admin">
+                    <Home className="!size-5 text-teal-shade dark:text-lime-shade" />
+                    <span className="text-sm md:text-base">Home</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === "/admin/projects"}
+                >
+                  <Link id="sidebar_projects" href="/admin/projects">
+                    <FolderKanban className="!size-5 text-teal-shade dark:text-lime-shade" />
+                    <span className="text-sm md:text-base">Projects</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === "/admin/services"}
+                >
+                  <Link id="sidebar_services" href="/admin/services">
+                    <Briefcase className="!size-5 text-teal-shade dark:text-lime-shade" />
+                    <span className="text-sm md:text-base">Services</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === "/admin/type-description"}
+                >
+                  <Link id="sidebar_typeDesc" href="/admin/type-description">
+                    <BookType className="!size-5 text-teal-shade dark:text-lime-shade" />
+                    <span className="text-sm md:text-base">
+                      Type Description
+                    </span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === "/admin/users"}
+                >
+                  <Link id="sidebar_users" href="/admin/users">
+                    <Users className="!size-5 text-teal-shade dark:text-lime-shade" />
+                    <span className="text-sm md:text-base">Users</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

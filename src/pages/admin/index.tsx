@@ -38,14 +38,17 @@ const Admin: React.FC = () => {
   const isLoading = isUserLoading || isProjectLoading; // ✅ Added loading state
 
   return (
-    <div className="container mx-auto w-full py-6">
+    <div className="relative container mx-auto w-full py-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="md:text-2xl font-bold">
           Welcome to the Admin Dashboard
         </h1>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div
+        id="admin_home_statcard"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+      >
         {isLoading || isFetching
           ? [...Array(2)].map((_, index) => <StatCardSkeleton key={index} />) // ✅ Show skeleton while loading
           : stats.map((stat, index) => (
@@ -59,7 +62,10 @@ const Admin: React.FC = () => {
       </div>
 
       {/* Placeholder for more features */}
-      <div className="border-2 border-dashed border-teal-shade/50 min-h-96 w-full bg-slate-100 dark:bg-slate-800/50 rounded-md flex flex-col items-center justify-center mt-6 cursor-not-allowed">
+      <div
+        id="admin_home_placeholder"
+        className="border-2 border-dashed border-teal-shade/50 min-h-96 w-full bg-slate-100 dark:bg-slate-800/50 rounded-md flex flex-col items-center justify-center mt-6 cursor-not-allowed"
+      >
         <span className="text-teal-shade">Placeholder for more content</span>
       </div>
     </div>

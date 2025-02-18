@@ -16,6 +16,7 @@ import ProjectTypeForm from "@/pages/admin/type-description/_components/type-des
 import { useGetAllProjectTypedescQuery } from "@/store/api/projectTypeDesc";
 import { CustomPagination } from "@/components/ui/custom-pagination";
 import { Input } from "@/components/ui/input";
+import { startTour } from "@/driver";
 
 export default function TypeDescription() {
   const router = useRouter();
@@ -83,6 +84,10 @@ export default function TypeDescription() {
     }
   }, [allProjectTypeDesc]);
 
+  useEffect(() => {
+    startTour(router);
+  });
+
   const formattedTypeDesc =
     allProjectTypeDesc?.data?.response?.map((projectType) => ({
       project:
@@ -95,13 +100,16 @@ export default function TypeDescription() {
 
   return (
     <div className="container mx-auto w-full py-6">
-      <div className="grid grid-cols-1 gap-2">
+      <div id="type_description_page" className="grid grid-cols-1 gap-2">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Project Types Description</h1>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <motion.div whileHover={{ scale: 1.05 }}>
-                <Button className="transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35">
+                <Button
+                  id="add_TypeDesc"
+                  className="transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35"
+                >
                   Add Type Description <PlusCircle className="ml-2 h-4 w-4" />
                 </Button>
               </motion.div>
@@ -127,11 +135,13 @@ export default function TypeDescription() {
           />
         </div>
         <>
-          <DataTable
-            columns={columns}
-            isLoading={isLoading || isFetching}
-            data={isError ? [] : formattedTypeDesc || []}
-          />
+          <div id="typeDescTable">
+            <DataTable
+              columns={columns}
+              isLoading={isLoading || isFetching}
+              data={isError ? [] : formattedTypeDesc || []}
+            />
+          </div>
           <CustomPagination
             currentPage={currentPage}
             totalPages={totalPages}
