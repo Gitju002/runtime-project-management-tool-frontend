@@ -3,13 +3,8 @@ import { useGetAllUsersQuery } from "@/store/api/user";
 import { useEffect, useState } from "react";
 import StatCard from "@/components/ui/admin-stat-card";
 import { StatCardSkeleton } from "@/components/skeleton/admin-statcard-skeleton";
-import { Button } from "@/components/ui/button";
-import { CircleHelp, FileQuestion, ShieldQuestion } from "lucide-react";
-import { startTour } from "@/driver";
-import { useRouter } from "next/router";
 
 const Admin: React.FC = () => {
-  const router = useRouter();
   const [stats, setStats] = useState<{ title: string; value: number }[]>([]);
   const {
     data: userData,
@@ -72,16 +67,6 @@ const Admin: React.FC = () => {
         className="border-2 border-dashed border-teal-shade/50 min-h-96 w-full bg-slate-100 dark:bg-slate-800/50 rounded-md flex flex-col items-center justify-center mt-6 cursor-not-allowed"
       >
         <span className="text-teal-shade">Placeholder for more content</span>
-      </div>
-      <div className="absolute bottom-12 right-4 flex items-center space-x-2">
-        <Button
-          onClick={() => startTour(router)}
-          className="rounded-full bg-blue-600 hover:bg-blue-600/80 transition-colors duration-200"
-          variant={"outline"}
-          size={"icon"}
-        >
-          <CircleHelp size={28} />
-        </Button>
       </div>
     </div>
   );
