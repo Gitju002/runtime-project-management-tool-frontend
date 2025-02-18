@@ -18,6 +18,10 @@ import { CustomPagination } from "@/components/ui/custom-pagination";
 import { Input } from "@/components/ui/input";
 import { DatePicker } from "@/components/ui/date-picker";
 import { format } from "date-fns";
+import { startTour } from "@/driver";
+
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
 export default function Projects() {
   const router = useRouter();
@@ -33,6 +37,35 @@ export default function Projects() {
   const fromDate = searchParams.get("fromDate");
   const toDate = searchParams.get("toDate");
 
+  // useEffect(() => {
+  //   const storedStep = localStorage.getItem("driverStep");
+
+  //   if (storedStep === "3") {
+  //     localStorage.removeItem("driverStep"); // Clear stored progress
+
+  //     const driverObj = driver({
+  //       steps: [
+  //         {
+  //           element: "#add_project",
+  //           popover: {
+  //             title: "➕ Add a Project",
+  //             description: "Click this button to add a new project.",
+  //           },
+  //         },
+  //       ],
+  //       allowClose: false,
+  //       showProgress: true,
+  //     });
+
+  //     setTimeout(() => {
+  //       driverObj.drive(0); // Resume tour from step 0 on Projects page
+  //     }, 1000); // Small delay to allow UI to load
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    startTour(router); // Detects and continues the tour automatically
+  }, []);
   const {
     data: projectData,
     isLoading,
@@ -129,7 +162,10 @@ export default function Projects() {
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <motion.div whileHover={{ scale: 1.05 }}>
-                <Button className="transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35">
+                <Button
+                  id="add_project"
+                  className="transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35"
+                >
                   Add Project <PlusCircle className="ml-2 h-4 w-4" />
                 </Button>
               </motion.div>
@@ -161,11 +197,13 @@ export default function Projects() {
         </div>
 
         <>
-          <DataTable
-            columns={columns}
-            isLoading={isLoading || isFetching}
-            data={isError ? [] : projectData?.data?.projects || []}
-          />
+          <div id="project_table">
+            <DataTable
+              columns={columns}
+              isLoading={isLoading || isFetching}
+              data={isError ? [] : projectData?.data?.projects || []}
+            />
+          </div>
           <CustomPagination
             currentPage={currentPage}
             totalPages={totalPages}

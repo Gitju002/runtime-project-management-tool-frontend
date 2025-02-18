@@ -16,6 +16,7 @@ import { CustomPagination } from "@/components/ui/custom-pagination";
 import { Input } from "@/components/ui/input";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
+import { startTour } from "@/driver";
 
 export type Service = {
   id: string;
@@ -97,6 +98,10 @@ export default function Services() {
     return () => clearTimeout(delay);
   }, [serviceSearch]);
 
+  useEffect(() => {
+    startTour(router);
+  }, []);
+
   const formattedServices: Service[] =
     servicesData?.data?.services?.map((service, index) => ({
       id: (limit * (currentPage - 1) + index + 1).toString(),
@@ -110,13 +115,16 @@ export default function Services() {
 
   return (
     <div className="container  mx-auto w-full py-6">
-      <div className="grid grid-cols-1 gap-2">
+      <div id="services_page" className="grid grid-cols-1 gap-2">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Services</h1>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <motion.div whileHover={{ scale: 1.05 }}>
-                <Button className=" transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35">
+                <Button
+                  id="add_service"
+                  className=" transition-all duration-200 bg-teal-shade text-lime-shade hover:shadow-lg hover:bg-teal-shade hover:shadow-teal-shade/35"
+                >
                   Add Service <PlusCircle className="ml-2 h-4 w-4" />
                 </Button>
               </motion.div>
@@ -140,11 +148,14 @@ export default function Services() {
           />
         </div>
         <>
-          <DataTable
-            columns={columns}
-            isLoading={isLoading || isFetching || paginationLoading}
-            data={isError ? [] : formattedServices || []}
-          />
+          <div id="services_table">
+            {" "}
+            <DataTable
+              columns={columns}
+              isLoading={isLoading || isFetching || paginationLoading}
+              data={isError ? [] : formattedServices || []}
+            />
+          </div>
           <CustomPagination
             currentPage={currentPage}
             totalPages={totalPages}

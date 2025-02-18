@@ -109,7 +109,7 @@ export default function AdminSidebar() {
                   asChild
                   isActive={pathname === "/admin/type-description"}
                 >
-                  <Link id="sidebar_types" href="/admin/type-description">
+                  <Link id="sidebar_typeDesc" href="/admin/type-description">
                     <BookType className="!size-5 text-teal-shade dark:text-lime-shade" />
                     <span className="text-sm md:text-base">
                       Type Description

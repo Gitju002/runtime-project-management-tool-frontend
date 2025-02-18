@@ -20,6 +20,7 @@ import {
   useGetProjectListQuery,
 } from "@/store/api/project";
 import { Loader2 } from "lucide-react";
+import { resumeProjectsTour } from "@/driver";
 
 export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
   const [loading, setLoading] = useState(false);
@@ -50,6 +51,7 @@ export default function ProjectForm({ onSuccess }: { onSuccess: () => void }) {
         form.reset();
       }
       onSuccess();
+      resumeProjectsTour();
     } catch (error) {
       console.error("Failed to submit:", error);
     } finally {

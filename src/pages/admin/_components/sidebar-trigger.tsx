@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { ArrowLeft, ArrowRight, Car } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import Image from "next/image";
 
 function CustomSidebarTrigger() {
@@ -45,12 +45,6 @@ function CustomSidebarTrigger() {
           <ArrowRight />
         </Button>
         <div className="flex items-center gap-6">
-          <Button
-            // onClick={adminHomeTour}
-            className="transition-all duration-200 border border-teal-shade dark:border-lime-shade bg-transparent text-teal-shade dark:text-lime-shade  hover:shadow-lg hover:bg-transparent dark:hover:shadow-lime-shade/35 hover:shadow-teal-shade/35"
-          >
-            Start Tour <Car />
-          </Button>
           <div className="aspect-auto w-16 relative">
             <Image height={24} width={56} src="/images/logo.png" alt="logo" />
           </div>
