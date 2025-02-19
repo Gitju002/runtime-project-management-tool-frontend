@@ -22,8 +22,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { Eye, EyeClosed } from "lucide-react";
+import { Eye, EyeClosed, FileDown, Sheet } from "lucide-react";
 import { DataTableSkeleton } from "../skeleton/data-table-skeleton";
+import {
+  useGetCSVByUserMutation,
+  useGetPDFByUserMutation,
+} from "@/store/api/user";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -51,35 +55,81 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const [getCSVByUser, { data: csvData }] = useGetCSVByUserMutation();
+  const [getPDFByUser, { data: pdfData }] = useGetPDFByUserMutation();
+
+  const handleDownload = async (type: "csv" | "pdf") => {
+    try {
+      const fetchFunction =
+        type === "csv"
+          ? await getCSVByUser().unwrap()
+          : await getPDFByUser().unwrap();
+
+      if (!fetchFunction) {
+        return;
+      }
+
+      const blob = new Blob([fetchFunction], {
+        type: type === "csv" ? "text/csv" : "application/pdf",
+      });
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `tasks.${type}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error(`Failed to download ${type}`, error);
+    }
+  };
+
   return (
     <div>
-      <div className="flex items-center py-4">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              <Eye size={16} />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+      <div className="flex gap-2 items-center py-4">
+        <div className="flex gap-2 ms-auto items-end">
+          <Button
+            variant={"outline"}
+            size={"icon"}
+            onClick={() => handleDownload("csv")}
+          >
+            <Sheet />
+          </Button>
+          <Button
+            variant={"outline"}
+            size={"icon"}
+            onClick={() => handleDownload("pdf")}
+          >
+            <FileDown />
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                <Eye size={16} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       {isLoading ? (
         <DataTableSkeleton />
