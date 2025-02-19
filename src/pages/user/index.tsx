@@ -202,23 +202,17 @@ const User = () => {
   const categorizedTaskGroups = allTasksIsError
     ? []
     : Object.values(groupedTasks).map((group) => {
-        const hasCompleted = group.tasks.some(
-          (task) => task.status === "Completed"
-        );
-        const hasOngoing = group.tasks.some(
-          (task) => task.status === "Ongoing"
-        );
+        const lastTask = group.tasks[0];
+        const category =
+          lastTask.status === "Completed"
+            ? "Completed"
+            : lastTask.status === "Ongoing"
+            ? "Ongoing"
+            : "Initiated";
 
         return {
           ...group,
-          category:
-            hasCompleted && hasOngoing
-              ? "Both"
-              : hasCompleted
-              ? "Completed"
-              : hasOngoing
-              ? "Ongoing"
-              : "Initiated",
+          category,
         };
       });
 

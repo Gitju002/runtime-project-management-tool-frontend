@@ -11,7 +11,7 @@ interface TaskGroupProps {
 }
 
 export function TaskGroup({ group }: TaskGroupProps) {
-  const latestTask = group?.tasks[group?.tasks?.length - 1];
+  const latestTask = group?.tasks[0];
   // console.log("Latest Task: ", latestTask);
   const isCompleted = latestTask?.status === "Completed";
 
