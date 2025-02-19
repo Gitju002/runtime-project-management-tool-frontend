@@ -28,6 +28,7 @@ import {
   useGetCSVByUserMutation,
   useGetPDFByUserMutation,
 } from "@/store/api/user";
+import { useRouter } from "next/router";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -42,6 +43,7 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
+  const router = useRouter();
 
   const table = useReactTable({
     data,
@@ -89,20 +91,24 @@ export function DataTable<TData, TValue>({
     <div>
       <div className="flex gap-2 items-center py-4">
         <div className="flex gap-2 ms-auto items-end">
-          <Button
-            variant={"outline"}
-            size={"icon"}
-            onClick={() => handleDownload("csv")}
-          >
-            <Sheet />
-          </Button>
-          <Button
-            variant={"outline"}
-            size={"icon"}
-            onClick={() => handleDownload("pdf")}
-          >
-            <FileDown />
-          </Button>
+          {router.pathname === "/user" && (
+            <div>
+              <Button
+                variant={"outline"}
+                size={"icon"}
+                onClick={() => handleDownload("csv")}
+              >
+                <Sheet />
+              </Button>
+              <Button
+                variant={"outline"}
+                size={"icon"}
+                onClick={() => handleDownload("pdf")}
+              >
+                <FileDown />
+              </Button>
+            </div>
+          )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">
