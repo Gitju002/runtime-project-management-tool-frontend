@@ -10,7 +10,13 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import TaskForm from "./_components/task-form";
-import { Car, Logs, PieChartIcon, PlusCircleIcon } from "lucide-react";
+import {
+  Car,
+  Logs,
+  PieChartIcon,
+  PlusCircleIcon,
+  User2Icon,
+} from "lucide-react";
 import { format } from "date-fns";
 import { useGetTaskByUserIDQuery } from "@/store/api/tasks";
 import { transformTasks } from "@/utils/tasksFormatting";
@@ -183,6 +189,14 @@ const User = () => {
               Start Tour <Car />
             </Button>
           </motion.div>
+          <div>
+            <Button
+              className="transition-all duration-200 border border-teal-shade dark:border-lime-shade bg-transparent text-teal-shade dark:text-lime-shade  hover:shadow-lg hover:bg-transparent dark:hover:shadow-lime-shade/35 hover:shadow-teal-shade/35"
+              onClick={() => router.push("/profile")}
+            >
+              Profile <User2Icon />
+            </Button>
+          </div>
           <Dialog open={isOpened} onOpenChange={setIsOpened}>
             <DialogTrigger asChild>
               <motion.div whileHover={{ scale: 1.05 }}>

@@ -7,36 +7,26 @@ import { Button } from "@/components/ui/button";
 import ProfileInfo from "@/pages/profile/_components/profile-info";
 import { Mail, Phone, MapPin, Briefcase, Calendar, Award } from "lucide-react";
 import { useGetUserQuery } from "@/store/api/user";
-import { useLogoutMutation } from "@/store/api/auth";
-import { useDispatch } from "react-redux";
-import { log } from "console";
 import Image from "next/image";
 
 export default function ProfilePage() {
-  const [loading, setLoading] = useState(true);
-
-  const [logout] = useLogoutMutation();
-  const dispatch = useDispatch();
-
   const {
     data: userData,
     isLoading: userLoading,
     error: userError,
     isFetching: userFetching,
+    refetch: refetchUser,
   } = useGetUserQuery();
 
+  const loading = userLoading || userFetching;
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  }, []);
-
+    refetchUser();
+  }, [userData?.data?.role_name]);
   console.log("userData", userData?.data.profilepic);
-
   return (
     <div className="container mx-auto w-full py-6 space-y-4">
       {/* Hero Section */}
-      <div className="relative transition-all duration-200 border border-[#12c6e2]  bg-transparent text-white rounded-3xl profile-bg overflow-hidden">
+      <div className="relative transition-all duration-200 border border-[#12c6e2]  bg-teal-shade text-white rounded-3xl profile-bg overflow-hidden">
         <div className="absolute  bottom-2 right-4">
           <Image
             sizes="100vw"
@@ -230,56 +220,59 @@ export default function ProfilePage() {
       </div>
 
       {/* Additional Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <div className="space-y-4">
-              <Skeleton className="h-14 w-full" />
-              <Skeleton className="h-14 w-full" />
-              <Skeleton className="h-14 w-full" />
-            </div>
-          ) : (
-            <ul className="space-y-4">
-              <li className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Award className="h-6 w-6 text-blue-600" />
-                </div>
-                <div>
-                  <p className="font-semibold">
-                    Completed Advanced React Course
-                  </p>
-                  <p className="text-sm text-gray-500">2 days ago</p>
-                </div>
-              </li>
-              <li className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center">
-                  <Briefcase className="h-6 w-6 text-green-600" />
-                </div>
-                <div>
-                  <p className="font-semibold">
-                    Started new project: E-commerce Platform
-                  </p>
-                  <p className="text-sm text-gray-500">1 week ago</p>
-                </div>
-              </li>
-              <li className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center">
-                  <Mail className="h-6 w-6 text-purple-600" />
-                </div>
-                <div>
-                  <p className="font-semibold">
-                    Received Employee of the Month Award
-                  </p>
-                  <p className="text-sm text-gray-500">2 weeks ago</p>
-                </div>
-              </li>
-            </ul>
-          )}
-        </CardContent>
-      </Card>
+      {userData?.data?.role_name?.toLowerCase() !==
+        process.env.NEXT_PUBLIC_ADMIN_ROLE?.toLowerCase() && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Activity</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <div className="space-y-4">
+                <Skeleton className="h-14 w-full" />
+                <Skeleton className="h-14 w-full" />
+                <Skeleton className="h-14 w-full" />
+              </div>
+            ) : (
+              <ul className="space-y-4">
+                <li className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center">
+                    <Award className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="font-semibold">
+                      Completed Advanced React Course
+                    </p>
+                    <p className="text-sm text-gray-500">2 days ago</p>
+                  </div>
+                </li>
+                <li className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center">
+                    <Briefcase className="h-6 w-6 text-green-600" />
+                  </div>
+                  <div>
+                    <p className="font-semibold">
+                      Started new project: E-commerce Platform
+                    </p>
+                    <p className="text-sm text-gray-500">1 week ago</p>
+                  </div>
+                </li>
+                <li className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center">
+                    <Mail className="h-6 w-6 text-purple-600" />
+                  </div>
+                  <div>
+                    <p className="font-semibold">
+                      Received Employee of the Month Award
+                    </p>
+                    <p className="text-sm text-gray-500">2 weeks ago</p>
+                  </div>
+                </li>
+              </ul>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

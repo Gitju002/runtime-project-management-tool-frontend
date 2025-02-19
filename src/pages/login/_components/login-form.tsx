@@ -13,17 +13,19 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { loginFormSchema } from "@/schema";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Eye, EyeOff } from "lucide-react";
 import { useLoginMutation } from "@/store/api/auth";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "@/store/features/userInfo";
 import { Loader2 } from "lucide-react";
+import { useState } from "react";
 export default function LoginForm() {
   const [login, { isLoading: isSubmitting, error, isSuccess }] =
     useLoginMutation();
   const router = useRouter();
   const dispatch = useDispatch();
+  const [showPassword, setShowPassword] = useState(false);
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -32,6 +34,10 @@ export default function LoginForm() {
     },
     disabled: isSubmitting,
   });
+
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
     try {
@@ -76,8 +82,26 @@ export default function LoginForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
-              <FormControl className="transition-all duration-200 dark:border-teal-shade">
-                <Input type="password" placeholder="********" {...field} />
+              <FormControl>
+                <div className="relative">
+                  {showPassword ? (
+                    <EyeOff
+                      onClick={togglePassword}
+                      className="cursor-pointer w-5 absolute top-2 right-2"
+                    />
+                  ) : (
+                    <Eye
+                      onClick={togglePassword}
+                      className="cursor-pointer w-5 absolute top-2 right-2"
+                    />
+                  )}
+                  <Input
+                    className="transition-all duration-200 dark:border-teal-shade"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="********"
+                    {...field}
+                  />
+                </div>
               </FormControl>
 
               <FormMessage />

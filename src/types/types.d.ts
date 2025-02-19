@@ -93,8 +93,8 @@ export type User = {
   _id: string;
   externalId: number;
   date_of_joining: string;
-  roleId: number;
-  roleName: string;
+  role_id: number;
+  role_name: string;
   officeId: number;
   officeName: string;
   departmentId: number;
