@@ -10,9 +10,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Checkbox } from "@/components/ui/checkbox";
+import { EditSheet } from "@/components/ui/edit-sheet";
 
 export const getColumns = (
   handleSortClick: (columnName: string) => void
@@ -29,6 +30,28 @@ export const getColumns = (
     return <ArrowUp size={16} className="ml-1 text-gray-400" />; // Default inactive state
   };
   return [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
     {
       accessorKey: "slno",
       header: () => <div>Sl No.</div>,
@@ -115,8 +138,16 @@ export const getColumns = (
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem>Delete Task</DropdownMenuItem>
-              <DropdownMenuItem>Edit Task</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <EditSheet />
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  navigator.clipboard.writeText(row.original.projectName)
+                }
+              >
+                Copy Project Name
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );

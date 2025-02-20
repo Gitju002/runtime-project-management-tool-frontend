@@ -164,7 +164,6 @@ const User = () => {
   const columns = getColumns(handleSortClick); // Pass the function here
 
   const formattedTasks = transformTasks(tasksData, limit);
-
   const userName = useSelector((state: RootState) => state.userInfo.name);
 
   // console.log("username ", userName);
