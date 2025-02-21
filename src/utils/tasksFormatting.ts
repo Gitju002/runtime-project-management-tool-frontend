@@ -1,11 +1,13 @@
 import { GetAllTaskResponse, TableTask, Task } from "@/types/types";
 
-const formatDate = (isoString: string): string => {
+const formatDate = (isoString: string | null): string => {
+  if (!isoString) return "Pending";
   const date = new Date(isoString);
   return date.toISOString().split("T")[0]; // Extract YYYY-MM-DD
 };
 
-const formatTime = (isoString: string): string => {
+const formatTime = (isoString: string | null): string => {
+  if (!isoString) return "Pending";
   const date = new Date(isoString);
   let hours = date.getHours();
   const minutes = date.getMinutes().toString().padStart(2, "0");
