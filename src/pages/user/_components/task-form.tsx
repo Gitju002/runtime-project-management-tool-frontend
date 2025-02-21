@@ -42,7 +42,7 @@ const TaskForm = ({
       project: "",
       service: "",
       purpose: "",
-      startDate: "",
+      startDate: new Date().toISOString(),
       startTime: formatISOTime(new Date()),
       // finishDate: new Date().toISOString(),
       // finishTime: formatISOTime(new Date()),
@@ -161,11 +161,7 @@ const TaskForm = ({
                   <FormControl>
                     <DatePicker
                       placeholder="Pick start date"
-                      value={
-                        field.value
-                          ? new Date(new Date(field.value).getTime() + 19800000)
-                          : new Date()
-                      }
+                      value={field.value ? new Date(field.value) : new Date()}
                       onChange={(e) =>
                         field.onChange(
                           e
