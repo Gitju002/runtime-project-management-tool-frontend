@@ -148,6 +148,13 @@ export const getColumns = (
               >
                 Copy Project Name
               </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  navigator.clipboard.writeText(row.original.purpose)
+                }
+              >
+                Copy Purpose
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
