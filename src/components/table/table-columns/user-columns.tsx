@@ -14,7 +14,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { EditSheet } from "@/components/ui/edit-sheet";
-import { AlertDialogUserTask } from "@/components/ui/alert-dialog-user-task";
+import { AlertDialogUserTaskForward } from "@/components/ui/alert-dialog-user-task-forward";
+import { AlertDialogUserTaskCompleted } from "@/components/ui/alert-dialog-user-task-completed";
 
 export const getColumns = (
   handleSortClick: (columnName: string) => void
@@ -139,11 +140,14 @@ export const getColumns = (
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem asChild>
-                <AlertDialogUserTask />
+                <AlertDialogUserTaskForward taskId={row.original.id} />
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <EditSheet />
+                <AlertDialogUserTaskCompleted taskId={row.original.id} />
               </DropdownMenuItem>
+              {/* <DropdownMenuItem asChild>
+                <EditSheet />
+              </DropdownMenuItem> */}
               <DropdownMenuItem
                 onClick={() =>
                   navigator.clipboard.writeText(row.original.projectName)

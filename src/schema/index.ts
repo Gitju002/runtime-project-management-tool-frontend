@@ -24,7 +24,7 @@ export const addTaskSchema = z
       .min(2, {
         message: "Please enter a valid purpose",
       })
-      .max(50, {
+      .max(10000, {
         message: "Purpose must not exceed 50 characters",
       }),
     startDate: z.string(),

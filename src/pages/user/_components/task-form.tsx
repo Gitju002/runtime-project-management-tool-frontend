@@ -27,6 +27,7 @@ import { addTaskSchema } from "@/schema";
 import { useCreateTaskMutation } from "@/store/api/tasks";
 import { TimePicker } from "@/components/ui/time-picker";
 import { Loader2 } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 
 const TaskForm = ({
   setIsOpen,
@@ -140,7 +141,7 @@ const TaskForm = ({
               <FormItem>
                 <FormLabel>Purpose</FormLabel>
                 <FormControl>
-                  <Input
+                  <Textarea
                     className="bg-background hover:bg-input"
                     placeholder="Define Project Purpose Here"
                     {...field}

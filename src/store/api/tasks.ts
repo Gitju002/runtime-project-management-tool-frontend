@@ -94,6 +94,52 @@ export const taskApi = createApi({
         return error;
       },
     }),
+    markAsCompleted: builder.mutation<
+      TaskResponse,
+      {
+        taskId: string;
+      }
+    >({
+      query: (taskId) => ({
+        url: `/task/mark-completed`,
+        method: "PATCH",
+        body: taskId,
+      }),
+      invalidatesTags: ["Task"],
+      transformResponse: (response) => {
+        const apiResponse = response as TaskResponse;
+        toast.success(apiResponse.message);
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as TaskResponsePerUser;
+        toast.error(apiError.message);
+        return error;
+      },
+    }),
+    continueTaskTomorrow: builder.mutation<
+      TaskResponse,
+      {
+        taskId: string;
+      }
+    >({
+      query: (taskId) => ({
+        url: `/task/continue-tomorrow`,
+        method: "PATCH",
+        body: taskId,
+      }),
+      invalidatesTags: ["Task"],
+      transformResponse: (response) => {
+        const apiResponse = response as TaskResponse;
+        toast.success(apiResponse.message);
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as TaskResponsePerUser;
+        toast.error(apiError.message);
+        return error;
+      },
+    }),
   }),
 });
 
@@ -101,4 +147,6 @@ export const {
   useCreateTaskMutation,
   useGetTaskByUserIDQuery,
   useGetAllTaskQuery,
+  useMarkAsCompletedMutation,
+  useContinueTaskTomorrowMutation,
 } = taskApi;

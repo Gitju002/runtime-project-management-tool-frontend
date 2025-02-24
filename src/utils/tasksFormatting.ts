@@ -29,6 +29,7 @@ export const transformTasks = (
   const pageNo = taskData?.data?.paginationData.currentPage || 1;
   return (
     taskData?.data?.tasks.map((task, index) => ({
+      id: task._id,
       slno: limit * (pageNo - 1) + index + 1,
       date: formatDate(task.date),
       projectName: task.project.projectName,
