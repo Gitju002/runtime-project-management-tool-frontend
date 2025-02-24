@@ -44,8 +44,8 @@ const TaskForm = ({
       purpose: "",
       startDate: new Date().toISOString(),
       startTime: formatISOTime(new Date()),
-      finishDate: new Date().toISOString(),
-      finishTime: formatISOTime(new Date()),
+      // finishDate: new Date().toISOString(),
+      // finishTime: formatISOTime(new Date()),
       status: "Ongoing",
     },
   });
@@ -68,6 +68,7 @@ const TaskForm = ({
         form.reset();
         setIsOpen(false);
       });
+    // console.log(values);
   }
   const isFormDisabled = isProjectLoading || isServiceLoading || isSubmitting;
 
@@ -161,7 +162,13 @@ const TaskForm = ({
                     <DatePicker
                       placeholder="Pick start date"
                       value={field.value ? new Date(field.value) : new Date()}
-                      onChange={(e) => field.onChange(e?.toISOString())}
+                      onChange={(e) =>
+                        field.onChange(
+                          e
+                            ? new Date(e.getTime() + 19800000).toISOString()
+                            : null
+                        )
+                      }
                       btnDisabled={isFormDisabled}
                     />
                   </FormControl>
@@ -188,7 +195,7 @@ const TaskForm = ({
             />
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <FormField
               control={form.control}
               name="finishDate"
@@ -229,7 +236,7 @@ const TaskForm = ({
                 </FormItem>
               )}
             />
-          </div>
+          </div> */}
           <FormField
             control={form.control}
             name="status"

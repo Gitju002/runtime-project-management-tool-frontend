@@ -125,8 +125,8 @@ export type ExternalUser = {
 
 export type CreateTaskPayload = {
   date: string;
-  finishDate: string;
-  finishTime: string;
+  finishDate?: string;
+  finishTime?: string;
   project: string;
   purpose: string;
   service: string;
