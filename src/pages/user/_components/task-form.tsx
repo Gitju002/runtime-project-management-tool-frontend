@@ -163,11 +163,7 @@ const TaskForm = ({
                       placeholder="Pick start date"
                       value={field.value ? new Date(field.value) : new Date()}
                       onChange={(e) =>
-                        field.onChange(
-                          e
-                            ? new Date(e.getTime() + 19800000).toISOString()
-                            : null
-                        )
+                        field.onChange(e ? new Date(e).toISOString() : null)
                       }
                       btnDisabled={isFormDisabled}
                     />
