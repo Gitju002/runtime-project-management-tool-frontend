@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { EditSheet } from "@/components/ui/edit-sheet";
+import { AlertDialogUserTask } from "@/components/ui/alert-dialog-user-task";
 
 export const getColumns = (
   handleSortClick: (columnName: string) => void
@@ -137,7 +138,9 @@ export const getColumns = (
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem asChild>
+                <AlertDialogUserTask />
+              </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <EditSheet />
               </DropdownMenuItem>
