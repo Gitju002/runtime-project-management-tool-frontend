@@ -24,7 +24,7 @@ export const addTaskSchema = z
       .min(2, {
         message: "Please enter a valid purpose",
       })
-      .max(50, {
+      .max(10000, {
         message: "Purpose must not exceed 50 characters",
       }),
     startDate: z.string(),
@@ -124,8 +124,5 @@ export const addProjectSchema = z.object({
   //   })
   //   .optional(),
 
-  cost: z
-    .number()
-    .positive("Cost must be a positive number.")
-    .max(1_000_000, "Cost cannot exceed 1,000,000."),
+  cost: z.number().positive("Cost must be a positive number."),
 });
