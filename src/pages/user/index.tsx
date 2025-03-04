@@ -61,7 +61,7 @@ const User = () => {
   const currentPage = Number(searchParams.get("page")) || 1;
   const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
-  const userName = useSelector((state: RootState) => state.userInfo.name);
+  // const userName = useSelector((state: RootState) => state.userInfo.name);
   const { data: userData } = useGetUserQuery();
 
   // API Query with Search Filters
@@ -88,15 +88,20 @@ const User = () => {
     isFetching: allTasksFetching,
     isError: allTasksIsError,
     isSuccess: allTasksSuccess,
-  } = useGetAllTaskQuery({
-    userName: userData?.data.name,
-  });
+  } = useGetAllTaskQuery(
+    {
+      userName: userData?.data.name,
+    },
+    {
+      skip: !userData?.data.name,
+    }
+  );
 
-  console.log(allTasksData);
+  // console.log(allTasksData);
 
   const groupedTasks: GroupedTasks = groupTasksBySlug(allTasksData);
 
-  console.log(groupedTasks);
+  // console.log(groupedTasks);
 
   const [disableBtn, setDisableBtn] = useState<boolean>(false);
 

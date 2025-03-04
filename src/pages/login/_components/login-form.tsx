@@ -20,6 +20,8 @@ import { useDispatch } from "react-redux";
 import { setCredentials } from "@/store/features/userInfo";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
+import { useGetUserQuery } from "@/store/api/user";
+import { toast } from "sonner";
 export default function LoginForm() {
   const [login, { isLoading: isSubmitting, error, isSuccess }] =
     useLoginMutation();
@@ -39,21 +41,28 @@ export default function LoginForm() {
     setShowPassword(!showPassword);
   };
 
+  const { refetch } = useGetUserQuery();
+
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
     try {
       const response = await login(values).unwrap();
       // console.log(response);
-      dispatch(
-        setCredentials({
-          name: response?.data?.user?.name,
-          token: response?.data?.token,
-          role: response?.data?.user?.role,
-        })
-      );
-      if (response?.data?.user?.role === "Admin") {
-        router.push("/admin");
+      if (response.success) {
+        dispatch(
+          setCredentials({
+            name: response?.data?.user?.name,
+            token: response?.data?.token,
+            role: response?.data?.user?.role,
+          })
+        );
+        refetch();
+        if (response?.data?.user?.role === "Admin") {
+          router.push("/admin");
+        } else {
+          router.push("/user");
+        }
       } else {
-        router.push("/user");
+        toast.error(response.message);
       }
     } catch {
       console.error(error);
