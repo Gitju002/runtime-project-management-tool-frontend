@@ -10,6 +10,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useContinueTaskTomorrowMutation } from "@/store/api/tasks";
+import { ArrowUp } from "lucide-react";
 
 interface AlertDialogUserTaskForwardProps {
   taskId: string;
@@ -40,8 +41,8 @@ export const AlertDialogUserTaskForward = ({
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className="w-full relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-input">
-        Forward Task
+      <AlertDialogTrigger className=" w-full relative flex cursor-pointer select-none items-center gap-2 rounded-md px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-input border border-blue-600 font-semibold text-blue-600 dark:text-blue-500">
+        Forward <ArrowUp className="h-4 w-4" />
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

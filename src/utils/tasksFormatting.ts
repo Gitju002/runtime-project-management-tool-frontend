@@ -1,6 +1,12 @@
-import { GetAllTaskResponse, TableTask, Task } from "@/types/types";
+import {
+  GetAllTaskResponse,
+  GroupedTasks,
+  TableTask,
+  Task,
+  TaskResponsePerUser,
+} from "@/types/types";
 
-const formatDate = (isoString: string | null): string => {
+export const formatDate = (isoString: string | null): string => {
   if (!isoString) return "Pending";
   const date = new Date(isoString);
   const options: Intl.DateTimeFormatOptions = {
@@ -42,4 +48,30 @@ export const transformTasks = (
       status: task.status as "Initiated" | "Ongoing" | "Completed",
     })) || []
   );
+};
+
+export const groupTasksBySlug = (
+  tasksData: TaskResponsePerUser | undefined
+): GroupedTasks => {
+  if (!tasksData || !tasksData.data) {
+    return {};
+  }
+
+  return tasksData.data.reduce((acc: GroupedTasks, task: Task) => {
+    const { slug, date, project, service, purpose } = task;
+
+    if (!acc[slug]) {
+      acc[slug] = {
+        slug,
+        date,
+        projectName: project.projectName,
+        service: service.serviceName,
+        purpose,
+        tasks: [],
+      };
+    }
+
+    acc[slug].tasks.push(task);
+    return acc;
+  }, {});
 };

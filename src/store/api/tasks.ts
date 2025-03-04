@@ -78,9 +78,9 @@ export const taskApi = createApi({
       TaskResponsePerUser,
       Partial<GetAllProjectsQueryParams>
     >({
-      query: ({ projectName }) => ({
+      query: ({ projectName, userName }) => ({
         url: "/task/all",
-        params: { projectName },
+        params: { projectName, userName },
       }),
       providesTags: ["Task"],
       transformResponse: (response) => {

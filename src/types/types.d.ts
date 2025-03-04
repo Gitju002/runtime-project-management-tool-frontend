@@ -88,7 +88,20 @@ export type Task = {
   createdAt: string;
   updatedAt: string;
   __v: number;
+  slug: string;
 };
+
+export type GroupedTasks = Record<
+  string,
+  {
+    slug: string;
+    date: string;
+    projectName: string;
+    service: string;
+    purpose: string;
+    tasks: Task[];
+  }
+>;
 
 export type User = {
   _id: string;
@@ -174,6 +187,7 @@ export type GetAllProjectsQueryParams = {
   toDate?: string;
   fromDate?: string;
   projectName?: string;
+  userName?: string;
   serviceName?: string;
   location?: string;
   userName?: string;

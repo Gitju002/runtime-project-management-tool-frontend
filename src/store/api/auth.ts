@@ -16,6 +16,7 @@ export const authApi = createApi({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["User"],
       transformResponse: (response) => {
         const apiResponse = response as UserResponse;
         toast.success(apiResponse.message);

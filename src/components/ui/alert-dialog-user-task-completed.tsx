@@ -10,6 +10,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useMarkAsCompletedMutation } from "@/store/api/tasks";
+import { CheckCircle } from "lucide-react";
 
 interface AlertDialogUserTaskCompletedProps {
   taskId: string;
@@ -40,8 +41,8 @@ export const AlertDialogUserTaskCompleted = ({
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className="w-full relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-input">
-        Complete Task
+      <AlertDialogTrigger className="w-full relative flex cursor-pointer select-none items-center gap-2 rounded-md px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-input font-semibold border border-green-600 text-green-600 dark:text-green-500">
+        Completed <CheckCircle className=" h-4 w-4 " />
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
