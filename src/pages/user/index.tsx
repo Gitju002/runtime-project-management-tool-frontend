@@ -199,24 +199,28 @@ const User = () => {
 
   const [activeTab, setActiveTab] = useState("all");
 
-  const categorizedTaskGroups = Object.values(groupedTasks).map((group) => {
-    const hasCompleted = group.tasks.some(
-      (task) => task.status === "Completed"
-    );
-    const hasOngoing = group.tasks.some((task) => task.status === "Ongoing");
+  const categorizedTaskGroups = allTasksIsError
+    ? []
+    : Object.values(groupedTasks).map((group) => {
+        const hasCompleted = group.tasks.some(
+          (task) => task.status === "Completed"
+        );
+        const hasOngoing = group.tasks.some(
+          (task) => task.status === "Ongoing"
+        );
 
-    return {
-      ...group,
-      category:
-        hasCompleted && hasOngoing
-          ? "Both"
-          : hasCompleted
-          ? "Completed"
-          : hasOngoing
-          ? "Ongoing"
-          : "Initiated",
-    };
-  });
+        return {
+          ...group,
+          category:
+            hasCompleted && hasOngoing
+              ? "Both"
+              : hasCompleted
+              ? "Completed"
+              : hasOngoing
+              ? "Ongoing"
+              : "Initiated",
+        };
+      });
 
   const filteredTaskGroups = allTasksIsError
     ? []
