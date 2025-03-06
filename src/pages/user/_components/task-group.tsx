@@ -11,28 +11,27 @@ interface TaskGroupProps {
 }
 
 export function TaskGroup({ group }: TaskGroupProps) {
-  const latestTask = group.tasks[group.tasks.length - 1];
+  const latestTask = group?.tasks[group?.tasks?.length - 1];
   // console.log("Latest Task: ", latestTask);
-  const isCompleted = latestTask.status === "Completed";
+  const isCompleted = latestTask?.status === "Completed";
 
   return (
     <Card className="shadow-md dark:shadow-black/20 dark:bg-gradient-to-br dark:from-slate-900 dark:to-slate-950 bg-gradient-to-br from-white to-slate-50">
       <CardHeader>
         <div className="flex items-center justify-between">
-          {" "}
           <CardTitle className="text-lg font-bold text-teal-shade dark:text-lime-shade">
-            {group.purpose}
+            {group?.purpose}
           </CardTitle>
           <Badge variant={isCompleted ? "success" : "ongoing"} className="mt-2">
             {isCompleted ? "Completed" : "Ongoing"}
           </Badge>
         </div>
-        <div className="text-sm text-muted-foreground">{group.service}</div>
-        <div className="text-sm font-medium mt-1"> {group.projectName}</div>
+        <div className="text-sm text-muted-foreground">{group?.service}</div>
+        <div className="text-sm font-medium mt-1"> {group?.projectName}</div>
       </CardHeader>
       <CardContent className="p-4">
         <ScrollArea className="h-24 mt-4">
-          {group.tasks.map((task, index) => (
+          {group?.tasks?.map((task, index) => (
             <div key={task._id}>
               <div className="flex items-center gap-2 justify-between">
                 <div className="flex flex-row items-center gap-2">
@@ -58,7 +57,7 @@ export function TaskGroup({ group }: TaskGroupProps) {
                     </div>
                   )}
               </div>
-              {index < group.tasks.length - 1 && (
+              {index < group?.tasks?.length - 1 && (
                 <div className="border-l-2 border-dashed border-gray-300 h-4 ml-2 my-1"></div>
               )}
             </div>
