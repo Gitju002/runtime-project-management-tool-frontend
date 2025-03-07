@@ -18,7 +18,7 @@ export const formatDate = (isoString: string | null): string => {
   return new Intl.DateTimeFormat("en-GB", options).format(date);
 };
 
-const formatTime = (isoString: string | null): string => {
+export const formatTime = (isoString: string | null): string => {
   if (!isoString) return "Pending";
   const date = new Date(isoString);
   let hours = date.getHours();

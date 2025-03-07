@@ -25,8 +25,6 @@ import { Input } from "@/components/ui/input";
 import TaskCompletedComponent from "../admin/analytics/_components/task-completed";
 import PieChartComponent from "../admin/analytics/_components/pie-chart";
 import BarChartComponent from "../admin/analytics/_components/bar-chart";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
 import { useRouter } from "next/router";
 import { useSearchParams } from "next/navigation";
 import { DatePicker } from "@/components/ui/date-picker";
@@ -35,6 +33,7 @@ import TaskGroup from "./_components/task-group";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GroupedTasks } from "@/types/types";
 import { useGetUserQuery } from "@/store/api/user";
+import UserTaskGroupSkeleton from "@/components/skeleton/user-task-group-skeleton";
 
 const User = () => {
   const router = useRouter();
@@ -244,6 +243,8 @@ const User = () => {
         return matchesProject && matchesService && matchesTab;
       });
 
+  console.log(allTasksLoading, allTasksFetching);
+
   return (
     <div className="container  mx-auto min-h-screen w-full py-10">
       <div className="flex gap-2 justify-between items-center mb-6">
@@ -393,7 +394,11 @@ const User = () => {
           {/* New Design */}
           <div className="flex flex-col gap-4 mt-2">
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {filteredTaskGroups.length > 0 ? (
+              {allTasksLoading || allTasksFetching ? (
+                [1, 2, 3, 4, 5, 6].map((_, index) => (
+                  <UserTaskGroupSkeleton index={index} />
+                ))
+              ) : filteredTaskGroups.length > 0 ? (
                 filteredTaskGroups.map((group) => (
                   <TaskGroup key={group.slug} group={group} />
                 ))

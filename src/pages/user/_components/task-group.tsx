@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { GroupedTasks } from "@/types/types"; // Ensure correct import
-import { formatDate } from "@/utils/tasksFormatting";
+import { GroupedTasks } from "@/types/types";
+import { formatDate, formatTime } from "@/utils/tasksFormatting";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { AlertDialogUserTaskForward } from "@/components/ui/alert-dialog-user-task-forward";
 import { AlertDialogUserTaskCompleted } from "@/components/ui/alert-dialog-user-task-completed";
@@ -11,8 +11,8 @@ interface TaskGroupProps {
 }
 
 export function TaskGroup({ group }: TaskGroupProps) {
-  const latestTask = group?.tasks[group?.tasks?.length - 1];
-  // console.log("Latest Task: ", latestTask);
+  const latestTask = group?.tasks[0];
+  console.log(latestTask);
   const isCompleted = latestTask?.status === "Completed";
 
   return (
@@ -29,23 +29,37 @@ export function TaskGroup({ group }: TaskGroupProps) {
         <div className="text-sm text-muted-foreground">{group?.service}</div>
         <div className="text-sm font-medium mt-1"> {group?.projectName}</div>
       </CardHeader>
-      <CardContent className="p-4">
-        <ScrollArea className="h-24 mt-4">
+      <CardContent className="pt-0 pb-3">
+        <ScrollArea className="h-24 pr-4 mt-1">
           {group?.tasks?.map((task, index) => (
             <div key={task._id}>
               <div className="flex items-center gap-2 justify-between">
-                <div className="flex flex-row items-center gap-2">
-                  <div className="text-sm font-medium">
-                    {formatDate(task.startDate)}
+                <div className="w-full flex flex-row justify-between items-center gap-2">
+                  <div className=" flex items-center gap-2">
+                    <div className="text-sm font-medium">
+                      {formatDate(task.startDate)}
+                    </div>
+                    <Badge
+                      variant={
+                        task.status === "Completed" ? "success" : "ongoing"
+                      }
+                      className="mt-1"
+                    >
+                      {task.status}
+                    </Badge>
                   </div>
-                  <Badge
-                    variant={
-                      task.status === "Completed" ? "success" : "ongoing"
-                    }
-                    className="mt-1"
-                  >
-                    {task.status}
-                  </Badge>
+                  {index === group?.tasks?.length - 1 && (
+                    <div className="text-sm font-medium">
+                      <span className="text-xs opacity-60">Started at: </span>
+                      {formatTime(task.startTime)}
+                    </div>
+                  )}
+                  {task.status === "Completed" && (
+                    <div className="text-sm font-medium">
+                      <span className="text-xs opacity-60">Finised at: </span>
+                      {formatTime(task.finishTime)}
+                    </div>
+                  )}
                 </div>
                 {formatDate(task.startDate) ===
                   formatDate(new Date().toISOString()) &&
