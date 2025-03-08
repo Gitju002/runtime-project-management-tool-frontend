@@ -90,7 +90,7 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div className="flex gap-2 items-center py-4">
-        <div className="flex gap-2 ms-auto items-end">
+        <div className="flex gap-2 justify-start">
           {router.pathname === "/user" && (
             <div>
               <Button
