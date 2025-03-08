@@ -15,6 +15,7 @@ import {
   Logs,
   PieChartIcon,
   PlusCircleIcon,
+  Replace,
   User2Icon,
 } from "lucide-react";
 import { format } from "date-fns";
@@ -153,6 +154,7 @@ const User = () => {
       } else {
         params.delete("projectName");
       }
+      params.delete("page");
       router.push(`?${params.toString()}`, undefined, {
         shallow: true,
         scroll: false,
@@ -169,6 +171,7 @@ const User = () => {
       } else {
         params.delete("services");
       }
+      params.delete("page");
       router.push(`?${params.toString()}`, undefined, {
         shallow: true,
         scroll: false,
@@ -185,6 +188,7 @@ const User = () => {
       } else {
         params.delete("fromDate");
       }
+      params.delete("page");
       router.push(`?${params.toString()}`, undefined, {
         shallow: true,
         scroll: false,
@@ -201,6 +205,7 @@ const User = () => {
       } else {
         params.delete("toDate");
       }
+      params.delete("page");
       router.push(`?${params.toString()}`, undefined, {
         shallow: true,
         scroll: false,
@@ -209,9 +214,9 @@ const User = () => {
     return () => clearTimeout(delay);
   }, [toDateSearch]);
 
-  useEffect(() => {
-    refetchTasks();
-  }, []);
+  // useEffect(() => {
+  //   refetchTasks();
+  // }, []);
   const columns = getColumns(handleSortClick); // Pass the function here
 
   const formattedTasks = transformTasks(tasksData, limit);
@@ -311,7 +316,7 @@ const User = () => {
           </Dialog>
         </div>
       </div>
-      {/* {tasksData && userData ? (
+      {tasksData && userData ? (
         <div
           id="step_2_analytics"
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2 gap-2 "
@@ -341,8 +346,8 @@ const User = () => {
             Please add a task to view Analytics.
           </p>
         </div>
-      )} */}
-      {<div className="size-52"></div>}
+      )}
+      {/* {<div className="size-52"></div>} */}
       <div className="grid grid-cols-1 gap-2">
         <div className="flex justify-between items-center mb-6">
           <h1 id="step_3_userLogs" className="text-2xl font-semibold">

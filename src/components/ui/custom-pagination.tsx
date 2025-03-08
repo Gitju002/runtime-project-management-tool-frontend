@@ -65,7 +65,7 @@ export function CustomPagination({
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            href="#"
+            href=""
             onClick={() => handlePageChange(currentPage - 1)}
             // isActive={currentPage != 1}
           />
@@ -78,7 +78,7 @@ export function CustomPagination({
                 <PaginationEllipsis />
               ) : (
                 <PaginationLink
-                  href="#"
+                  href=""
                   isActive={currentPage === page}
                   onClick={() => handlePageChange(page)}
                 >
@@ -90,7 +90,7 @@ export function CustomPagination({
 
         <PaginationItem>
           <PaginationNext
-            href="#"
+            href=""
             onClick={() => {
               if (currentPage < totalPages) {
                 handlePageChange(currentPage + 1);
