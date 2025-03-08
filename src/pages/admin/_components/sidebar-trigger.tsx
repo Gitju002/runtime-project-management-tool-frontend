@@ -24,7 +24,7 @@ function CustomSidebarTrigger() {
       process.env.NEXT_PUBLIC_ADMIN_ROLE?.toLowerCase()
     );
   }, [userData]);
-  console.log("Userdata", userData);
+  // console.log("Userdata", userData);
 
   useEffect(() => {
     refetchUser();
@@ -32,7 +32,7 @@ function CustomSidebarTrigger() {
   return (
     <div
       className={cn(
-        " sticky z-50 mx-auto",
+        "sticky z-50 mx-auto",
         isMobile ? "top-0" : "top-2 container"
       )}
     >
@@ -61,7 +61,7 @@ function CustomSidebarTrigger() {
           )}
           variant={"outline"}
           size={"icon"}
-          onClick={isAdmin ? toggleSidebar : () => router.back()}
+          onClick={!isAdmin ? toggleSidebar : () => router.back()}
         >
           <ArrowRight />
         </Button>
