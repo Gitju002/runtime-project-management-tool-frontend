@@ -52,15 +52,16 @@ const User = () => {
   const [toDateSearch, setToDateSearch] = useState<Date | null>(
     searchParams.get("toDate") ? new Date(searchParams.get("toDate")!) : null
   );
-
   const sortBy = searchParams.get("sortBy")
     ? [searchParams.get("sortBy")!]
     : [];
-  const [isOpened, setIsOpened] = useState(false);
   const currentPage = Number(searchParams.get("page")) || 1;
+
+  const [isOpened, setIsOpened] = useState(false);
   const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   // const userName = useSelector((state: RootState) => state.userInfo.name);
+
   const { data: userData } = useGetUserQuery();
 
   // API Query with Search Filters
@@ -105,6 +106,7 @@ const User = () => {
   const [disableBtn, setDisableBtn] = useState<boolean>(false);
 
   //console.log("Tasks Data", tasksData);
+
   useEffect(() => {
     if (tasksData) {
       handlePageChange(tasksData.data.paginationData.currentPage);
@@ -116,7 +118,10 @@ const User = () => {
     // setPaginationLoading
     const params = new URLSearchParams(searchParams);
     params.set("page", page.toString());
-    router.push(`?${params.toString()}`);
+    router.push(`?${params.toString()}`, undefined, {
+      shallow: true,
+      scroll: false,
+    });
   };
 
   const handleSortClick = useCallback(
@@ -132,7 +137,10 @@ const User = () => {
         params.set("sortBy", columnName); // Apply Ascending
       }
 
-      router.push(`?${params.toString()}`);
+      router.push(`?${params.toString()}`, undefined, {
+        shallow: true,
+        scroll: false,
+      });
     },
     [searchParams, router]
   );
@@ -145,7 +153,10 @@ const User = () => {
       } else {
         params.delete("projectName");
       }
-      router.push(`?${params.toString()}`);
+      router.push(`?${params.toString()}`, undefined, {
+        shallow: true,
+        scroll: false,
+      });
     }, 500);
     return () => clearTimeout(delay);
   }, [projectSearch]);
@@ -158,7 +169,10 @@ const User = () => {
       } else {
         params.delete("services");
       }
-      router.push(`?${params.toString()}`);
+      router.push(`?${params.toString()}`, undefined, {
+        shallow: true,
+        scroll: false,
+      });
     }, 1250);
     return () => clearTimeout(delay);
   }, [serviceSearch]);
@@ -171,7 +185,10 @@ const User = () => {
       } else {
         params.delete("fromDate");
       }
-      router.push(`?${params.toString()}`);
+      router.push(`?${params.toString()}`, undefined, {
+        shallow: true,
+        scroll: false,
+      });
     }, 1250);
     return () => clearTimeout(delay);
   }, [fromDateSearch]);
@@ -184,7 +201,10 @@ const User = () => {
       } else {
         params.delete("toDate");
       }
-      router.push(`?${params.toString()}`);
+      router.push(`?${params.toString()}`, undefined, {
+        shallow: true,
+        scroll: false,
+      });
     }, 1250);
     return () => clearTimeout(delay);
   }, [toDateSearch]);
@@ -237,7 +257,7 @@ const User = () => {
         return matchesProject && matchesService && matchesTab;
       });
 
-  console.log(allTasksLoading, allTasksFetching);
+  // console.log(allTasksLoading, allTasksFetching);
 
   return (
     <div className="container  mx-auto min-h-screen w-full py-10">
@@ -291,7 +311,7 @@ const User = () => {
           </Dialog>
         </div>
       </div>
-      {tasksData && userData ? (
+      {/* {tasksData && userData ? (
         <div
           id="step_2_analytics"
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2 gap-2 "
@@ -321,7 +341,8 @@ const User = () => {
             Please add a task to view Analytics.
           </p>
         </div>
-      )}
+      )} */}
+      {<div className="size-52"></div>}
       <div className="grid grid-cols-1 gap-2">
         <div className="flex justify-between items-center mb-6">
           <h1 id="step_3_userLogs" className="text-2xl font-semibold">
