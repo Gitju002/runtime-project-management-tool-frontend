@@ -41,7 +41,7 @@ export const AlertDialogDeleteProject = ({
   return (
     <AlertDialog>
       <AlertDialogTrigger className="w-full relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-input">
-        Delete Task
+        Delete Project
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

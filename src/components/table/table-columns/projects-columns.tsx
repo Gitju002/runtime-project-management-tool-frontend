@@ -125,6 +125,17 @@ export const getColumns = (
     },
 
     {
+      accessorKey: "services",
+      header: () => " Services",
+      cell: ({ row }) => {
+        const services = (row.original.services ?? []).map(
+          (service) => service
+        );
+        return services.length > 0 ? services.join(", ") : "No Services";
+      },
+    },
+
+    {
       accessorKey: "projectDescription",
       header: () => <div>Project Description</div>,
       cell: ({ row }) => (

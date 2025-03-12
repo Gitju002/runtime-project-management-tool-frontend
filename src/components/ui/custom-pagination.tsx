@@ -8,6 +8,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useRouter } from "next/router";
 
 interface CustomPaginationProps {
   currentPage: number;
@@ -20,6 +21,7 @@ export function CustomPagination({
   totalPages,
   onPageChange,
 }: CustomPaginationProps) {
+  const router = useRouter();
   const getPageNumbers = () => {
     const pages = [];
 
@@ -60,12 +62,14 @@ export function CustomPagination({
     }
   };
 
+  const isAdmin = router.pathname.includes("/admin");
+
   return (
     <Pagination>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            href=""
+            href={isAdmin ? "#" : ""}
             onClick={() => handlePageChange(currentPage - 1)}
             // isActive={currentPage != 1}
           />
@@ -78,7 +82,7 @@ export function CustomPagination({
                 <PaginationEllipsis />
               ) : (
                 <PaginationLink
-                  href=""
+                  href={isAdmin ? "#" : ""}
                   isActive={currentPage === page}
                   onClick={() => handlePageChange(page)}
                 >
@@ -90,7 +94,7 @@ export function CustomPagination({
 
         <PaginationItem>
           <PaginationNext
-            href=""
+            href={isAdmin ? "#" : ""}
             onClick={() => {
               if (currentPage < totalPages) {
                 handlePageChange(currentPage + 1);

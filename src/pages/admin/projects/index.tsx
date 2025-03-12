@@ -152,6 +152,7 @@ export default function Projects() {
     }
   }, [projectData]);
 
+  console.log(projectData);
   const columns = getColumns(handleSortClick);
 
   return (

@@ -59,6 +59,7 @@ export type Project = {
   createdAt: string;
   updatedAt: string;
   __v: number;
+  services?: string[];
 };
 
 export type ProjectTypeDesc = {
