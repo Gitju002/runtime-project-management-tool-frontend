@@ -22,21 +22,21 @@ export const columns: ColumnDef<Task>[] = [
     accessorKey: "purpose",
     header: "Purpose",
   },
-  // {
-  //   accessorKey: "status",
-  //   header: "Status",
-  //   cell: ({ row }: { row: { original: GetAllTaskResponse } }) => (
-  //     <Badge
-  //       variant={
-  //         row.original.status === "Initiated"
-  //           ? "initial"
-  //           : row.original.status === "Ongoing"
-  //           ? "ongoing"
-  //           : "success"
-  //       }
-  //     >
-  //       {row.original.status}
-  //     </Badge>
-  //   ),
-  // },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => (
+      <Badge
+        variant={
+          row.original.status === "Initiated"
+            ? "initial"
+            : row.original.status === "Ongoing"
+            ? "ongoing"
+            : "success"
+        }
+      >
+        {row.original.status}
+      </Badge>
+    ),
+  },
 ];
