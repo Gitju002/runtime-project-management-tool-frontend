@@ -4,12 +4,12 @@ import { ProjectTypeDesc } from "@/types/types";
 
 export const columns: ColumnDef<Partial<ProjectTypeDesc>>[] = [
   {
-    accessorKey: "project",
-    header: "Project Name",
-  },
-  {
     accessorKey: "projectTypeDescription",
     header: "Type Description",
+  },
+  {
+    accessorKey: "project",
+    header: "Project Name",
   },
   {
     accessorKey: "location",

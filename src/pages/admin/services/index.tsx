@@ -19,7 +19,8 @@ import { useRouter } from "next/router";
 import { startTour } from "@/driver";
 
 export type Service = {
-  id: string;
+  // id: string;
+  _id: string;
   projectName: string;
   serviceName: string;
   description: string;
@@ -110,7 +111,8 @@ export default function Services() {
 
   const formattedServices: Service[] =
     servicesData?.data?.services?.map((service, index) => ({
-      id: (limit * (currentPage - 1) + index + 1).toString(),
+      // id: (limit * (currentPage - 1) + index + 1).toString(),
+      _id: service._id,
       projectName:
         typeof service.project === "string"
           ? service.project
@@ -143,14 +145,16 @@ export default function Services() {
         </div>
         <div className="flex justify-between gap-5 items-center">
           <Input
-            placeholder="Filter by Project Names..."
-            onChange={(e) => setProjectSearch(e.target.value)}
-            value={projectSearch}
-          />
-          <Input
             placeholder="Filter by Service Names..."
             onChange={(e) => setServiceSearch(e.target.value)}
             value={serviceSearch}
+            className="dark:bg-slate-800"
+          />
+          <Input
+            placeholder="Filter by Project Names..."
+            onChange={(e) => setProjectSearch(e.target.value)}
+            value={projectSearch}
+            className="dark:bg-slate-800"
           />
         </div>
         <>

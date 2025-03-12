@@ -24,7 +24,6 @@ import { useGetAllServicesQuery } from "@/store/api/service";
 import { useGetAllTaskQuery } from "@/store/api/tasks";
 import {
   useGetDurationAnalyticsQuery,
-  useGetDurationPerProjectQuery,
   useGetNoOfUsersByProjectQuery,
 } from "@/store/api/analytics";
 import { OverviewTabSkeleton } from "@/components/skeleton/project-details-overview-skeleton";

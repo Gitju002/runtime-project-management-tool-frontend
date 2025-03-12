@@ -20,7 +20,6 @@ import { DatePicker } from "@/components/ui/date-picker";
 import { format } from "date-fns";
 import { startTour } from "@/driver";
 
-import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 
 export default function Projects() {
