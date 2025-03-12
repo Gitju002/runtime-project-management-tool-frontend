@@ -27,20 +27,26 @@ export type Service = {
 
 export default function Services() {
   const [open, setOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10); // Items per page
   const [totalPages, setTotalPages] = useState(1);
   const [paginationLoading, setPaginationLoading] = useState(false);
   const searchParams = useSearchParams();
+  const currentPage = Number(searchParams.get("page")) || 1;
   const projectName = searchParams.get("projectName") || ""; // Reading from URL
   const serviceName = searchParams.get("serviceName") || ""; // Reading from URL
   const router = useRouter();
   const [projectSearch, setProjectSearch] = useState("");
   const [serviceSearch, setServiceSearch] = useState("");
 
+  // const handlePageChange = (page: number) => {
+  //   setPaginationLoading(true);
+  //   setCurrentPage(page);
+  // };
+
   const handlePageChange = (page: number) => {
-    setPaginationLoading(true);
-    setCurrentPage(page);
+    const params = new URLSearchParams(searchParams);
+    params.set("page", page.toString());
+    router.push(`?${params.toString()}`);
   };
 
   const {

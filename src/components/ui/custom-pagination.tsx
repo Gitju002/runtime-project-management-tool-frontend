@@ -70,6 +70,7 @@ export function CustomPagination({
         <PaginationItem>
           <PaginationPrevious
             href={isAdmin ? "#" : ""}
+            // href=""
             onClick={() => handlePageChange(currentPage - 1)}
             // isActive={currentPage != 1}
           />
@@ -83,6 +84,7 @@ export function CustomPagination({
               ) : (
                 <PaginationLink
                   href={isAdmin ? "#" : ""}
+                  // href=""
                   isActive={currentPage === page}
                   onClick={() => handlePageChange(page)}
                 >
@@ -95,6 +97,7 @@ export function CustomPagination({
         <PaginationItem>
           <PaginationNext
             href={isAdmin ? "#" : ""}
+            // href=""
             onClick={() => {
               if (currentPage < totalPages) {
                 handlePageChange(currentPage + 1);

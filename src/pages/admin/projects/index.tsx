@@ -37,6 +37,9 @@ export default function Projects() {
   const fromDate = searchParams.get("fromDate");
   const toDate = searchParams.get("toDate");
 
+  // const [currentPage, setCurrentPage] = useState(1);
+  const [paginationLoading, setPaginationLoading] = useState(false);
+
   // useEffect(() => {
   //   const storedStep = localStorage.getItem("driverStep");
 
@@ -126,6 +129,10 @@ export default function Projects() {
     params.set("page", page.toString());
     router.push(`?${params.toString()}`);
   };
+  // const handlePageChange = (page: number) => {
+  //   setPaginationLoading(true);
+  //   setCurrentPage(page);
+  // };
 
   const handleSortClick = useCallback(
     (columnName: string) => {
