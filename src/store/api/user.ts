@@ -65,18 +65,20 @@ export const userApi = createApi({
         return error;
       },
     }),
-    getCSVByUser: builder.mutation<Blob, void>({
-      query: () => ({
-        url: `/task/export-csv`,
+    getCSVByUser: builder.mutation<Blob, string>({
+      query: (userName) => ({
+        url: `/task/export-csv/`,
         method: "GET",
+        params: { userName },
         responseHandler: async (response) => response.blob(),
       }),
     }),
 
-    getPDFByUser: builder.mutation<Blob, void>({
-      query: () => ({
-        url: `/task/export-pdf`,
+    getPDFByUser: builder.mutation<Blob, string>({
+      query: (userName) => ({
+        url: `/task/export-pdf/`,
         method: "GET",
+        params: { userName },
         responseHandler: async (response) => response.blob(),
       }),
     }),

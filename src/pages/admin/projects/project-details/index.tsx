@@ -38,51 +38,81 @@ export default function ProjectDetails() {
     data: tasksData,
     isLoading,
     isError,
-  } = useGetAllTaskQuery({
-    projectName,
-  });
+  } = useGetAllTaskQuery(
+    {
+      projectName,
+    },
+    {
+      skip: !projectName,
+    }
+  );
 
   const {
     data: projectData,
     isLoading: isProjectLoading,
     isFetching,
     error: projectError,
-  } = useGetAllProjectsQuery({
-    projectName,
-  });
+  } = useGetAllProjectsQuery(
+    {
+      projectName,
+    },
+    {
+      skip: !projectName,
+    }
+  );
 
   const {
     data: allProjectTypeDesc,
     isLoading: isTypeDescLoading,
     isSuccess,
     error: typeDescError,
-  } = useGetAllProjectTypedescQuery({
-    projectName,
-  });
+  } = useGetAllProjectTypedescQuery(
+    {
+      projectName,
+    },
+    {
+      skip: !projectName,
+    }
+  );
 
   const {
     data: servicesData,
     isLoading: isServicesLoading,
     error,
-  } = useGetAllServicesQuery({
-    projectName,
-  });
+  } = useGetAllServicesQuery(
+    {
+      projectName,
+    },
+    {
+      skip: !projectName,
+    }
+  );
 
   const {
     data: tasksDurationData,
     isLoading: isDurationLoading,
     isError: durationError,
-  } = useGetDurationAnalyticsQuery({
-    projectName,
-  });
+  } = useGetDurationAnalyticsQuery(
+    {
+      projectName,
+    },
+    {
+      skip: !projectName,
+    }
+  );
 
   const {
     data: noOfUsersData,
     isLoading: isUsersLoading,
     isError: usersError,
-  } = useGetNoOfUsersByProjectQuery({
-    projectName,
-  });
+  } = useGetNoOfUsersByProjectQuery(
+    {
+      projectName,
+    },
+    {
+      skip: !projectName,
+    }
+  );
 
   console.log(noOfUsersData);
 

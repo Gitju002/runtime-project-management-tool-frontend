@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ColumnDef,
   VisibilityState,
@@ -29,6 +29,7 @@ import {
   useGetPDFByUserMutation,
 } from "@/store/api/user";
 import { useRouter } from "next/router";
+import { useParams, useSearchParams } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -43,6 +44,8 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
+  const [selectedUser, setSelectedUser] = useState<string>();
+  const searchParams = useSearchParams();
   const router = useRouter();
 
   const table = useReactTable({
@@ -57,15 +60,23 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  const [getCSVByUser, { data: csvData }] = useGetCSVByUserMutation();
-  const [getPDFByUser, { data: pdfData }] = useGetPDFByUserMutation();
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    const userName = params.get("userName");
+    if (userName) {
+      setSelectedUser(userName);
+    }
+  }, [searchParams]);
+
+  const [getCSVByUser] = useGetCSVByUserMutation();
+  const [getPDFByUser] = useGetPDFByUserMutation();
 
   const handleDownload = async (type: "csv" | "pdf") => {
     try {
       const fetchFunction =
         type === "csv"
-          ? await getCSVByUser().unwrap()
-          : await getPDFByUser().unwrap();
+          ? await getCSVByUser(selectedUser ? selectedUser : "").unwrap()
+          : await getPDFByUser(selectedUser ? selectedUser : "").unwrap();
 
       if (!fetchFunction) {
         return;
@@ -91,7 +102,8 @@ export function DataTable<TData, TValue>({
     <div>
       <div className="flex gap-2 items-center py-4">
         <div className="flex gap-2 justify-start">
-          {router.pathname === "/user" && (
+          {(router.pathname === "/user" ||
+            router.pathname === "/admin/analytics") && (
             <div>
               <Button
                 variant={"outline"}
