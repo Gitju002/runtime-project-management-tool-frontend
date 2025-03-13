@@ -36,35 +36,6 @@ export default function Projects() {
   const fromDate = searchParams.get("fromDate");
   const toDate = searchParams.get("toDate");
 
-  // const [currentPage, setCurrentPage] = useState(1);
-  const [paginationLoading, setPaginationLoading] = useState(false);
-
-  // useEffect(() => {
-  //   const storedStep = localStorage.getItem("driverStep");
-
-  //   if (storedStep === "3") {
-  //     localStorage.removeItem("driverStep"); // Clear stored progress
-
-  //     const driverObj = driver({
-  //       steps: [
-  //         {
-  //           element: "#add_project",
-  //           popover: {
-  //             title: "➕ Add a Project",
-  //             description: "Click this button to add a new project.",
-  //           },
-  //         },
-  //       ],
-  //       allowClose: false,
-  //       showProgress: true,
-  //     });
-
-  //     setTimeout(() => {
-  //       driverObj.drive(0); // Resume tour from step 0 on Projects page
-  //     }, 1000); // Small delay to allow UI to load
-  //   }
-  // }, []);
-
   useEffect(() => {
     startTour(router); // Detects and continues the tour automatically
   }, []);
@@ -204,7 +175,7 @@ export default function Projects() {
         </div>
 
         <>
-          <div id="project_table">
+          <div id="project_table" className="min-h-[550px]  rounded-md">
             <DataTable
               columns={columns}
               isLoading={isLoading || isFetching}

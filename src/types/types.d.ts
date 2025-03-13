@@ -60,6 +60,7 @@ export type Project = {
   updatedAt: string;
   __v: number;
   services?: string[];
+  projectTypeDesc?: string[];
 };
 
 export type ProjectTypeDesc = {
@@ -342,3 +343,10 @@ export interface TasksDuration {
     }[];
   };
 }
+export type FormattedService = {
+  // id: string;
+  _id: string;
+  projectName: string;
+  serviceName: string;
+  description: string;
+};

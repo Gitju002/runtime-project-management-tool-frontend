@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { Service } from "@/pages/admin/services/index";
+import type { FormattedService } from "@/types/types";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,8 +9,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { AlertDialogDeleteService } from "@/components/ui/alert-dialog-delete-service";
+import { ProjectDetails } from "./projects-columns";
+// import { Service } from "@/types/types";
 
-export const columns: ColumnDef<Service>[] = [
+export const columns: ColumnDef<FormattedService>[] = [
   // {
   //   accessorKey: "id",
   //   header: "SL No.",
@@ -21,7 +23,10 @@ export const columns: ColumnDef<Service>[] = [
   },
   {
     accessorKey: "projectName",
-    header: "Project Name",
+    header: " Project Name",
+    cell: ({ row }) => (
+      <ProjectDetails projectName={row.original.projectName} />
+    ),
   },
   {
     accessorKey: "description",

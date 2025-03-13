@@ -56,10 +56,31 @@ export const project_TD_Api = createApi({
       },
       invalidatesTags: ["ProjectType"],
     }),
+    deleteProjectTypeDesc: builder.mutation<
+      Partial<GetAllTypeDescResponse>,
+      string
+    >({
+      query: (projectTypeDescId) => ({
+        url: `/projectTypeDesc/delete/${projectTypeDescId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["ProjectType"],
+      transformResponse: (response) => {
+        const apiResponse = response as Partial<GetAllTypeDescResponse>;
+        toast.success(apiResponse.message);
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as Partial<GetAllTypeDescResponse>;
+        toast.error(apiError.message);
+        return error;
+      },
+    }),
   }),
 });
 
 export const {
   useGetAllProjectTypedescQuery,
   useCreateProjectTypeDescMutation,
+  useDeleteProjectTypeDescMutation,
 } = project_TD_Api;

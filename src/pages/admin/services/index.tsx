@@ -17,14 +17,7 @@ import { Input } from "@/components/ui/input";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { startTour } from "@/driver";
-
-export type Service = {
-  // id: string;
-  _id: string;
-  projectName: string;
-  serviceName: string;
-  description: string;
-};
+import { FormattedService } from "@/types/types";
 
 export default function Services() {
   const [open, setOpen] = useState(false);
@@ -109,7 +102,7 @@ export default function Services() {
     startTour(router);
   }, []);
 
-  const formattedServices: Service[] =
+  const formattedServices: FormattedService[] =
     servicesData?.data?.services?.map((service, index) => ({
       // id: (limit * (currentPage - 1) + index + 1).toString(),
       _id: service._id,
@@ -143,7 +136,7 @@ export default function Services() {
             </DialogContent>
           </Dialog>
         </div>
-        <div className="flex justify-between gap-5 items-center">
+        <div className="flex justify-between gap-5 items-center mb-6">
           <Input
             placeholder="Filter by Service Names..."
             onChange={(e) => setServiceSearch(e.target.value)}
@@ -158,7 +151,7 @@ export default function Services() {
           />
         </div>
         <>
-          <div id="services_table">
+          <div id="services_table" className="min-h-[550px] rounded-md">
             {" "}
             <DataTable
               columns={columns}
