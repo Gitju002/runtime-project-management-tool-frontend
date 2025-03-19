@@ -140,6 +140,37 @@ export const taskApi = createApi({
         return error;
       },
     }),
+    getCSVByUser: builder.mutation<Blob, string>({
+      query: (userName) => ({
+        url: `/task/export-csv/`,
+        method: "GET",
+        params: { userName },
+        responseHandler: async (response) => response.blob(),
+      }),
+    }),
+
+    getPDFByUser: builder.mutation<Blob, string>({
+      query: (userName) => ({
+        url: `/task/export-pdf/`,
+        method: "GET",
+        params: { userName },
+        responseHandler: async (response) => response.blob(),
+      }),
+    }),
+    getCSVByProject: builder.mutation<Blob, string>({
+      query: (projectName) => ({
+        url: `task/export-csv-by-project/${encodeURIComponent(projectName)}`,
+        method: "GET",
+        responseHandler: async (response) => response.blob(),
+      }),
+    }),
+    getPDFByProject: builder.mutation<Blob, string>({
+      query: (projectName) => ({
+        url: `task/export-pdf-by-project/${encodeURIComponent(projectName)}`,
+        method: "GET",
+        responseHandler: async (response) => response.blob(),
+      }),
+    }),
   }),
 });
 
@@ -149,4 +180,8 @@ export const {
   useGetAllTaskQuery,
   useMarkAsCompletedMutation,
   useContinueTaskTomorrowMutation,
+  useGetCSVByUserMutation,
+  useGetPDFByUserMutation,
+  useGetCSVByProjectMutation,
+  useGetPDFByProjectMutation,
 } = taskApi;

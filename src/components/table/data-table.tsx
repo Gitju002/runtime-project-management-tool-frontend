@@ -27,7 +27,7 @@ import { DataTableSkeleton } from "../skeleton/data-table-skeleton";
 import {
   useGetCSVByUserMutation,
   useGetPDFByUserMutation,
-} from "@/store/api/user";
+} from "@/store/api/tasks";
 import { useRouter } from "next/router";
 import { useParams, useSearchParams } from "next/navigation";
 
@@ -104,7 +104,7 @@ export function DataTable<TData, TValue>({
         <div className="flex gap-2 justify-start">
           {(router.pathname === "/user" ||
             router.pathname === "/admin/analytics") && (
-            <div>
+            <div className="flex gap-2 justify-start">
               <Button
                 variant={"outline"}
                 size={"icon"}

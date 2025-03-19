@@ -65,30 +65,8 @@ export const userApi = createApi({
         return error;
       },
     }),
-    getCSVByUser: builder.mutation<Blob, string>({
-      query: (userName) => ({
-        url: `/task/export-csv/`,
-        method: "GET",
-        params: { userName },
-        responseHandler: async (response) => response.blob(),
-      }),
-    }),
-
-    getPDFByUser: builder.mutation<Blob, string>({
-      query: (userName) => ({
-        url: `/task/export-pdf/`,
-        method: "GET",
-        params: { userName },
-        responseHandler: async (response) => response.blob(),
-      }),
-    }),
   }),
 });
 
-export const {
-  useGetAllUsersQuery,
-  useGetUsersListQuery,
-  useGetUserQuery,
-  useGetCSVByUserMutation,
-  useGetPDFByUserMutation,
-} = userApi;
+export const { useGetAllUsersQuery, useGetUsersListQuery, useGetUserQuery } =
+  userApi;

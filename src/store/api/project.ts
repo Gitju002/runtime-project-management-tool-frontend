@@ -68,7 +68,7 @@ export const projectApi = createApi({
     }),
     deleteProject: builder.mutation<CreateProjectResponse, string>({
       query: (projectId) => ({
-        url: `/project/delete/${projectId}`,
+        url: `/project/delete/${encodeURIComponent(projectId)}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Project"],
