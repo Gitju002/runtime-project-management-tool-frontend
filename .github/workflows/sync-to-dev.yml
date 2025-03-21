@@ -1,0 +1,30 @@
+name: Sync to Dev Repository
+
+on:
+  push:
+    branches:
+      - snehashis  # Trigger the action on push to the 'snehashis' branch
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Add remote for dev repo
+        run: |
+          git remote add dev https://github.com/Gitju002/runtime-project-management-tool-dev.git
+          git fetch dev
+
+      - name: Push changes to dev repository
+        run: |
+          git push dev snehashis:main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Automatically provided secret for auth
