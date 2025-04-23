@@ -19,9 +19,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DataTableSkeleton } from "../skeleton/data-table-skeleton";
+import {
+  useGetCSVByProjectMutation,
+  useGetPDFByProjectMutation,
+} from "@/store/api/tasks";
+import { Eye, FileDown, Sheet } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,6 +50,8 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+  const [selectedProject, setSelectedProject] = React.useState<string>();
+  const searchParams = useSearchParams();
 
   const table = useReactTable({
     data,
@@ -54,9 +68,93 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  React.useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    const projectName = params.get("projectName");
+    if (projectName) {
+      setSelectedProject(projectName);
+    }
+  }, [searchParams]);
+
+  const [getCSVByProject] = useGetCSVByProjectMutation();
+  const [getPDFByProject] = useGetPDFByProjectMutation();
+
+  const handleDownload = async (type: "csv" | "pdf") => {
+    try {
+      const fetchFunction =
+        type === "csv"
+          ? await getCSVByProject(
+              selectedProject ? selectedProject : ""
+            ).unwrap()
+          : await getPDFByProject(
+              selectedProject ? selectedProject : ""
+            ).unwrap();
+
+      if (!fetchFunction) {
+        return;
+      }
+
+      const blob = new Blob([fetchFunction], {
+        type: type === "csv" ? "text/csv" : "application/pdf",
+      });
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `tasks.${type}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error(`Failed to download ${type}`, error);
+    }
+  };
+
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center gap-2 py-4">
+        <div className="flex gap-2 justify-start">
+          <Button
+            variant={"outline"}
+            size={"icon"}
+            onClick={() => handleDownload("csv")}
+          >
+            <Sheet />
+          </Button>
+          <Button
+            variant={"outline"}
+            size={"icon"}
+            onClick={() => handleDownload("pdf")}
+          >
+            <FileDown />
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                <Eye size={16} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
         <Input
           placeholder="Filter by username..."
           value={
@@ -119,7 +217,7 @@ export function DataTable<TData, TValue>({
           </Table>
         </div>
       )}
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-center space-x-2 py-4">
         <Button
           variant="outline"
           size="sm"

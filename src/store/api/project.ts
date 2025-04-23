@@ -66,6 +66,23 @@ export const projectApi = createApi({
       },
       invalidatesTags: ["Project"],
     }),
+    deleteProject: builder.mutation<CreateProjectResponse, string>({
+      query: (projectId) => ({
+        url: `/project/delete/${encodeURIComponent(projectId)}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Project"],
+      transformResponse: (response) => {
+        const apiResponse = response as CreateProjectResponse;
+        toast.success(apiResponse.message);
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as CreateProjectResponse;
+        toast.error(apiError.message);
+        return error;
+      },
+    }),
   }),
 });
 
@@ -73,4 +90,5 @@ export const {
   useGetProjectListQuery,
   useGetAllProjectsQuery,
   useCreateProjectMutation,
+  useDeleteProjectMutation,
 } = projectApi;

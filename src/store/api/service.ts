@@ -71,6 +71,23 @@ export const serviceApi = createApi({
         return error;
       },
     }),
+    deleteService: builder.mutation<CreateServiceResponse, string>({
+      query: (serviceId) => ({
+        url: `/service/delete/${serviceId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Service"],
+      transformResponse: (response) => {
+        const apiResponse = response as CreateServiceResponse;
+        toast.success(apiResponse.message);
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as CreateServiceResponse;
+        toast.error(apiError.message);
+        return error;
+      },
+    }),
   }),
 });
 
@@ -78,4 +95,5 @@ export const {
   useGetServiceByProjectQuery,
   useGetAllServicesQuery,
   useCreateServiceMutation,
+  useDeleteServiceMutation,
 } = serviceApi;

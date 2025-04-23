@@ -3,18 +3,20 @@ import { TableTask } from "@/types/types";
 import { Badge } from "@/components/ui/badge";
 import { useSearchParams } from "next/navigation";
 import { ArrowDown, ArrowUp } from "lucide-react";
-// import { MoreHorizontal } from "lucide-react";
-// import { Button } from "@/components/ui/button";
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuItem,
-//   DropdownMenuLabel,
-//   DropdownMenuSeparator,
-//   DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu";
+import { MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Checkbox } from "@/components/ui/checkbox";
+import { EditSheet } from "@/components/ui/edit-sheet";
+import { AlertDialogUserTaskForward } from "@/components/ui/alert-dialog-user-task-forward";
+import { AlertDialogUserTaskCompleted } from "@/components/ui/alert-dialog-user-task-completed";
 
-// Accept handleSortClick as a parameter
 export const getColumns = (
   handleSortClick: (columnName: string) => void
 ): ColumnDef<TableTask>[] => {
@@ -30,6 +32,28 @@ export const getColumns = (
     return <ArrowUp size={16} className="ml-1 text-gray-400" />; // Default inactive state
   };
   return [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
     {
       accessorKey: "slno",
       header: () => <div>Sl No.</div>,
@@ -102,26 +126,46 @@ export const getColumns = (
         </Badge>
       ), // Adds color coding for status
     },
-    // {
-    //   id: "actions",
-    //   header: "Actions",
-    //   cell: ({ row }) => {
-    //     return (
-    //       <DropdownMenu>
-    //         <DropdownMenuTrigger asChild>
-    //           <Button variant="ghost" className="h-8 w-8 p-0">
-    //             <span className="sr-only">Open menu</span>
-    //             <MoreHorizontal className="h-4 w-4" />
-    //           </Button>
-    //         </DropdownMenuTrigger>
-    //         <DropdownMenuContent align="end">
-    //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-    //           <DropdownMenuItem>Delete Task</DropdownMenuItem>
-    //           <DropdownMenuItem>Edit Task</DropdownMenuItem>
-    //         </DropdownMenuContent>
-    //       </DropdownMenu>
-    //     );
-    //   },
-    // },
+    {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => {
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <AlertDialogUserTaskForward taskId={row.original.id} />
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <AlertDialogUserTaskCompleted taskId={row.original.id} />
+              </DropdownMenuItem>
+              {/* <DropdownMenuItem asChild>
+                <EditSheet />
+              </DropdownMenuItem> */}
+              <DropdownMenuItem
+                onClick={() =>
+                  navigator.clipboard.writeText(row.original.projectName)
+                }
+              >
+                Copy Project Name
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  navigator.clipboard.writeText(row.original.purpose)
+                }
+              >
+                Copy Purpose
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
   ];
 };

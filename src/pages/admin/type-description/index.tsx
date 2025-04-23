@@ -17,6 +17,7 @@ import { useGetAllProjectTypedescQuery } from "@/store/api/projectTypeDesc";
 import { CustomPagination } from "@/components/ui/custom-pagination";
 import { Input } from "@/components/ui/input";
 import { startTour } from "@/driver";
+import { GetAllTypeDescResponse, ProjectTypeDesc } from "@/types/types";
 
 export default function TypeDescription() {
   const router = useRouter();
@@ -96,6 +97,7 @@ export default function TypeDescription() {
           : projectType.project.projectName,
       projectTypeDescription: projectType.projectTypeDescription,
       location: projectType.location,
+      _id: projectType._id,
     })) || [];
 
   return (
@@ -135,7 +137,7 @@ export default function TypeDescription() {
           />
         </div>
         <>
-          <div id="typeDescTable">
+          <div id="typeDescTable" className="min-h-[550px] rounded-md">
             <DataTable
               columns={columns}
               isLoading={isLoading || isFetching}

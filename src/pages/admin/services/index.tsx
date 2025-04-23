@@ -17,30 +17,30 @@ import { Input } from "@/components/ui/input";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { startTour } from "@/driver";
-
-export type Service = {
-  id: string;
-  projectName: string;
-  serviceName: string;
-  description: string;
-};
+import { FormattedService } from "@/types/types";
 
 export default function Services() {
   const [open, setOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10); // Items per page
   const [totalPages, setTotalPages] = useState(1);
   const [paginationLoading, setPaginationLoading] = useState(false);
   const searchParams = useSearchParams();
+  const currentPage = Number(searchParams.get("page")) || 1;
   const projectName = searchParams.get("projectName") || ""; // Reading from URL
   const serviceName = searchParams.get("serviceName") || ""; // Reading from URL
   const router = useRouter();
   const [projectSearch, setProjectSearch] = useState("");
   const [serviceSearch, setServiceSearch] = useState("");
 
+  // const handlePageChange = (page: number) => {
+  //   setPaginationLoading(true);
+  //   setCurrentPage(page);
+  // };
+
   const handlePageChange = (page: number) => {
-    setPaginationLoading(true);
-    setCurrentPage(page);
+    const params = new URLSearchParams(searchParams);
+    params.set("page", page.toString());
+    router.push(`?${params.toString()}`);
   };
 
   const {
@@ -102,9 +102,10 @@ export default function Services() {
     startTour(router);
   }, []);
 
-  const formattedServices: Service[] =
+  const formattedServices: FormattedService[] =
     servicesData?.data?.services?.map((service, index) => ({
-      id: (limit * (currentPage - 1) + index + 1).toString(),
+      // id: (limit * (currentPage - 1) + index + 1).toString(),
+      _id: service._id,
       projectName:
         typeof service.project === "string"
           ? service.project
@@ -135,20 +136,22 @@ export default function Services() {
             </DialogContent>
           </Dialog>
         </div>
-        <div className="flex justify-between gap-5 items-center">
-          <Input
-            placeholder="Filter by Project Names..."
-            onChange={(e) => setProjectSearch(e.target.value)}
-            value={projectSearch}
-          />
+        <div className="flex justify-between gap-5 items-center mb-6">
           <Input
             placeholder="Filter by Service Names..."
             onChange={(e) => setServiceSearch(e.target.value)}
             value={serviceSearch}
+            className="dark:bg-slate-800"
+          />
+          <Input
+            placeholder="Filter by Project Names..."
+            onChange={(e) => setProjectSearch(e.target.value)}
+            value={projectSearch}
+            className="dark:bg-slate-800"
           />
         </div>
         <>
-          <div id="services_table">
+          <div id="services_table" className="min-h-[550px] rounded-md">
             {" "}
             <DataTable
               columns={columns}

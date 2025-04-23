@@ -10,21 +10,32 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import TaskForm from "./_components/task-form";
-import { Car, Logs, PieChartIcon, PlusCircleIcon } from "lucide-react";
+import {
+  Car,
+  Grid3X3Icon,
+  ListIcon,
+  Logs,
+  PieChartIcon,
+  PlusCircleIcon,
+  User2Icon,
+} from "lucide-react";
 import { format } from "date-fns";
-import { useGetTaskByUserIDQuery } from "@/store/api/tasks";
-import { transformTasks } from "@/utils/tasksFormatting";
+import { useGetAllTaskQuery, useGetTaskByUserIDQuery } from "@/store/api/tasks";
+import { groupTasksBySlug, transformTasks } from "@/utils/tasksFormatting";
 import { CustomPagination } from "@/components/ui/custom-pagination";
 import { Input } from "@/components/ui/input";
 import TaskCompletedComponent from "../admin/analytics/_components/task-completed";
 import PieChartComponent from "../admin/analytics/_components/pie-chart";
 import BarChartComponent from "../admin/analytics/_components/bar-chart";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
 import { useRouter } from "next/router";
 import { useSearchParams } from "next/navigation";
 import { DatePicker } from "@/components/ui/date-picker";
 import { userTaskTour } from "@/driver";
+import TaskGroup from "./_components/task-group";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { GroupedTasks } from "@/types/types";
+import { useGetUserQuery } from "@/store/api/user";
+import UserTaskGroupSkeleton from "@/components/skeleton/user-task-group-skeleton";
 
 const User = () => {
   const router = useRouter();
@@ -43,14 +54,17 @@ const User = () => {
   const [toDateSearch, setToDateSearch] = useState<Date | null>(
     searchParams.get("toDate") ? new Date(searchParams.get("toDate")!) : null
   );
-
   const sortBy = searchParams.get("sortBy")
     ? [searchParams.get("sortBy")!]
     : [];
-  const [isOpened, setIsOpened] = useState(false);
   const currentPage = Number(searchParams.get("page")) || 1;
+
+  const [isOpened, setIsOpened] = useState(false);
   const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
+  // const userName = useSelector((state: RootState) => state.userInfo.name);
+
+  const { data: userData } = useGetUserQuery();
 
   // API Query with Search Filters
   const {
@@ -59,6 +73,7 @@ const User = () => {
     isFetching,
     isError: tasksIsError,
     isSuccess: tasksSuccess,
+    refetch: refetchTasks,
   } = useGetTaskByUserIDQuery({
     toDate: searchParams.get("toDate") || "",
     fromDate: searchParams.get("fromDate") || "",
@@ -69,9 +84,31 @@ const User = () => {
     sortBy,
   });
 
+  const {
+    data: allTasksData,
+    isLoading: allTasksLoading,
+    isFetching: allTasksFetching,
+    isError: allTasksIsError,
+    isSuccess: allTasksSuccess,
+  } = useGetAllTaskQuery(
+    {
+      userName: userData?.data.name,
+    },
+    {
+      skip: !userData?.data.name,
+    }
+  );
+
+  // console.log(allTasksData);
+
+  const groupedTasks: GroupedTasks = groupTasksBySlug(allTasksData);
+
+  // console.log(groupedTasks);
+
   const [disableBtn, setDisableBtn] = useState<boolean>(false);
 
   //console.log("Tasks Data", tasksData);
+
   useEffect(() => {
     if (tasksData) {
       handlePageChange(tasksData.data.paginationData.currentPage);
@@ -83,7 +120,10 @@ const User = () => {
     // setPaginationLoading
     const params = new URLSearchParams(searchParams);
     params.set("page", page.toString());
-    router.push(`?${params.toString()}`);
+    router.push(`?${params.toString()}`, undefined, {
+      shallow: true,
+      scroll: false,
+    });
   };
 
   const handleSortClick = useCallback(
@@ -99,7 +139,10 @@ const User = () => {
         params.set("sortBy", columnName); // Apply Ascending
       }
 
-      router.push(`?${params.toString()}`);
+      router.push(`?${params.toString()}`, undefined, {
+        shallow: true,
+        scroll: false,
+      });
     },
     [searchParams, router]
   );
@@ -112,7 +155,11 @@ const User = () => {
       } else {
         params.delete("projectName");
       }
-      router.push(`?${params.toString()}`);
+      params.delete("page");
+      router.push(`?${params.toString()}`, undefined, {
+        shallow: true,
+        scroll: false,
+      });
     }, 500);
     return () => clearTimeout(delay);
   }, [projectSearch]);
@@ -125,7 +172,11 @@ const User = () => {
       } else {
         params.delete("services");
       }
-      router.push(`?${params.toString()}`);
+      params.delete("page");
+      router.push(`?${params.toString()}`, undefined, {
+        shallow: true,
+        scroll: false,
+      });
     }, 1250);
     return () => clearTimeout(delay);
   }, [serviceSearch]);
@@ -138,7 +189,11 @@ const User = () => {
       } else {
         params.delete("fromDate");
       }
-      router.push(`?${params.toString()}`);
+      params.delete("page");
+      router.push(`?${params.toString()}`, undefined, {
+        shallow: true,
+        scroll: false,
+      });
     }, 1250);
     return () => clearTimeout(delay);
   }, [fromDateSearch]);
@@ -151,22 +206,69 @@ const User = () => {
       } else {
         params.delete("toDate");
       }
-      router.push(`?${params.toString()}`);
+      params.delete("page");
+      router.push(`?${params.toString()}`, undefined, {
+        shallow: true,
+        scroll: false,
+      });
     }, 1250);
     return () => clearTimeout(delay);
   }, [toDateSearch]);
+
+  // useEffect(() => {
+  //   refetchTasks();
+  // }, []);
   const columns = getColumns(handleSortClick); // Pass the function here
 
   const formattedTasks = transformTasks(tasksData, limit);
 
-  const userName = useSelector((state: RootState) => state.userInfo.name);
+  const [activeTab, setActiveTab] = useState("all");
 
-  // console.log("username ", userName);
+  const categorizedTaskGroups = allTasksIsError
+    ? []
+    : Object.values(groupedTasks).map((group) => {
+        const lastTask = group.tasks[0];
+        const category =
+          lastTask.status === "Completed"
+            ? "Completed"
+            : lastTask.status === "Ongoing"
+            ? "Ongoing"
+            : "Initiated";
+
+        return {
+          ...group,
+          category,
+        };
+      });
+
+  const filteredTaskGroups = allTasksIsError
+    ? []
+    : categorizedTaskGroups.filter((group) => {
+        const matchesProject =
+          !projectSearch ||
+          group.projectName.toLowerCase().includes(projectSearch.toLowerCase());
+
+        const matchesService =
+          !serviceSearch ||
+          group.service.toLowerCase().includes(serviceSearch.toLowerCase());
+
+        // Apply tab filtering
+        const matchesTab =
+          activeTab === "all" ||
+          (activeTab === "ongoing" &&
+            (group.category === "Ongoing" || group.category === "Both")) ||
+          (activeTab === "completed" &&
+            (group.category === "Completed" || group.category === "Both"));
+
+        return matchesProject && matchesService && matchesTab;
+      });
+
+  // console.log(allTasksLoading, allTasksFetching);
 
   return (
     <div className="container  mx-auto min-h-screen w-full py-10">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">
+      <div className="flex gap-2 justify-between items-center mb-6">
+        <h1 className="sm:text-sm lg:text-2xl text-nowrap font-semibold">
           User Analytics Overview{" "}
           <PieChartIcon
             size={20}
@@ -183,6 +285,14 @@ const User = () => {
               Start Tour <Car />
             </Button>
           </motion.div>
+          <div>
+            <Button
+              className="transition-all duration-200 border border-teal-shade dark:border-lime-shade bg-transparent text-teal-shade dark:text-lime-shade  hover:shadow-lg hover:bg-transparent dark:hover:shadow-lime-shade/35 hover:shadow-teal-shade/35"
+              onClick={() => router.push("/profile")}
+            >
+              Profile <User2Icon />
+            </Button>
+          </div>
           <Dialog open={isOpened} onOpenChange={setIsOpened}>
             <DialogTrigger asChild>
               <motion.div whileHover={{ scale: 1.05 }}>
@@ -207,14 +317,23 @@ const User = () => {
           </Dialog>
         </div>
       </div>
-      {tasksData ? (
+      {tasksData && userData ? (
         <div
           id="step_2_analytics"
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2 gap-2 "
         >
-          <TaskCompletedComponent userName={userName} taskdata={tasksData} />
-          <PieChartComponent userName={userName} taskdata={tasksData} />
-          <BarChartComponent userName={userName} taskdata={tasksData} />
+          <TaskCompletedComponent
+            userName={userData?.data.name}
+            taskdata={tasksData}
+          />
+          <PieChartComponent
+            userName={userData?.data.name}
+            taskdata={tasksData}
+          />
+          <BarChartComponent
+            userName={userData?.data.name}
+            taskdata={tasksData}
+          />
         </div>
       ) : (
         <div className="flex flex-col items-center border rounded-md justify-center h-96">
@@ -229,6 +348,7 @@ const User = () => {
           </p>
         </div>
       )}
+      {/* {<div className="size-52"></div>} */}
       <div className="grid grid-cols-1 gap-2">
         <div className="flex justify-between items-center mb-6">
           <h1 id="step_3_userLogs" className="text-2xl font-semibold">

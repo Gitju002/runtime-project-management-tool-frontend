@@ -25,9 +25,14 @@ export async function middleware(request: NextRequest) {
   const loginUrl = new URL("/login", origin);
   const adminUrl = new URL("/admin", origin);
   const userUrl = new URL("/user", origin);
+  const profileUrl = new URL("/profile", origin);
 
   const adminRouteRegex = /^\/admin(\/|$)/;
   const userRouteRegex = /^\/user(\/|$)/;
+
+  if (!authToken && pathname.startsWith(profileUrl.pathname)) {
+    return NextResponse.redirect(loginUrl);
+  }
 
   // If no token and not on login page, redirect to login
   if (!authToken && !pathname.startsWith(loginUrl.pathname)) {

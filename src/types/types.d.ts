@@ -1,4 +1,5 @@
 export type TableTask = {
+  id: string;
   slno: number;
   date: string;
   projectName: string;
@@ -58,6 +59,8 @@ export type Project = {
   createdAt: string;
   updatedAt: string;
   __v: number;
+  services?: string[];
+  projectTypeDesc?: string[];
 };
 
 export type ProjectTypeDesc = {
@@ -87,14 +90,27 @@ export type Task = {
   createdAt: string;
   updatedAt: string;
   __v: number;
+  slug: string;
 };
+
+export type GroupedTasks = Record<
+  string,
+  {
+    slug: string;
+    date: string;
+    projectName: string;
+    service: string;
+    purpose: string;
+    tasks: Task[];
+  }
+>;
 
 export type User = {
   _id: string;
   externalId: number;
   date_of_joining: string;
-  roleId: number;
-  roleName: string;
+  role_id: number;
+  role_name: string;
   officeId: number;
   officeName: string;
   departmentId: number;
@@ -125,8 +141,8 @@ export type ExternalUser = {
 
 export type CreateTaskPayload = {
   date: string;
-  finishDate: string;
-  finishTime: string;
+  finishDate?: string;
+  finishTime?: string;
   project: string;
   purpose: string;
   service: string;
@@ -173,6 +189,7 @@ export type GetAllProjectsQueryParams = {
   toDate?: string;
   fromDate?: string;
   projectName?: string;
+  userName?: string;
   serviceName?: string;
   location?: string;
   userName?: string;
@@ -326,3 +343,10 @@ export interface TasksDuration {
     }[];
   };
 }
+export type FormattedService = {
+  // id: string;
+  _id: string;
+  projectName: string;
+  serviceName: string;
+  description: string;
+};

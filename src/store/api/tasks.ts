@@ -78,9 +78,9 @@ export const taskApi = createApi({
       TaskResponsePerUser,
       Partial<GetAllProjectsQueryParams>
     >({
-      query: ({ projectName }) => ({
+      query: ({ projectName, userName }) => ({
         url: "/task/all",
-        params: { projectName },
+        params: { projectName, userName },
       }),
       providesTags: ["Task"],
       transformResponse: (response) => {
@@ -94,6 +94,83 @@ export const taskApi = createApi({
         return error;
       },
     }),
+    markAsCompleted: builder.mutation<
+      TaskResponse,
+      {
+        taskId: string;
+      }
+    >({
+      query: (taskId) => ({
+        url: `/task/mark-completed`,
+        method: "PATCH",
+        body: taskId,
+      }),
+      invalidatesTags: ["Task"],
+      transformResponse: (response) => {
+        const apiResponse = response as TaskResponse;
+        toast.success(apiResponse.message);
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as TaskResponsePerUser;
+        toast.error(apiError.message);
+        return error;
+      },
+    }),
+    continueTaskTomorrow: builder.mutation<
+      TaskResponse,
+      {
+        taskId: string;
+      }
+    >({
+      query: (taskId) => ({
+        url: `/task/continue-tomorrow`,
+        method: "PATCH",
+        body: taskId,
+      }),
+      invalidatesTags: ["Task"],
+      transformResponse: (response) => {
+        const apiResponse = response as TaskResponse;
+        toast.success(apiResponse.message);
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error.data as TaskResponsePerUser;
+        toast.error(apiError.message);
+        return error;
+      },
+    }),
+    getCSVByUser: builder.mutation<Blob, string>({
+      query: (userName) => ({
+        url: `/task/export-csv/`,
+        method: "GET",
+        params: { userName },
+        responseHandler: async (response) => response.blob(),
+      }),
+    }),
+
+    getPDFByUser: builder.mutation<Blob, string>({
+      query: (userName) => ({
+        url: `/task/export-pdf/`,
+        method: "GET",
+        params: { userName },
+        responseHandler: async (response) => response.blob(),
+      }),
+    }),
+    getCSVByProject: builder.mutation<Blob, string>({
+      query: (projectName) => ({
+        url: `task/export-csv-by-project/${encodeURIComponent(projectName)}`,
+        method: "GET",
+        responseHandler: async (response) => response.blob(),
+      }),
+    }),
+    getPDFByProject: builder.mutation<Blob, string>({
+      query: (projectName) => ({
+        url: `task/export-pdf-by-project/${encodeURIComponent(projectName)}`,
+        method: "GET",
+        responseHandler: async (response) => response.blob(),
+      }),
+    }),
   }),
 });
 
@@ -101,4 +178,10 @@ export const {
   useCreateTaskMutation,
   useGetTaskByUserIDQuery,
   useGetAllTaskQuery,
+  useMarkAsCompletedMutation,
+  useContinueTaskTomorrowMutation,
+  useGetCSVByUserMutation,
+  useGetPDFByUserMutation,
+  useGetCSVByProjectMutation,
+  useGetPDFByProjectMutation,
 } = taskApi;

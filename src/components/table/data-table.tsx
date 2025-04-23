@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ColumnDef,
   VisibilityState,
@@ -22,8 +22,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { Eye, EyeClosed } from "lucide-react";
+import { Eye, EyeClosed, FileDown, Sheet } from "lucide-react";
 import { DataTableSkeleton } from "../skeleton/data-table-skeleton";
+import {
+  useGetCSVByUserMutation,
+  useGetPDFByUserMutation,
+} from "@/store/api/tasks";
+import { useRouter } from "next/router";
+import { useParams, useSearchParams } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,6 +44,9 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
+  const [selectedUser, setSelectedUser] = useState<string>();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   const table = useReactTable({
     data,
@@ -51,35 +60,94 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    const userName = params.get("userName");
+    if (userName) {
+      setSelectedUser(userName);
+    }
+  }, [searchParams]);
+
+  const [getCSVByUser] = useGetCSVByUserMutation();
+  const [getPDFByUser] = useGetPDFByUserMutation();
+
+  const handleDownload = async (type: "csv" | "pdf") => {
+    try {
+      const fetchFunction =
+        type === "csv"
+          ? await getCSVByUser(selectedUser ? selectedUser : "").unwrap()
+          : await getPDFByUser(selectedUser ? selectedUser : "").unwrap();
+
+      if (!fetchFunction) {
+        return;
+      }
+
+      const blob = new Blob([fetchFunction], {
+        type: type === "csv" ? "text/csv" : "application/pdf",
+      });
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `tasks.${type}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error(`Failed to download ${type}`, error);
+    }
+  };
+
   return (
     <div>
-      <div className="flex items-center py-4">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              <Eye size={16} />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+      <div className="flex gap-2 items-center py-4">
+        <div className="flex gap-2 justify-start">
+          {(router.pathname === "/user" ||
+            router.pathname === "/admin/analytics") && (
+            <div className="flex gap-2 justify-start">
+              <Button
+                variant={"outline"}
+                size={"icon"}
+                onClick={() => handleDownload("csv")}
+              >
+                <Sheet />
+              </Button>
+              <Button
+                variant={"outline"}
+                size={"icon"}
+                onClick={() => handleDownload("pdf")}
+              >
+                <FileDown />
+              </Button>
+            </div>
+          )}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                <Eye size={16} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       {isLoading ? (
         <DataTableSkeleton />

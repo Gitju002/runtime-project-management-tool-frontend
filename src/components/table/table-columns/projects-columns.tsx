@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import React from "react";
 import { Button } from "@/components/ui/button";
 // import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowDown, ArrowUp, MoreHorizontal } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import {
@@ -12,6 +12,13 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { AlertDialogDeleteProject } from "@/components/ui/alert-dialog-delete-project";
 
 const ExpandedComponent = ({ data }: { data: string }) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
@@ -118,6 +125,17 @@ export const getColumns = (
     },
 
     {
+      accessorKey: "services",
+      header: () => " Services",
+      cell: ({ row }) => {
+        const services = (row.original.services ?? []).map(
+          (service) => service
+        );
+        return services.length > 0 ? services.join(", ") : "No Services";
+      },
+    },
+
+    {
       accessorKey: "projectDescription",
       header: () => <div>Project Description</div>,
       cell: ({ row }) => (
@@ -203,5 +221,34 @@ export const getColumns = (
     //     </div>
     //   ),
     // },
+
+    {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => {
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <AlertDialogDeleteProject projectId={row.original._id} />
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  navigator.clipboard.writeText(row.original.projectName)
+                }
+              >
+                Copy Project Name
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
   ];
 };

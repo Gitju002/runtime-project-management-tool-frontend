@@ -13,17 +13,21 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { loginFormSchema } from "@/schema";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Eye, EyeOff } from "lucide-react";
 import { useLoginMutation } from "@/store/api/auth";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "@/store/features/userInfo";
 import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { useGetUserQuery } from "@/store/api/user";
+import { toast } from "sonner";
 export default function LoginForm() {
   const [login, { isLoading: isSubmitting, error, isSuccess }] =
     useLoginMutation();
   const router = useRouter();
   const dispatch = useDispatch();
+  const [showPassword, setShowPassword] = useState(false);
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -33,21 +37,32 @@ export default function LoginForm() {
     disabled: isSubmitting,
   });
 
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const { refetch } = useGetUserQuery();
+
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
     try {
       const response = await login(values).unwrap();
       // console.log(response);
-      dispatch(
-        setCredentials({
-          name: response?.data?.user?.name,
-          token: response?.data?.token,
-          role: response?.data?.user?.role,
-        })
-      );
-      if (response?.data?.user?.role === "Admin") {
-        router.push("/admin");
+      if (response.success) {
+        dispatch(
+          setCredentials({
+            name: response?.data?.user?.name,
+            token: response?.data?.token,
+            role: response?.data?.user?.role,
+          })
+        );
+        refetch();
+        if (response?.data?.user?.role === "Admin") {
+          router.push("/admin");
+        } else {
+          router.push("/user");
+        }
       } else {
-        router.push("/user");
+        toast.error(response.message);
       }
     } catch {
       console.error(error);
@@ -76,8 +91,26 @@ export default function LoginForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
-              <FormControl className="transition-all duration-200 dark:border-teal-shade">
-                <Input type="password" placeholder="********" {...field} />
+              <FormControl>
+                <div className="relative">
+                  {showPassword ? (
+                    <EyeOff
+                      onClick={togglePassword}
+                      className="cursor-pointer w-5 absolute top-2 right-2"
+                    />
+                  ) : (
+                    <Eye
+                      onClick={togglePassword}
+                      className="cursor-pointer w-5 absolute top-2 right-2"
+                    />
+                  )}
+                  <Input
+                    className="transition-all duration-200 dark:border-teal-shade"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="********"
+                    {...field}
+                  />
+                </div>
               </FormControl>
 
               <FormMessage />

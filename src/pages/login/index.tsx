@@ -1,15 +1,50 @@
-import LoginForm from "@/pages/login/_components/login-form";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+"use client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import { useNewLoginQuery } from "@/store/api/auth";
+import { useRouter } from "next/navigation";
+import { setCredentials } from "@/store/features/userInfo";
+import { useDispatch } from "react-redux";
+import { useSearchParams } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 export default function LoginPage() {
+  const params = useSearchParams();
+  const router = useRouter();
+
+  const dispatch = useDispatch();
   const text = "Welcome Back 👋🏼".split(" ");
+  const { isLoading, data } = useNewLoginQuery(
+    { user_id: decodeURIComponent(params?.get("user_id") || "") },
+    { skip: !params?.get("user_id") }
+  );
+
+  if (params === null || params?.get("user_id") === null) {
+    return;
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-black/40">
+        <Loader2 className="w-10 h-10 animate-spin text-teal-shade" />
+      </div>
+    );
+  }
+
+  if (data?.success === true) {
+    dispatch(
+      setCredentials({
+        name: data?.data?.user?.name,
+        token: data?.data?.token,
+        role: data?.data?.user?.role,
+      })
+    );
+    if (data?.data?.user?.role === "Admin") {
+      router.push("/admin");
+    } else {
+      router.push("/user");
+    }
+  }
 
   return (
     <div className="relative min-h-screen bg-black/40 flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
@@ -54,13 +89,11 @@ export default function LoginPage() {
                 Runtimer!
               </motion.p>
             </CardTitle>
-            <CardDescription className="text-center text-white">
+            {/* <CardDescription className="text-center text-white">
               Login, and start managing your projects!
-            </CardDescription>
+            </CardDescription> */}
           </CardHeader>
-          <CardContent>
-            <LoginForm />
-          </CardContent>
+          <CardContent>{/* <LoginForm /> */}</CardContent>
         </Card>
       </motion.div>
     </div>

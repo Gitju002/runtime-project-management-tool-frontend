@@ -16,6 +16,28 @@ export const authApi = createApi({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["User"],
+      transformResponse: (response) => {
+        const apiResponse = response as UserResponse;
+        toast.success(apiResponse.message);
+        return apiResponse;
+      },
+      transformErrorResponse: (error) => {
+        const apiError = error?.data as UserResponse;
+        toast.error(apiError?.data?.error || "Error logging in");
+        return error;
+      },
+    }),
+    newLogin: builder.query<
+      UserResponse,
+      {
+        user_id: string;
+      }
+    >({
+      query: ({ user_id }) => ({
+        url: `auth/new-login/${decodeURIComponent(user_id)}`,
+      }),
+      providesTags: ["User"],
       transformResponse: (response) => {
         const apiResponse = response as UserResponse;
         toast.success(apiResponse.message);
@@ -45,4 +67,5 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation } = authApi;
+export const { useLoginMutation, useLogoutMutation, useNewLoginQuery } =
+  authApi;

@@ -28,17 +28,21 @@ export const addTaskSchema = z
         message: "Purpose must not exceed 50 characters",
       }),
     startDate: z.string(),
-    finishDate: z.string(),
+    finishDate: z.string().optional(),
     startTime: z.string().refine((val) => !isNaN(Date.parse(val)), {
       message: "Please select a valid start time",
     }),
-    finishTime: z.string().refine((val) => !isNaN(Date.parse(val)), {
-      message: "Please select a valid finish time",
-    }),
+    finishTime: z
+      .string()
+      .refine((val) => !isNaN(Date.parse(val)), {
+        message: "Please select a valid finish time",
+      })
+      .optional(),
     status: z.enum(["Initiated", "Ongoing", "Completed"]),
   })
   .refine(
     (data) => {
+      if (!data.finishDate) return true;
       const startDate = new Date(data.startDate);
       const finishDate = new Date(data.finishDate);
       return startDate <= finishDate;

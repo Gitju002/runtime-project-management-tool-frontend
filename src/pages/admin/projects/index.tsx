@@ -20,7 +20,6 @@ import { DatePicker } from "@/components/ui/date-picker";
 import { format } from "date-fns";
 import { startTour } from "@/driver";
 
-import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 
 export default function Projects() {
@@ -36,32 +35,6 @@ export default function Projects() {
   const [totalPages, setTotalPages] = useState(1);
   const fromDate = searchParams.get("fromDate");
   const toDate = searchParams.get("toDate");
-
-  // useEffect(() => {
-  //   const storedStep = localStorage.getItem("driverStep");
-
-  //   if (storedStep === "3") {
-  //     localStorage.removeItem("driverStep"); // Clear stored progress
-
-  //     const driverObj = driver({
-  //       steps: [
-  //         {
-  //           element: "#add_project",
-  //           popover: {
-  //             title: "➕ Add a Project",
-  //             description: "Click this button to add a new project.",
-  //           },
-  //         },
-  //       ],
-  //       allowClose: false,
-  //       showProgress: true,
-  //     });
-
-  //     setTimeout(() => {
-  //       driverObj.drive(0); // Resume tour from step 0 on Projects page
-  //     }, 1000); // Small delay to allow UI to load
-  //   }
-  // }, []);
 
   useEffect(() => {
     startTour(router); // Detects and continues the tour automatically
@@ -126,6 +99,10 @@ export default function Projects() {
     params.set("page", page.toString());
     router.push(`?${params.toString()}`);
   };
+  // const handlePageChange = (page: number) => {
+  //   setPaginationLoading(true);
+  //   setCurrentPage(page);
+  // };
 
   const handleSortClick = useCallback(
     (columnName: string) => {
@@ -152,6 +129,7 @@ export default function Projects() {
     }
   }, [projectData]);
 
+  console.log(projectData);
   const columns = getColumns(handleSortClick);
 
   return (
@@ -197,7 +175,7 @@ export default function Projects() {
         </div>
 
         <>
-          <div id="project_table">
+          <div id="project_table" className="min-h-[550px]  rounded-md">
             <DataTable
               columns={columns}
               isLoading={isLoading || isFetching}

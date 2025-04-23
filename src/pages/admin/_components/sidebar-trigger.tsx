@@ -6,15 +6,33 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { startTour } from "@/driver";
 import { useRouter } from "next/router";
+import { useGetUserQuery } from "@/store/api/user";
+import { useEffect, useMemo } from "react";
 function CustomSidebarTrigger() {
+  const {
+    data: userData,
+    isLoading: userLoading,
+    refetch: refetchUser,
+  } = useGetUserQuery();
   const { toggleSidebar } = useSidebar();
   const { open, isMobile } = useSidebar();
   const router = useRouter();
 
+  const isAdmin = useMemo(() => {
+    return (
+      userData?.data?.role_name?.toLowerCase() ===
+      process.env.NEXT_PUBLIC_ADMIN_ROLE?.toLowerCase()
+    );
+  }, [userData]);
+  // console.log("Userdata", userData);
+
+  useEffect(() => {
+    refetchUser();
+  }, [userData?.data?.role_name]);
   return (
     <div
       className={cn(
-        " sticky z-10 mx-auto",
+        "sticky z-50 mx-auto",
         isMobile ? "top-0" : "top-2 container"
       )}
     >
@@ -31,7 +49,7 @@ function CustomSidebarTrigger() {
           )}
           variant={"outline"}
           size={"icon"}
-          onClick={toggleSidebar}
+          onClick={isAdmin ? toggleSidebar : () => router.back()}
         >
           {open ? <ArrowLeft /> : <ArrowRight />}
         </Button>
@@ -43,7 +61,7 @@ function CustomSidebarTrigger() {
           )}
           variant={"outline"}
           size={"icon"}
-          onClick={toggleSidebar}
+          onClick={!isAdmin ? toggleSidebar : () => router.back()}
         >
           <ArrowRight />
         </Button>
