@@ -110,7 +110,7 @@ export default function ProfilePage() {
             <ProfileInfo
               icon={MapPin}
               label="Office"
-              value={userData?.data?.officeName || "N/A"}
+              value={userData?.data?.office_name || "N/A"}
               loading={loading}
               bgColor="bg-yellow-100"
               iconColor="text-yellow-600"
@@ -129,7 +129,7 @@ export default function ProfilePage() {
             <ProfileInfo
               icon={Briefcase}
               label="Department"
-              value={userData?.data?.departmentName || "N/A"}
+              value={userData?.data?.department_name || "N/A"}
               loading={loading}
               bgColor="bg-green-100"
               iconColor="text-green-600"

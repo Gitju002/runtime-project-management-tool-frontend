@@ -128,5 +128,8 @@ export const addProjectSchema = z.object({
   //   })
   //   .optional(),
 
-  cost: z.number().positive("Cost must be a positive number."),
+  cost: z
+    .number()
+    .positive("Cost must be a positive number.")
+    .max(1_000_000, "Cost cannot exceed 1,000,000."),
 });

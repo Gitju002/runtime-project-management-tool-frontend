@@ -30,7 +30,7 @@ export function TaskGroup({ group }: TaskGroupProps) {
         <div className="text-sm font-medium mt-1"> {group?.projectName}</div>
       </CardHeader>
       <CardContent className="pt-0 pb-3">
-        <ScrollArea className="h-24 pr-4 mt-1">
+        <ScrollArea className="h-24  mt-1">
           {group?.tasks?.map((task, index) => (
             <div key={task._id}>
               <div className="flex items-center gap-2 justify-between">

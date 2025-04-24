@@ -28,7 +28,7 @@ export const authApi = createApi({
         return error;
       },
     }),
-    newLogin: builder.query<
+    directLogin: builder.query<
       UserResponse,
       {
         user_id: string;
@@ -67,5 +67,5 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation, useNewLoginQuery } =
+export const { useLoginMutation, useLogoutMutation, useDirectLoginQuery } =
   authApi;

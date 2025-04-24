@@ -1,4 +1,3 @@
-import LoginForm from "@/pages/login/_components/login-form";
 import {
   Card,
   CardContent,
@@ -6,9 +5,52 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useDirectLoginQuery } from "@/store/api/auth";
+import { setCredentials } from "@/store/features/userInfo";
 import { motion } from "framer-motion";
+import { Loader2 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
 
 export default function LoginPage() {
+  const params = useSearchParams();
+  const router = useRouter();
+
+  const dispatch = useDispatch();
+
+  const { isLoading, error, isError, isFetching, isSuccess, data } =
+    useDirectLoginQuery(
+      { user_id: decodeURIComponent(params?.get("user_id") || "") },
+      { skip: !params?.get("user_id"), refetchOnMountOrArgChange: true }
+    );
+
+  // if (params === null || params?.get("user_id") === null) {
+  //   return;
+  // }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-black/40">
+        <Loader2 className="w-10 h-10 animate-spin text-teal-shade" />
+      </div>
+    );
+  }
+
+  if (data?.success === true) {
+    dispatch(
+      setCredentials({
+        name: data?.data?.user?.name,
+        token: data?.data?.token,
+        role: data?.data?.user?.role,
+      })
+    );
+    if (data?.data?.user?.role === "Admin") {
+      router.push("/admin");
+    } else {
+      router.push("/user");
+    }
+  }
   const text = "Welcome Back 👋🏼".split(" ");
 
   return (
@@ -58,8 +100,18 @@ export default function LoginPage() {
               Login, and start managing your projects!
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <LoginForm />
+          <CardContent className="flex flex-col items-center justify-center gap-4">
+            {isLoading && (
+              <>
+                <Loader2 className="w-10 h-10 animate-spin text-teal-shade" />
+                <p className="text-center text-white">Logging you in...</p>
+              </>
+            )}
+            {isError && (
+              <p className="text-center text-red-500">
+                "An error occurred. Please try again."
+              </p>
+            )}
           </CardContent>
         </Card>
       </motion.div>

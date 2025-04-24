@@ -360,48 +360,105 @@ const User = () => {
             />{" "}
           </h1>
         </div>
-
-        <div className="flex gap-4 justify-between items-center w-full">
-          <div className="flex flex-wrap md:flex-nowrap justify-between items-center gap-4">
-            <Input
-              placeholder="Filter by Project Names..."
-              onChange={(e) => setProjectSearch(e.target.value)}
-              value={projectSearch}
-              className="w-full border border-teal-shade dark:bg-slate-800"
-            />
-            <Input
-              placeholder="Filter by Services..."
-              onChange={(e) => setServiceSearch(e.target.value)}
-              value={serviceSearch}
-              className="w-full border border-teal-shade dark:bg-slate-800"
-            />
-            <DatePicker
-              placeholder="Pick From Date"
-              value={fromDateSearch}
-              onChange={(date) => setFromDateSearch(date || null)}
-            />
-            <DatePicker
-              placeholder="Pick To Date"
-              value={toDateSearch}
-              onChange={(date) => setToDateSearch(date || null)}
-            />
-          </div>
-        </div>
-
-        <>
-          <div id="step_4_taskTable">
-            <DataTable
-              isLoading={tasksLoading || isFetching}
-              columns={columns}
-              data={tasksIsError ? [] : formattedTasks}
-            />
-          </div>
-          <CustomPagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
+        <div className="flex flex-col md:flex-row w-full justify-between items-center gap-4">
+          <Input
+            placeholder="Filter by Project Names..."
+            onChange={(e) => setProjectSearch(e.target.value)}
+            value={projectSearch}
+            className="w-full border border-teal-shade dark:bg-slate-800"
           />
-        </>
+          <Input
+            placeholder="Filter by Services..."
+            onChange={(e) => setServiceSearch(e.target.value)}
+            value={serviceSearch}
+            className="w-full border border-teal-shade dark:bg-slate-800"
+          />
+          <DatePicker
+            placeholder="Pick From Date"
+            value={fromDateSearch}
+            onChange={(date) => setFromDateSearch(date || null)}
+          />
+          <DatePicker
+            placeholder="Pick To Date"
+            value={toDateSearch}
+            onChange={(date) => setToDateSearch(date || null)}
+          />
+        </div>
+        <Tabs defaultValue="Grid View" className="w-full">
+          <div className="flex justify-end">
+            <TabsList className="">
+              <TabsTrigger value="Grid View">
+                <Grid3X3Icon className="dark:stroke-lime-shade stroke-teal-shade" />
+              </TabsTrigger>
+              <TabsTrigger value="List View">
+                <ListIcon className="dark:stroke-lime-shade stroke-teal-shade" />
+              </TabsTrigger>
+            </TabsList>
+          </div>
+          <TabsContent value="Grid View">
+            <div className="flex flex-wrap gap-4 justify-between items-center w-full">
+              <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <TabsList>
+                  <TabsTrigger value="all">
+                    All Tasks ({categorizedTaskGroups.length})
+                  </TabsTrigger>
+                  <TabsTrigger value="ongoing">
+                    Ongoing (
+                    {
+                      categorizedTaskGroups.filter(
+                        (group) => group.category === "Ongoing"
+                      ).length
+                    }
+                    )
+                  </TabsTrigger>
+                  <TabsTrigger value="completed">
+                    Completed (
+                    {
+                      categorizedTaskGroups.filter(
+                        (group) => group.category === "Completed"
+                      ).length
+                    }
+                    )
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+            <div className="flex flex-col gap-4 mt-2">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {allTasksLoading || allTasksFetching ? (
+                  [1, 2, 3, 4, 5, 6].map((_, index) => (
+                    <UserTaskGroupSkeleton index={index} />
+                  ))
+                ) : filteredTaskGroups.length > 0 ? (
+                  filteredTaskGroups.map((group) => (
+                    <TaskGroup key={group.slug} group={group} />
+                  ))
+                ) : (
+                  <p className="text-center text-gray-500 col-span-full">
+                    No tasks found.
+                  </p>
+                )}
+              </div>
+            </div>{" "}
+          </TabsContent>
+          <TabsContent value="List View" className="w-full">
+            <div
+              id="step_4_taskTable"
+              className="min-h-[650px] border p-2 rounded-md my-2"
+            >
+              <DataTable
+                isLoading={tasksLoading || isFetching}
+                columns={columns}
+                data={tasksIsError ? [] : formattedTasks}
+              />
+            </div>
+            <CustomPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
