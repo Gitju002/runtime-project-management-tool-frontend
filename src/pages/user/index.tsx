@@ -57,8 +57,10 @@ const User = () => {
   const sortBy = searchParams.get("sortBy")
     ? [searchParams.get("sortBy")!]
     : [];
-  const currentPage = Number(searchParams.get("page")) || 1;
-
+  // const currentPage = Number(searchParams.get("page")) || 1;
+  const [currentPage, setCurrentPage] = useState<number>(
+    Number(searchParams.get("page")) || 1
+  );
   const [isOpened, setIsOpened] = useState(false);
   const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
@@ -118,12 +120,14 @@ const User = () => {
 
   const handlePageChange = (page: number) => {
     // setPaginationLoading
-    const params = new URLSearchParams(searchParams);
-    params.set("page", page.toString());
-    router.push(`?${params.toString()}`, undefined, {
-      shallow: true,
-      scroll: false,
-    });
+    // const params = new URLSearchParams(searchParams);
+    // params.set("page", page.toString());
+    // console.log(params.toString());
+    setCurrentPage(page);
+    // router.push(`?${params.toString()}`, undefined, {
+    //   shallow: true,
+    //   scroll: false,
+    // });
   };
 
   const handleSortClick = useCallback(
@@ -222,7 +226,7 @@ const User = () => {
 
   const formattedTasks = transformTasks(tasksData, limit);
 
-  console.log("Snehashis");
+  // console.log("Snehashis");
   const [activeTab, setActiveTab] = useState("all");
 
   const categorizedTaskGroups = allTasksIsError
