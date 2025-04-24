@@ -99,7 +99,7 @@ const User = () => {
     }
   );
 
-  // console.log(allTasksData);
+  console.log(allTasksData);
 
   const groupedTasks: GroupedTasks = groupTasksBySlug(allTasksData);
 
