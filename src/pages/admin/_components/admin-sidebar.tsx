@@ -43,8 +43,8 @@ export default function AdminSidebar() {
     isLoading: userLoading,
     refetch: refetchUser,
   } = useGetUserQuery();
-  const [logout] = useLogoutMutation();
-  const dispatch = useDispatch();
+  // const [logout] = useLogoutMutation();
+  // const dispatch = useDispatch();
 
   useEffect(() => {
     setTimeout(() => {
@@ -57,9 +57,9 @@ export default function AdminSidebar() {
   }, [userData?.data?.role_name]);
 
   const handleLogout = () => {
-    logout();
-    dispatch(clearUserInfo());
-    router.push("/login");
+    // logout();
+    // dispatch(clearUserInfo());
+    router.push("/logout");
   };
 
   const handleGetProfile = () => {
@@ -161,8 +161,11 @@ export default function AdminSidebar() {
                   >
                     Profile
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleLogout}>
-                    <span>Sign out</span>
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={handleLogout}
+                  >
+                    <span>Log out</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

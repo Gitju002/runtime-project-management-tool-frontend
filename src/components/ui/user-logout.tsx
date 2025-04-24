@@ -1,18 +1,18 @@
 import { useRouter } from "next/router";
 import { Button } from "./button";
-import { useLogoutMutation } from "@/store/api/auth";
-import { useDispatch } from "react-redux";
-import { clearUserInfo } from "@/store/features/userInfo";
+// import { useLogoutMutation } from "@/store/api/auth";
+// import { useDispatch } from "react-redux";
+// import { clearUserInfo } from "@/store/features/userInfo";
 import { motion } from "framer-motion";
 
 export default function UserLogout() {
   const router = useRouter();
-  const [logout] = useLogoutMutation();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  // const [logout] = useLogoutMutation();
   const handleLogout = () => {
-    logout();
-    dispatch(clearUserInfo());
-    router.push("/login");
+    // logout();
+    // dispatch(clearUserInfo());
+    router.push("/logout");
   };
   return (
     <div className="fixed bottom-4 left-4 flex items-center justify-center">

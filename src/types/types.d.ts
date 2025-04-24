@@ -231,7 +231,27 @@ export type GetAllTaskResponse = {
 export type GetUserResponse = {
   success: boolean;
   message: string;
-  data: User;
+  data: {
+    _id: string;
+    externalId: number;
+    date_of_joining: string;
+    role_id: number;
+    role_name: string;
+    office_id: number;
+    office_name: string;
+    department_id: number;
+    department_name: string;
+    designation: string;
+    email: string;
+    name: string;
+    dob: string;
+    gender: number;
+    mobile: number;
+    profilepic: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  };
 };
 export type TaskResponsePerUser = {
   success: boolean;

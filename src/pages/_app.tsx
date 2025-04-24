@@ -16,9 +16,15 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   // const defaultOpen = getCookie("sidebar_state") === "true";
 
-  const hideSidebarRoutes = ["/user", "/login"];
-  const hideLogoutRoutes = ["/login", "/admin", "/profile"];
-  const hideThemeToggleRoutes = ["/login"];
+  const hideSidebarRoutes = ["/user", "/login", "/app-login", "/logout"];
+  const hideLogoutRoutes = [
+    "/login",
+    "/app-login",
+    "/logout",
+    "/admin",
+    "/profile",
+  ];
+  const hideThemeToggleRoutes = ["/login", "/app-login", "/logout"];
   const isAdminRoute = /^\/admin(\/|$)/.test(router.pathname);
   const showSidebar = !hideSidebarRoutes.includes(router.pathname);
   const showLogout =
