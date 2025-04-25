@@ -14,10 +14,12 @@ import { ArrowUp } from "lucide-react";
 
 interface AlertDialogUserTaskForwardProps {
   taskId: string;
+  buttonType: "icon" | "text";
 }
 
 export const AlertDialogUserTaskForward = ({
   taskId,
+  buttonType,
 }: AlertDialogUserTaskForwardProps) => {
   const [
     continueTaskTomorrow,
@@ -42,10 +44,17 @@ export const AlertDialogUserTaskForward = ({
   return (
     <AlertDialog>
       <AlertDialogTrigger
-        title="Forward Task"
-        className=" w-full relative flex cursor-pointer select-none items-center gap-2 rounded-md px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-input border border-blue-600 font-semibold text-blue-600 dark:text-blue-500"
+        title={buttonType === "icon" ? "Forward to Next Day" : undefined}
+        className={` w-full relative flex cursor-pointer select-none items-center gap-2 rounded-md px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-input ${
+          buttonType === "icon" &&
+          "border border-blue-600 text-blue-600 dark:text-blue-500  font-semibold"
+        } `}
       >
-        <ArrowUp className="h-4 w-4" />
+        {buttonType === "text" ? (
+          <span>Forward to Next Day</span>
+        ) : (
+          <ArrowUp className="h-4 w-4" />
+        )}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

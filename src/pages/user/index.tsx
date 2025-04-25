@@ -36,6 +36,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GroupedTasks } from "@/types/types";
 import { useGetUserQuery } from "@/store/api/user";
 import UserTaskGroupSkeleton from "@/components/skeleton/user-task-group-skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const User = () => {
   const router = useRouter();
@@ -57,10 +62,8 @@ const User = () => {
   const sortBy = searchParams.get("sortBy")
     ? [searchParams.get("sortBy")!]
     : [];
-  // const currentPage = Number(searchParams.get("page")) || 1;
-  const [currentPage, setCurrentPage] = useState<number>(
-    Number(searchParams.get("page")) || 1
-  );
+  const currentPage = Number(searchParams.get("page")) || 1;
+
   const [isOpened, setIsOpened] = useState(false);
   const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
@@ -120,14 +123,12 @@ const User = () => {
 
   const handlePageChange = (page: number) => {
     // setPaginationLoading
-    // const params = new URLSearchParams(searchParams);
-    // params.set("page", page.toString());
-    // console.log(params.toString());
-    setCurrentPage(page);
-    // router.push(`?${params.toString()}`, undefined, {
-    //   shallow: true,
-    //   scroll: false,
-    // });
+    const params = new URLSearchParams(searchParams);
+    params.set("page", page.toString());
+    router.push(`?${params.toString()}`, undefined, {
+      shallow: true,
+      scroll: false,
+    });
   };
 
   const handleSortClick = useCallback(
@@ -226,7 +227,7 @@ const User = () => {
 
   const formattedTasks = transformTasks(tasksData, limit);
 
-  // console.log("Snehashis");
+  console.log("Snehashis");
   const [activeTab, setActiveTab] = useState("all");
 
   const categorizedTaskGroups = allTasksIsError
@@ -391,12 +392,22 @@ const User = () => {
         <Tabs defaultValue="Grid View" className="w-full">
           <div className="flex justify-end">
             <TabsList className="">
-              <TabsTrigger value="Grid View">
-                <Grid3X3Icon className="dark:stroke-lime-shade stroke-teal-shade" />
-              </TabsTrigger>
-              <TabsTrigger value="List View">
-                <ListIcon className="dark:stroke-lime-shade stroke-teal-shade" />
-              </TabsTrigger>
+              <Tooltip>
+                <TooltipTrigger>
+                  <TabsTrigger value="Grid View">
+                    <Grid3X3Icon className="dark:stroke-lime-shade stroke-teal-shade" />
+                  </TabsTrigger>
+                </TooltipTrigger>
+                <TooltipContent>Grid View of Tasks</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger>
+                  <TabsTrigger value="List View">
+                    <ListIcon className="dark:stroke-lime-shade stroke-teal-shade" />
+                  </TabsTrigger>
+                </TooltipTrigger>
+                <TooltipContent>Complete Log of Tasks</TooltipContent>
+              </Tooltip>
             </TabsList>
           </div>
           <TabsContent value="Grid View">

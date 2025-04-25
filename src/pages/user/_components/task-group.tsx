@@ -66,8 +66,14 @@ export function TaskGroup({ group }: TaskGroupProps) {
                   task.status === "Ongoing" &&
                   !task.finishTime && (
                     <div className="flex space-x-2">
-                      <AlertDialogUserTaskForward taskId={task._id} />
-                      <AlertDialogUserTaskCompleted taskId={task._id} />
+                      <AlertDialogUserTaskForward
+                        buttonType="icon"
+                        taskId={task._id}
+                      />
+                      <AlertDialogUserTaskCompleted
+                        buttonType="icon"
+                        taskId={task._id}
+                      />
                     </div>
                   )}
               </div>

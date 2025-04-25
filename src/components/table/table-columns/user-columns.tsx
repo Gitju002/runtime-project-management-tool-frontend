@@ -14,6 +14,7 @@ import {
 
 import { AlertDialogUserTaskForward } from "@/components/ui/alert-dialog-user-task-forward";
 import { AlertDialogUserTaskCompleted } from "@/components/ui/alert-dialog-user-task-completed";
+import { formatDate } from "@/utils/tasksFormatting";
 
 export const getColumns = (
   handleSortClick: (columnName: string) => void
@@ -115,12 +116,36 @@ export const getColumns = (
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem asChild>
-                <AlertDialogUserTaskForward taskId={row.original.id} />
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <AlertDialogUserTaskCompleted taskId={row.original.id} />
-              </DropdownMenuItem>
+              {/* Debugging logs moved outside JSX */}
+              {/* {(() => {
+                  console.log(
+                    row.original.startDate ===
+                      formatDate(new Date().toISOString()) &&
+                      row.original.status === "Ongoing"
+                  );
+                  return null;
+                })()} */}
+              {row.original.startDate ===
+                formatDate(new Date().toISOString()) &&
+                row.original.status === "Ongoing" && (
+                  <DropdownMenuItem asChild>
+                    <AlertDialogUserTaskForward
+                      buttonType="text"
+                      taskId={row.original.id}
+                    />
+                  </DropdownMenuItem>
+                )}
+
+              {row.original.startDate ===
+                formatDate(new Date().toISOString()) &&
+                row.original.status === "Ongoing" && (
+                  <DropdownMenuItem asChild>
+                    <AlertDialogUserTaskCompleted
+                      buttonType="text"
+                      taskId={row.original.id}
+                    />
+                  </DropdownMenuItem>
+                )}
               {/* <DropdownMenuItem asChild>
                 <EditSheet />
               </DropdownMenuItem> */}

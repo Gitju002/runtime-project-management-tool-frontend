@@ -14,10 +14,12 @@ import { CheckCircle } from "lucide-react";
 
 interface AlertDialogUserTaskCompletedProps {
   taskId: string;
+  buttonType: "icon" | "text";
 }
 
 export const AlertDialogUserTaskCompleted = ({
   taskId,
+  buttonType,
 }: AlertDialogUserTaskCompletedProps) => {
   const [
     markAsCompleted,
@@ -42,10 +44,17 @@ export const AlertDialogUserTaskCompleted = ({
   return (
     <AlertDialog>
       <AlertDialogTrigger
-        title="Complete Task"
-        className="w-full relative flex cursor-pointer select-none items-center gap-2 rounded-md px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-input font-semibold border border-green-600 text-green-600 dark:text-green-500"
+        title={buttonType === "icon" ? "Mark as Complete" : undefined}
+        className={`w-full relative flex cursor-pointer select-none items-center gap-2 rounded-md px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-input ${
+          buttonType === "icon" &&
+          "font-semibold border border-green-600 text-green-600 dark:text-green-500"
+        }`}
       >
-        <CheckCircle className=" h-4 w-4 " />
+        {buttonType === "text" ? (
+          <span>Mark as Complete</span>
+        ) : (
+          <CheckCircle className=" h-4 w-4 " />
+        )}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
