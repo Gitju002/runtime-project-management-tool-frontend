@@ -81,7 +81,7 @@ const User = () => {
     fromDate: searchParams.get("fromDate") || "",
     projectName: searchParams.get("projectName") || "",
     serviceName: searchParams.get("services") || "",
-    page: currentPage,
+    page: Number(searchParams.get("page")) || 1,
     limit,
     sortBy,
   });
@@ -120,14 +120,14 @@ const User = () => {
 
   const handlePageChange = (page: number) => {
     // setPaginationLoading
-    // const params = new URLSearchParams(searchParams);
-    // params.set("page", page.toString());
+    const params = new URLSearchParams(searchParams);
+    params.set("page", page.toString());
     // console.log(params.toString());
     setCurrentPage(page);
-    // router.push(`?${params.toString()}`, undefined, {
-    //   shallow: true,
-    //   scroll: false,
-    // });
+    router.push(`?${params.toString()}`, undefined, {
+      shallow: true,
+      scroll: false,
+    });
   };
 
   const handleSortClick = useCallback(
