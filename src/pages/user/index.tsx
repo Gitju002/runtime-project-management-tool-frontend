@@ -36,11 +36,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GroupedTasks } from "@/types/types";
 import { useGetUserQuery } from "@/store/api/user";
 import UserTaskGroupSkeleton from "@/components/skeleton/user-task-group-skeleton";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 const User = () => {
   const router = useRouter();
@@ -392,22 +387,12 @@ const User = () => {
         <Tabs defaultValue="Grid View" className="w-full">
           <div className="flex justify-end">
             <TabsList className="">
-              <Tooltip>
-                <TooltipTrigger>
-                  <TabsTrigger value="Grid View">
-                    <Grid3X3Icon className="dark:stroke-lime-shade stroke-teal-shade" />
-                  </TabsTrigger>
-                </TooltipTrigger>
-                <TooltipContent>Grid View of Tasks</TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger>
-                  <TabsTrigger value="List View">
-                    <ListIcon className="dark:stroke-lime-shade stroke-teal-shade" />
-                  </TabsTrigger>
-                </TooltipTrigger>
-                <TooltipContent>Complete Log of Tasks</TooltipContent>
-              </Tooltip>
+              <TabsTrigger value="Grid View">
+                <Grid3X3Icon className="dark:stroke-lime-shade stroke-teal-shade" />
+              </TabsTrigger>
+              <TabsTrigger value="List View">
+                <ListIcon className="dark:stroke-lime-shade stroke-teal-shade" />
+              </TabsTrigger>
             </TabsList>
           </div>
           <TabsContent value="Grid View">
