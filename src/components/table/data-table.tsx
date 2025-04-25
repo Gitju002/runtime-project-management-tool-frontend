@@ -30,6 +30,8 @@ import {
 } from "@/store/api/tasks";
 import { useRouter } from "next/router";
 import { useParams, useSearchParams } from "next/navigation";
+import { DatePicker } from "../ui/date-picker";
+import { format } from "date-fns";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -47,6 +49,48 @@ export function DataTable<TData, TValue>({
   const [selectedUser, setSelectedUser] = useState<string>();
   const searchParams = useSearchParams();
   const router = useRouter();
+  const [fromDateSearch, setFromDateSearch] = useState<Date | null>(
+    searchParams.get("fromDate")
+      ? new Date(searchParams.get("fromDate")!)
+      : null
+  );
+
+  const [toDateSearch, setToDateSearch] = useState<Date | null>(
+    searchParams.get("toDate") ? new Date(searchParams.get("toDate")!) : null
+  );
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      const params = new URLSearchParams(searchParams);
+      if (fromDateSearch) {
+        params.set("fromDate", format(new Date(fromDateSearch), "yyyy-MM-dd"));
+      } else {
+        params.delete("fromDate");
+      }
+      params.delete("page");
+      router.push(`?${params.toString()}`, undefined, {
+        shallow: true,
+        scroll: false,
+      });
+    }, 1250);
+    return () => clearTimeout(delay);
+  }, [fromDateSearch]);
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      const params = new URLSearchParams(searchParams);
+      if (toDateSearch) {
+        params.set("toDate", format(new Date(toDateSearch), "yyyy-MM-dd"));
+      } else {
+        params.delete("toDate");
+      }
+      params.delete("page");
+      router.push(`?${params.toString()}`, undefined, {
+        shallow: true,
+        scroll: false,
+      });
+    }, 1250);
+    return () => clearTimeout(delay);
+  }, [toDateSearch]);
 
   const table = useReactTable({
     data,
@@ -147,6 +191,20 @@ export function DataTable<TData, TValue>({
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
+          {router.pathname === "/user" && (
+            <div className="flex gap-2">
+              <DatePicker
+                placeholder="Pick From Date"
+                value={fromDateSearch}
+                onChange={(date) => setFromDateSearch(date || null)}
+              />
+              <DatePicker
+                placeholder="Pick To Date"
+                value={toDateSearch}
+                onChange={(date) => setToDateSearch(date || null)}
+              />
+            </div>
+          )}
         </div>
       </div>
       {isLoading ? (

@@ -43,20 +43,15 @@ const User = () => {
   const [projectSearch, setProjectSearch] = useState(
     searchParams.get("projectName") || ""
   );
+
   const [serviceSearch, setServiceSearch] = useState(
     searchParams.get("services") || ""
   );
-  const [fromDateSearch, setFromDateSearch] = useState<Date | null>(
-    searchParams.get("fromDate")
-      ? new Date(searchParams.get("fromDate")!)
-      : null
-  );
-  const [toDateSearch, setToDateSearch] = useState<Date | null>(
-    searchParams.get("toDate") ? new Date(searchParams.get("toDate")!) : null
-  );
+
   const sortBy = searchParams.get("sortBy")
     ? [searchParams.get("sortBy")!]
     : [];
+
   const currentPage = Number(searchParams.get("page")) || 1;
 
   const [isOpened, setIsOpened] = useState(false);
@@ -181,43 +176,6 @@ const User = () => {
     return () => clearTimeout(delay);
   }, [serviceSearch]);
 
-  useEffect(() => {
-    const delay = setTimeout(() => {
-      const params = new URLSearchParams(searchParams);
-      if (fromDateSearch) {
-        params.set("fromDate", format(new Date(fromDateSearch), "yyyy-MM-dd"));
-      } else {
-        params.delete("fromDate");
-      }
-      params.delete("page");
-      router.push(`?${params.toString()}`, undefined, {
-        shallow: true,
-        scroll: false,
-      });
-    }, 1250);
-    return () => clearTimeout(delay);
-  }, [fromDateSearch]);
-
-  useEffect(() => {
-    const delay = setTimeout(() => {
-      const params = new URLSearchParams(searchParams);
-      if (toDateSearch) {
-        params.set("toDate", format(new Date(toDateSearch), "yyyy-MM-dd"));
-      } else {
-        params.delete("toDate");
-      }
-      params.delete("page");
-      router.push(`?${params.toString()}`, undefined, {
-        shallow: true,
-        scroll: false,
-      });
-    }, 1250);
-    return () => clearTimeout(delay);
-  }, [toDateSearch]);
-
-  // useEffect(() => {
-  //   refetchTasks();
-  // }, []);
   const columns = getColumns(handleSortClick); // Pass the function here
 
   const formattedTasks = transformTasks(tasksData, limit);
@@ -360,7 +318,7 @@ const User = () => {
             />{" "}
           </h1>
         </div>
-        <div className="flex flex-col md:flex-row w-full justify-between items-center gap-4">
+        <div className="flex flex-col md:flex-row w-full lg:w-1/2 justify-between items-center gap-4">
           <Input
             placeholder="Filter by Project Names..."
             onChange={(e) => setProjectSearch(e.target.value)}
@@ -372,16 +330,6 @@ const User = () => {
             onChange={(e) => setServiceSearch(e.target.value)}
             value={serviceSearch}
             className="w-full border border-teal-shade dark:bg-slate-800"
-          />
-          <DatePicker
-            placeholder="Pick From Date"
-            value={fromDateSearch}
-            onChange={(date) => setFromDateSearch(date || null)}
-          />
-          <DatePicker
-            placeholder="Pick To Date"
-            value={toDateSearch}
-            onChange={(date) => setToDateSearch(date || null)}
           />
         </div>
         <Tabs defaultValue="Grid View" className="w-full">
@@ -444,7 +392,7 @@ const User = () => {
           <TabsContent value="List View" className="w-full">
             <div
               id="step_4_taskTable"
-              className="min-h-[650px] border p-2 rounded-md my-2"
+              className="min-h-[650px]  p-2 rounded-md my-2"
             >
               <DataTable
                 isLoading={tasksLoading || isFetching}
