@@ -74,7 +74,7 @@ export default function TaskCompletedComponent({
 
   React.useEffect(() => {
     refetch();
-  }, [taskdata]);
+  }, [userName]);
 
   return isLoading || isFetching ? (
     <AnalyticsCardsSkeleton />

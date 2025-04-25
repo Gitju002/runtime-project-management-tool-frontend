@@ -74,7 +74,7 @@ export default function PieChartComponent({
 
   useEffect(() => {
     refetch();
-  }, [taskdata]);
+  }, [userName]);
 
   return isLoading || isFetching ? (
     <AnalyticsCardsSkeleton />

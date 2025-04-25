@@ -51,7 +51,7 @@ export default function BarChartComponent({
 
   useEffect(() => {
     refetch();
-  }, [taskdata]);
+  }, [userName]);
   return isLoading || isFetching ? (
     <AnalyticsCardsSkeleton />
   ) : (
