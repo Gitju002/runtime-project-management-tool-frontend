@@ -10,11 +10,11 @@ import { ThemeProvider } from "@/components/ui/theme-provider";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import UserLogout from "@/components/ui/user-logout";
 import { useGetUserQuery } from "@/store/api/user";
-// import { getCookie } from "cookies-next";
+import { getCookie } from "cookies-next";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  // const defaultOpen = getCookie("sidebar_state") === "true";
+  const defaultOpen = getCookie("sidebar_state") !== "false";
 
   const hideSidebarRoutes = ["/user", "/login", "/app-login", "/logout"];
   const hideLogoutRoutes = [
@@ -34,7 +34,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider attribute="class" defaultTheme="system">
       <StoreProvider>
-        <SidebarProvider>
+        <SidebarProvider defaultOpen={defaultOpen}>
           <div className="flex">
             {showSidebar && <AdminSidebar />}
             <Toaster />
