@@ -9,27 +9,37 @@ import CustomSidebarTrigger from "./admin/_components/sidebar-trigger";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import UserLogout from "@/components/ui/user-logout";
-import { useGetUserQuery } from "@/store/api/user";
-// import { getCookie } from "cookies-next";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  // const defaultOpen = getCookie("sidebar_state") === "true";
 
-  const hideSidebarRoutes = ["/user", "/login", "/app-login", "/logout"];
-  const hideLogoutRoutes = [
-    "/login",
-    "/app-login",
-    "/logout",
+  const showSidebarRoutes = [
     "/admin",
+    "/admin/projects",
+    "/admin/projects/project-details",
+    "/admin/services",
+    "/admin/type-description",
+    "/admin/users",
+    "/admin/analytics",
     "/profile",
   ];
-  const hideThemeToggleRoutes = ["/login", "/app-login", "/logout"];
-  const isAdminRoute = /^\/admin(\/|$)/.test(router.pathname);
-  const showSidebar = !hideSidebarRoutes.includes(router.pathname);
-  const showLogout =
-    !hideLogoutRoutes.includes(router.pathname) && !isAdminRoute;
-  const showThemeToggle = !hideThemeToggleRoutes.includes(router.pathname);
+
+  const showLogoutRoutes = ["/user"];
+
+  const showThemeToggleRoutes = [
+    "/admin",
+    "/admin/projects",
+    "/admin/services",
+    "/admin/type-description",
+    "/admin/users",
+    "/admin/analytics",
+    "/profile",
+    "/user",
+  ];
+
+  const showSidebar = showSidebarRoutes.includes(router.pathname);
+  const showLogout = showLogoutRoutes.includes(router.pathname);
+  const showThemeToggle = showThemeToggleRoutes.includes(router.pathname);
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system">

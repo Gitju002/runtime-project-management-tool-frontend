@@ -26,6 +26,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react";
 import { useLogoutMutation } from "@/store/api/auth";
 import { useRouter } from "next/router";
@@ -35,36 +36,59 @@ import { useGetUserQuery } from "@/store/api/user";
 
 export default function AdminSidebar() {
   const pathname = usePathname();
-  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  const {
-    data: userData,
-    isLoading: userLoading,
-    refetch: refetchUser,
-  } = useGetUserQuery();
-  // const [logout] = useLogoutMutation();
-  // const dispatch = useDispatch();
-
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  }, []);
+  const { data: userData, isLoading, refetch: refetchUser } = useGetUserQuery();
 
   useEffect(() => {
     refetchUser();
   }, [userData?.data?.role_name]);
 
   const handleLogout = () => {
-    // logout();
-    // dispatch(clearUserInfo());
     router.push("/logout");
   };
 
   const handleGetProfile = () => {
     router.push("/profile");
   };
+
+  if (isLoading) {
+    return (
+      <Sidebar variant="floating" collapsible="icon">
+        <SidebarContent>
+          <SidebarGroup className="space-y-28">
+            <SidebarGroupLabel className="text-sm md:text-base transition-all duration-300">
+              <Skeleton className="h-4 w-32" />
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu className="flex gap-y-4">
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <SidebarMenuItem key={index}>
+                    <SidebarMenuButton disabled>
+                      <Skeleton className="h-5 w-5 rounded" />
+                      <Skeleton className="h-4 w-16" />
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton disabled>
+                <Skeleton className="h-6 w-6 rounded-full" />
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="ml-auto h-4 w-4" />
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+      </Sidebar>
+    );
+  }
+
   if (
     userData?.data?.role_name?.toLowerCase() ===
     process.env.NEXT_PUBLIC_ADMIN_ROLE?.toLowerCase()

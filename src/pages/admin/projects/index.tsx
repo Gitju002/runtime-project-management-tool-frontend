@@ -155,7 +155,7 @@ export default function Projects() {
           </Dialog>
         </div>
 
-        <div className="flex justify-between gap-4 items-center mb-6">
+        <div className="flex max-md:flex-wrap justify-between gap-4 items-center mb-6">
           <Input
             placeholder="Filter by Project Names..."
             onChange={(e) => setProjectSearch(e.target.value)}
