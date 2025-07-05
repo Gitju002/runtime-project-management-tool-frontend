@@ -71,9 +71,9 @@ export default function LoginPage() {
         transition={{ duration: 0.8, ease: "easeInOut" }}
         className="w-full max-w-md"
       >
-        <Card className="w-full max-w-md dark:bg-dark-shade/20 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 border border-gray-50/20 hover:shadow-xl hover:dark:shadow-teal-shade/30 hover:shadow-lime-shade/20 transition-all duration-200">
+        <Card className="w-full max-w-md bg-dark-shade/20 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 border border-gray-50/20 hover:shadow-xl hover:shadow-teal-shade/30 transition-all duration-200">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center raleway-semibold">
+            <CardTitle className="text-2xl text-white font-bold text-center raleway-semibold">
               {text.map((el, i) => (
                 <motion.span
                   initial={{ opacity: 0 }}
@@ -91,7 +91,7 @@ export default function LoginPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1.5, delay: 0.5 }}
-                className="dark:text-lime-shade text-teal-shade"
+                className="text-lime-shade"
               >
                 Runtimer!
               </motion.p>
